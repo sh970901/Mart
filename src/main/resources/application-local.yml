@@ -1,1 +1,27 @@
-spring.application.name=market
+spring:
+  thymeleaf:
+    prefix : classpath:/templates/
+  #    suffix: .html
+  #    cache: false
+  datasource:
+    hikari:
+      pool-name: Leader
+      jdbc-url: jdbc:postgresql://localhost:5432/mart
+      username: admin
+      password: admin
+      maximum-pool-size: 5
+      minimum-idle: 5
+      driver-class-name: org.postgresql.Driver
+  jpa:
+    #    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+    hibernate:
+      ddl-auto: create        # DB (none, create, create-drop, update, validate)
+    open-in-view: false
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
