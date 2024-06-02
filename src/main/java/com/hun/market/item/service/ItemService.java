@@ -1,9 +1,9 @@
 package com.hun.market.item.service;
 
-import com.hun.market.item.dto.ItemResponseDto;
+import com.hun.market.item.dto.ItemDto;
 
 import java.util.List;
 
 public interface ItemService {
-    List<ItemResponseDto> getItemList(int page, int size);
+    List<ItemDto.ItemCreatResponseDto> getItemList(int page, int size);
 }

@@ -45,4 +45,15 @@ public class Item extends BaseEntity {
                 '}';
     }
 
+    public static Item from(ItemDto.ItemCreateRequestDto itemDto){
+        return Item.builder()
+                    .itemName(itemDto.getItemName())
+                    .itemStock(itemDto.getItemStock())
+                    .itemPrice(itemDto.getItemPrice())
+                    .description(itemDto.getDescription())
+                    .build();
+    }
+
+
+
 }

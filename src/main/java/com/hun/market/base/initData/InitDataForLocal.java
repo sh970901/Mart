@@ -1,6 +1,6 @@
 package com.hun.market.base.initData;
 
-import com.hun.market.item.dto.ItemCreationDto;
+import com.hun.market.item.domain.Item;
 import com.hun.market.item.dto.ItemDto;
 import com.hun.market.item.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +22,9 @@ public class InitDataForLocal extends AbstractInitData {
         return args -> {
             if (initDataDone) return;
             for(int i = 0; i<100; i++){
-                ItemDto itemDto = ItemCreationDto.from().itemName("item"+i).itemPrice(2000L).itemStock(3L).description(i+"번 상품입니다.").build();
-                itemRepository.save(itemDto.toEntity());
+                ItemDto.ItemCreateRequestDto itemDto = ItemDto.ItemCreateRequestDto.builder().itemName("item"+i).itemPrice(2000L).itemStock(3L).description(i+"번 상품입니다.").build();
+                Item item = Item.from(itemDto);
+                itemRepository.save(item);
             }
             before();
 

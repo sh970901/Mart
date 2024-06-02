@@ -1,7 +1,7 @@
 package com.hun.market.item.service;
 
 import com.hun.market.item.domain.Item;
-import com.hun.market.item.dto.ItemResponseDto;
+import com.hun.market.item.dto.ItemDto;
 import com.hun.market.item.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
 
     @Validated
-    public List<ItemResponseDto> getItemList(int page, int size) {
+    public List<ItemDto.ItemCreatResponseDto> getItemList(int page, int size) {
         Page<Item> resultItemPage = itemRepository.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "id")));
         log.info(String.valueOf(resultItemPage.getTotalPages()));
 
@@ -43,8 +43,8 @@ public class ItemServiceImpl implements ItemService {
 //                this::mapToItemResponseDto);
 //    }
 
-    private ItemResponseDto mapToItemResponseDto(Item item) {
-        return ItemResponseDto.from().itemName(item.getItemName()).itemPrice(item.getItemPrice()).itemStock(item.getItemStock()).description(item.getDescription()).build();
+    private ItemDto.ItemCreatResponseDto mapToItemResponseDto(Item item) {
+        return ItemDto.ItemCreatResponseDto.builder().itemName(item.getItemName()).itemPrice(item.getItemPrice()).itemStock(item.getItemStock()).description(item.getDescription()).build();
     }
 
 }
