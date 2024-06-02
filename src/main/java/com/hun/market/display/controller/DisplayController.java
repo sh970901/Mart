@@ -26,13 +26,6 @@ public class DisplayController {
                           @RequestParam(defaultValue = "18") int size, Model model){
 
         List<ItemResponseDto> itemList = itemService.getItemList(page, size);
-
-        for(ItemResponseDto item: itemList ){
-            log.info(item.getItemName());
-            log.info(item.getDescription());
-            log.info(String.valueOf(item.getItemPrice()));
-            log.info(String.valueOf(item.getItemStock()));
-        }
         model.addAttribute("itemList", itemList);
 
 
