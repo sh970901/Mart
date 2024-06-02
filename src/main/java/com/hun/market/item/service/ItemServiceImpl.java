@@ -25,7 +25,6 @@ public class ItemServiceImpl implements ItemService {
     @Validated
     public List<ItemDto.ItemCreatResponseDto> getItemList(int page, int size) {
         Page<Item> resultItemPage = itemRepository.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "id")));
-        log.info(String.valueOf(resultItemPage.getTotalPages()));
 
         return resultItemPage.getContent().stream()
                 .map(this::mapToItemResponseDto)

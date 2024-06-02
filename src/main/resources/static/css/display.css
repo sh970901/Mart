@@ -161,9 +161,9 @@ footer {
     justify-content: center;
     align-items: center;
     background-color: #f0f0f0; /* 스켈레톤의 배경색을 정의합니다. */
-    border-radius: 5px; /* 스켈레톤의 모서리를 둥글게 만듭니다. */
+    border-radius: 30px; /* 스켈레톤의 모서리를 둥글게 만듭니다. */
     padding: 20px; /* 스켈레톤의 안쪽 여백을 설정합니다. */
-    animation: pulse 3s infinite alternate; /* 펄스 애니메이션 적용 */
+    animation: pulse 10s infinite alternate; /* 펄스 애니메이션 적용 */
 }
 
 .skeleton-content {
@@ -175,7 +175,7 @@ footer {
     width: 100px; /* 스켈레톤 상자의 가로 길이를 정의합니다. */
     height: 100px; /* 스켈레톤 상자의 세로 길이를 정의합니다. */
     background-color: #ccc; /* 스켈레톤 상자의 색상을 정의합니다. */
-    border-radius: 5px; /* 스켈레톤 상자의 모서리를 둥글게 만듭니다. */
+    border-radius: 50px; /* 스켈레톤 상자의 모서리를 둥글게 만듭니다. */
     margin-right: 10px; /* 텍스트와의 간격을 조정합니다. */
 }
 
