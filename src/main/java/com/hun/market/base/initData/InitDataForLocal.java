@@ -1,6 +1,7 @@
 package com.hun.market.base.initData;
 
-import com.hun.market.item.domain.Item;
+import com.hun.market.item.dto.ItemCreationDto;
+import com.hun.market.item.dto.ItemDto;
 import com.hun.market.item.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Profile("local")
-public class LocalInitData extends AbstractInitData {
+public class InitDataForLocal extends AbstractInitData {
 
     private boolean initDataDone = false;
     private final ItemRepository itemRepository;
@@ -20,9 +21,10 @@ public class LocalInitData extends AbstractInitData {
     CommandLineRunner initData() {
         return args -> {
             if (initDataDone) return;
-            Item item = new Item();
-            item.setItemName("aa");
-            itemRepository.save(item);
+            for(int i = 0; i<100; i++){
+                ItemDto itemDto = ItemCreationDto.from().itemName("item"+i).itemPrice(2000L).itemStock(3L).description(i+"번 상품입니다.").build();
+                itemRepository.save(itemDto.toEntity());
+            }
             before();
 
             initDataDone = true;

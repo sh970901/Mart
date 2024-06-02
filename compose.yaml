@@ -23,3 +23,6 @@ services:
 volumes:
   postgres-data:
   redis-data:
+
+
+#    docker exec -it postgres-db psql -U admin -d mart || \dt
