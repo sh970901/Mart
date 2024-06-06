@@ -19,5 +19,4 @@ public class MemberContext extends User {
         super(member.getMbName(), member.getMbPassword(), authorities);
         this.mbCoin = member.getMbCoin();
     }
-
 }
