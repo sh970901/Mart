@@ -1,0 +1,179 @@
+<html layout:decorate="~{layout}" xmlns:layout="http://www.w3.org/1999/xhtml">
+
+<div layout:fragment="content" class="container my-3">
+
+    <div class = "center-container">
+        <img class="centered-image" th:src="@{/images/character/logo.png}">
+    </div>
+    <h2 class = login-title>INNO MARKET</h2>
+    <div class="login-container">
+        <form th:action="@{/accessCode}" method="post" class="login-form">
+            <!--            <label for="accessCode" class = "code-text">접속 코드</label>-->
+            <input type="text" name="mbName" id="mbName" class="form-control" placeholder="계정"> <br/>
+            <input type="text" name="mbPassword" id="mbPassword" class="form-control" placeholder="비밀번호">
+            <div th:if="${param.error}">
+                <div class="alert alert-danger">
+                    올바르지 않은 ACCESS CODE 입니다.
+                </div>
+            </div>
+            <button class = "btn btn-4" type="submit">접속</button>
+        </form>
+    </div>
+</div>
+<style>
+
+    @font-face {
+        font-family: 'Godo';
+        font-style: normal;
+        font-weight: 400;
+        src: url('//cdn.jsdelivr.net/korean-webfonts/1/corps/godo/Godo/GodoM.woff2') format('woff2'), url('//cdn.jsdelivr.net/korean-webfonts/1/corps/godo/Godo/GodoM.woff') format('woff');
+    }
+    .center-container {
+        font-family: 'Godo';
+        position: relative;
+        display: flex;
+        align-items: center; /* 세로 중앙 정렬 */
+        justify-content: center; /* 가로 중앙 정렬 */
+    }
+    .centered-image {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) translateY(-250px); /* 위로 80px 이동 */
+        max-width: 550px; /* 이미지의 최대 너비 설정 (optional) */
+        /*background-color: rgba(255, 255, 255, 0.8);*/
+    }
+    body {
+        font-family: 'Godo';
+        /*background-color: rgba(24, 89, 255, 0.1);*/
+        background-color: white;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .login-title {
+
+        align-content: center;
+        text-align: center;
+        color: rgba(24, 89, 255, 0.9); /* 투명도 80% (0.8) */
+        font-size : 90px;
+        margin : -83px;
+
+    }
+    .alert {
+        font-weight: bold;
+        margin-top : 10px;
+    }
+
+    .alert {
+        align-content: center;
+        text-align: center;
+        color : red;
+    }
+    .login-container {
+        font-family: 'Godo';
+        padding-top: 15px;
+        padding-bottom: 15px;
+        display: flex; /* 추가된 부분 */
+        flex-direction: column; /* 추가된 부분 */
+        justify-content: center;
+        align-content: center;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        width: 700px;
+        height: 160px;
+        border-radius: 30px 10px 50px;
+        margin-top : 100px;
+        border: 3px solid #ddd; /* 경계선 추가 */
+    }
+    .login-container label, .login-container input {
+        display: block;
+    }
+    input::placeholder {
+        font-family: 'Godo';
+        text-align: center;
+    }
+    .login-container input {
+        width: 50%;
+        margin: 0 auto;
+        padding: 8px;
+        box-sizing: border-box;
+        border: 0;
+        border-radius: 15px;
+        outline: none;
+        background-color: rgb(233, 233, 233);
+    }
+    .login-container button {
+        background-color: #4caf50;
+        color: #fff;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .btn {
+        font-family: 'Godo';
+        width : 50%;
+        margin-left : 25%;
+        flex: 1 1 auto;
+        text-align: center;
+        text-transform: uppercase;
+        transition: 0.5s;
+        background-size: 200% auto;
+        text-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+        border-radius: 10px;
+        margin-top: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+        border: 2px solid #fff; /* 경계선 추가 */
+        background-color: #ffffff; /* 배경색을 하얀색으로 변경 */
+        color: #000000; /* 글씨색을 까만색으로 변경 */
+    }
+    .btn:hover {
+        background-color: #f0f0f0; /* 버튼에 호버 효과를 주어 약간의 색상 변화 추가 */
+    }
+    .btn-4 {
+        background-image: linear-gradient(to right, #a1c4fd 0%, #c2e9fb 51%, #a1c4fd 100%);
+    }
+
+    input {
+        font-family: 'Godo';
+        height: 40px;
+        text-align: center;
+    }
+
+    /* 중간 크기 화면(예: 태블릿)에 대한 상품 배치: 3개 */
+    @media only screen and (min-width: 768px) {
+        .login-container {
+            grid-template-columns: repeat(auto-fill, minmax(500px, 1fr)); /* 300px로 수정 */
+            gap: 50px; /* 간격을 조정하여 더 적은 상품이 보이도록 함 */
+        }
+
+        .login-container form {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+    }
+
+    /* 큰 화면(예: 데스크탑)에 대한 상품 배치: 4개 */
+    @media only screen and (min-width: 1024px) {
+        .login-container {
+            grid-template-columns: repeat(auto-fill, minmax(800px, 1fr)); /* 250px로 수정 */
+            gap: 70px; /* 간격을 조정하여 더 적은 상품이 보이도록 함 */
+        }
+
+        .login-container form {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+    }
+</style>
+
+</html>

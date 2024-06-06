@@ -8,7 +8,7 @@ import lombok.*;
 @Entity
 @Getter
 @Table(name = "item")
-@NoArgsConstructor(access = AccessLevel.PROTECTED) // 기본 생성자를 protected로 설정
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Item extends BaseEntity {
 
@@ -17,16 +17,16 @@ public class Item extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="item_name", nullable = false)
+    @Column(name="item_name", nullable = false, length = 1000)
     private String itemName;
 
-    @Column(name="item_stock", nullable = false)
+    @Column(name="item_stock", nullable = false, length = 1000)
     private Long itemStock;
 
-    @Column(name="item_price", nullable = false)
+    @Column(name="item_price", nullable = false, length = 1000)
     private Long itemPrice;
 
-    @Column(name="item_description")
+    @Column(name="item_description", length = 1000)
     private String description;
 
     @Builder

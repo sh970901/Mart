@@ -1,10 +1,11 @@
-package com.hun.market.base.exception;
+package com.hun.market.core.exception;
 
 import com.hun.market.item.exception.ItemNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -16,7 +17,8 @@ import java.io.IOException;
 public class ErrorControllerAdvice {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(value = {
-            ItemNotFoundException.class
+            ItemNotFoundException.class,
+            UsernameNotFoundException.class
     })
     public void RuntimeException(HttpServletRequest request, HttpServletResponse response, Exception throwable) throws IOException {
         log.info("{}", throwable.getMessage());

@@ -1,4 +1,4 @@
-package com.hun.market.base.response;
+package com.hun.market.core.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
