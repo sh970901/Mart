@@ -4,8 +4,12 @@ import com.hun.market.base.entity.BaseEntity;
 import com.hun.market.item.domain.Item;
 import com.hun.market.item.dto.ItemDto;
 import com.hun.market.member.dto.MemberDto;
+import com.hun.market.order.order.domain.Order;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,6 +31,15 @@ public class Member extends BaseEntity {
 
     @Column(name="member_coin", nullable = false, length = 1000)
     private int mbCoin;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Order> orders = new ArrayList<>();
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "departmentName", column = @Column(nullable = false))
+    })
+    private Department department;
 
     @Override
     public String toString() {

@@ -29,10 +29,7 @@
         .login-div {
             display: flex;
             align-items: center;
-
-        }
-        .info-div {
-            margin-right: 20px;
+            color: black;
         }
         .user-info {
             margin-right: 20px;
@@ -45,12 +42,9 @@
         <div class="logo-div">
             <img th:src="@{/images/character/logo.png}" alt="로고 이미지" style="max-width: 200px; max-height:40px; height: auto;">
         </div>
-
-        <div class="info-div">
-            <span class="user-info" th:if="${#authorization.expression('isAuthenticated()')}"
-                  th:text="${#authentication.principal.username + '  ' + #authentication.principal.mbCoin + ' J₩' }"></span>
-        </div>
         <div class="login-div">
+            <span class="user-info" th:if="${#authorization.expression('isAuthenticated()')}"
+                  th:text="${#authentication.principal.username + '  ' + #authentication.principal.mbCoin + 'J₩' }"></span>
             <button class="btn btn-outline-primary me-2" sec:authorize="isAnonymous()" onclick="location.href='/login'">로그인</button>
             <button class="btn btn-outline-danger me-2" sec:authorize="isAuthenticated()" onclick="location.href='/logout'">로그아웃</button>
         </div>

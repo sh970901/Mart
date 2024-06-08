@@ -2,8 +2,12 @@ package com.hun.market.item.domain;
 
 import com.hun.market.base.entity.BaseEntity;
 import com.hun.market.item.dto.ItemDto;
+import com.hun.market.order.order.domain.OrderItem;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,6 +29,9 @@ public class Item extends BaseEntity {
 
     @Column(name="item_price", nullable = false, length = 1000)
     private Long itemPrice;
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItems = new ArrayList<>();
 
     @Column(name="item_description", length = 1000)
     private String description;
