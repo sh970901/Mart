@@ -77,6 +77,7 @@
                 <p th:text="${item.description}">상품 설명</p>
                 <p th:text="'재고: ' + ${item.itemStock} + '개'">수량</p>
                 <span th:text="'가격: ₩' + ${item.itemPrice}">가격: ₩10000</span>
+                <button class="btn btn-outline-primary me-2" th:onclick="|placeOrder(${item.itemId})|">바로 구매</button>
             </div>
         </div>
         <div id="loading-skeleton" class="skeleton" style="display: none;">
@@ -97,6 +98,42 @@
 </footer>
 
 <script th:src="@{/js/display.js}"></script>
+<script th:inline="javascript">
+    /*[[CDATA[*/
+    async function placeOrder(itemId) {
+        // 주문 데이터 설정
+        const orderData = {
+            orderItemDtos: [
+                { itemId: itemId, quantity: 1 } // 기본적으로 수량 1로 설정
+            ]
+        };
 
+        try {
+            const response = await fetch('/api/v1/orders/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(orderData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+
+            const result = await response.json();
+            console.log('Order placed successfully:', result);
+
+            // 주문 성공 시 사용자에게 알림 또는 페이지 이동
+            alert('Order placed successfully!');
+            // location.href = '/order-success'; // 주문 성공 페이지로 이동
+
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+            alert('Failed to place order: ' + error.message);
+        }
+    }
+    /*]]>*/
+</script>
 </body>
 </html>

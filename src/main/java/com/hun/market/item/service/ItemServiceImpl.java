@@ -47,7 +47,7 @@ public class ItemServiceImpl implements ItemService {
 //    }
 
     private ItemDto.ItemCreatResponseDto mapToItemResponseDto(Item item) {
-        return ItemDto.ItemCreatResponseDto.builder().itemName(item.getItemName()).itemPrice(item.getItemPrice()).itemStock(item.getItemStock()).description(item.getDescription()).build();
+        return ItemDto.ItemCreatResponseDto.builder().itemId(item.getId()).itemName(item.getItemName()).itemPrice(item.getItemPrice()).itemStock(item.getItemStock()).description(item.getDescription()).build();
     }
 
 }

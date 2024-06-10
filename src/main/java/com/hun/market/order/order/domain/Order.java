@@ -2,20 +2,13 @@ package com.hun.market.order.order.domain;
 
 import com.hun.market.base.entity.BaseEntity;
 import com.hun.market.member.domain.Member;
-import com.hun.market.order.order.dto.OrderDto;
-import com.hun.market.order.order.dto.OrderDto.OrderItemCreateRequestDto;
 import com.hun.market.order.ship.domain.ShippingAddress;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static jakarta.persistence.FetchType.EAGER;
 import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
@@ -52,23 +45,26 @@ public class Order extends BaseEntity {
     private List<OrderItem> orderItems = new ArrayList<>();
 
 
-    public static Order create(List<OrderItemCreateRequestDto> orderItemCreateRequestDtos, Member buyer) {
+    public static Order createByMember(List<OrderItem> orderItems, Member buyer) {
+
         Order order = Order.builder()
-                           .buyer(buyer)
-                           .totalPrice(0L)
-                           .build();
+                .buyer(buyer)
+                .orderItems(orderItems)
+                .orderStatus(OrderStatus.PENDING)
+                .shippingAddress(ShippingAddress.builder().street("Innople").build())
+                .totalPrice(0L)
+                .build();
 
-        for (OrderItemCreateRequestDto dto : orderItemCreateRequestDtos) {
-            OrderItem.create(order, dto.getItem(), dto.getQuantity(), dto.getPrice());
-        }
+        order.calcOrderTotalPrice();
 
-        order.calculateTotalPrice();
+        orderItems.forEach(orderItem -> orderItem.mappingOrder(order));
+
         return order;
     }
 
-    public void calculateTotalPrice() {
+    private void calcOrderTotalPrice() {
         this.totalPrice = orderItems.stream()
-                                    .mapToLong(OrderItem::calculateTotalPrice)
+                                    .mapToLong(OrderItem::calcOrderItemTotalPrice)
                                     .sum();
     }
 

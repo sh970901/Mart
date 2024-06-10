@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function fetchMoreItems() {
     currentPage += 1;  // 페이지 값을 증가시킴
-    const url = `/v1/api/items?page=${currentPage}&size=${size}`;
+    const url = `/api/v1/items?page=${currentPage}&size=${size}`;
 
     // // 스켈레톤 표시
     document.getElementById('loading-skeleton').style.display = 'flex';
@@ -41,7 +41,7 @@ function fetchMoreItems() {
                 const newItem = document.createElement('div');
                 newItem.classList.add('item');
                 newItem.innerHTML = `
-                    <img th:src="@{/images/상품이미지.jpeg}" alt="상품 이미지">
+                    <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/8-col/img%285%29.jpg" class="d-block w-100" alt="Exotic Fruits"/>
                     <h3>${item.itemName}</h3>
                     <p>${item.description}</p>
                     <p>재고: ${item.itemStock}개</p>

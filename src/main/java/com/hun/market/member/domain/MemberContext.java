@@ -19,4 +19,14 @@ public class MemberContext extends User {
         super(member.getMbName(), member.getMbPassword(), authorities);
         this.mbCoin = member.getMbCoin();
     }
+
+    @Override
+    public String toString() {
+        return "MemberContext{" +
+                "mbName='" + mbName + '\'' +
+                ", mbPassword='" + mbPassword + '\'' +
+                ", mbCoin=" + mbCoin +
+                ", authorities=" + authorities +
+                '}';
+    }
 }

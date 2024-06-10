@@ -34,6 +34,9 @@ public class ItemDto {
     @Builder
     public static class ItemCreatResponseDto {
 
+        @NotNull(message = "Item id is required")
+        private Long itemId;
+
         @NotNull(message = "Item name is required")
         @Size(max = 100, message = "Item name must be less than 100 characters")
         private String itemName;
