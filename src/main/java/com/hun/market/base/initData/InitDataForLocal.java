@@ -39,6 +39,9 @@ public class InitDataForLocal extends AbstractInitData {
             MemberDto.MemberCreateRequestDto mbDto = MemberDto.MemberCreateRequestDto.builder().mbName("admin").mbPassword(password).mbCoin(1000).department(department).build();
             memberRepository.save(Member.from(mbDto));
 
+            MemberDto.MemberCreateRequestDto mbDto2= MemberDto.MemberCreateRequestDto.builder().mbName("admin2").mbPassword(password).mbCoin(12000).department(department).build();
+            memberRepository.save(Member.from(mbDto2));
+
 
             initDataDone = true;
         };
