@@ -6,7 +6,7 @@ import jakarta.persistence.Embeddable;
 @Embeddable
 public class ShippingAddress {
 
-    @Column(columnDefinition = "VARCHAR(255) DEFAULT 'INNOPLE'")
+
     private String street;
 //    private String city;
 //    private String state;

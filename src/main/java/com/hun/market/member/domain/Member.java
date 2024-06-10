@@ -5,6 +5,7 @@ import com.hun.market.item.domain.Item;
 import com.hun.market.item.dto.ItemDto;
 import com.hun.market.member.dto.MemberDto;
 import com.hun.market.order.order.domain.Order;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@Table(name = "member")
+@Table(name = "members")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
@@ -32,13 +33,14 @@ public class Member extends BaseEntity {
     @Column(name="member_coin", nullable = false, length = 1000)
     private int mbCoin;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
 
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "departmentName", column = @Column(nullable = false))
     })
+    @Nullable
     private Department department;
 
     @Override
@@ -55,6 +57,7 @@ public class Member extends BaseEntity {
                 .mbName(memberDto.getMbName())
                 .mbPassword(memberDto.getMbPassword())
                 .mbCoin(memberDto.getMbCoin())
+                .department(memberDto.getDepartment())
                 .build();
     }
 }

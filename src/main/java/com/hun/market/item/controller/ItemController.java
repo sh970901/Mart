@@ -18,7 +18,6 @@ public class ItemController {
 
     private final ItemService itemService;
 
-    @PreAuthorize("isAnonymous()")
     @GetMapping("/api/items")
     public List<ItemDto.ItemCreatResponseDto> getItems(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "18") int size) {
         return itemService.getItemList(page, size);

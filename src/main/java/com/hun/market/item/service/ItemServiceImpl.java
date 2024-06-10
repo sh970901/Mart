@@ -22,6 +22,10 @@ import java.util.stream.Collectors;
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
 
+    /**
+     * TODO
+     * 레디슨을 활용한 캐싱 처리
+     */
     @Validated
     public List<ItemDto.ItemCreatResponseDto> getItemList(int page, int size) {
         Page<Item> resultItemPage = itemRepository.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "id")));

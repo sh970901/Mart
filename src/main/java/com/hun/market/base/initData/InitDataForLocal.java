@@ -3,6 +3,7 @@ package com.hun.market.base.initData;
 import com.hun.market.item.domain.Item;
 import com.hun.market.item.dto.ItemDto;
 import com.hun.market.item.repository.ItemRepository;
+import com.hun.market.member.domain.Department;
 import com.hun.market.member.domain.Member;
 import com.hun.market.member.dto.MemberDto;
 import com.hun.market.member.repository.MemberRepository;
@@ -34,7 +35,8 @@ public class InitDataForLocal extends AbstractInitData {
                 itemRepository.save(item);
             }
             String password = passwordEncoder.encode("1234");
-            MemberDto.MemberCreateRequestDto mbDto = MemberDto.MemberCreateRequestDto.builder().mbName("admin").mbPassword(password).mbCoin(1000).build();
+            Department department = Department.builder().departmentName("1").teamName("1").position("1").build();
+            MemberDto.MemberCreateRequestDto mbDto = MemberDto.MemberCreateRequestDto.builder().mbName("admin").mbPassword(password).mbCoin(1000).department(department).build();
             memberRepository.save(Member.from(mbDto));
 
 

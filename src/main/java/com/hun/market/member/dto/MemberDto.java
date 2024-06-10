@@ -1,5 +1,6 @@
 package com.hun.market.member.dto;
 
+import com.hun.market.member.domain.Department;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
@@ -23,6 +24,8 @@ public class MemberDto {
         @NotNull
         @PositiveOrZero
         private int mbCoin;
+
+        private Department department;
 
     }
 

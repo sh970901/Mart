@@ -6,16 +6,17 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.cache.annotation.EnableCaching;
 
 @Entity
 @Getter
-@Table(name = "order_item")
+@Table(name = "order_items")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@EnableCaching
 public class OrderItem {
-
     @Id
-    @Column(name = "orderItem_id")
+    @Column(name = "order_item_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

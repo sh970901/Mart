@@ -12,11 +12,12 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.FetchType.EAGER;
 import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
-@Table(name = "order")
+@Table(name = "orders")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Order extends BaseEntity {
@@ -39,7 +40,7 @@ public class Order extends BaseEntity {
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "street", column = @Column(name = "shipping_street", columnDefinition = "VARCHAR(255) DEFAULT 'INNOPLE'"))
+            @AttributeOverride(name = "street", column = @Column(name = "shipping_street"))
     })
     private ShippingAddress shippingAddress;
 
