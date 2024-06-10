@@ -2,10 +2,13 @@ package com.hun.market.order.order.domain;
 
 import com.hun.market.base.entity.BaseEntity;
 import com.hun.market.member.domain.Member;
+import com.hun.market.order.order.dto.OrderDto;
+import com.hun.market.order.order.dto.OrderDto.OrderItemCreateRequestDto;
 import com.hun.market.order.ship.domain.ShippingAddress;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,6 +23,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Table(name = "orders")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder(access = AccessLevel.PRIVATE)
 public class Order extends BaseEntity {
 
     @Id
@@ -48,4 +52,35 @@ public class Order extends BaseEntity {
     private List<OrderItem> orderItems = new ArrayList<>();
 
 
+    public static Order create(List<OrderItemCreateRequestDto> orderItemCreateRequestDtos, Member buyer) {
+        Order order = Order.builder()
+                           .buyer(buyer)
+                           .totalPrice(0L)
+                           .build();
+
+        for (OrderItemCreateRequestDto dto : orderItemCreateRequestDtos) {
+            OrderItem.create(order, dto.getItem(), dto.getQuantity(), dto.getPrice());
+        }
+
+        order.calculateTotalPrice();
+        return order;
+    }
+
+    public void calculateTotalPrice() {
+        this.totalPrice = orderItems.stream()
+                                    .mapToLong(OrderItem::calculateTotalPrice)
+                                    .sum();
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+            "id=" + id +
+            ", buyer='" + buyer + '\'' +
+            ", orderStatus='" + orderStatus + '\'' +
+            ", totalPrice=" + totalPrice +
+            ", shippingAddress=" + shippingAddress +
+            ", orderItems=" + orderItems +
+            '}';
+    }
 }

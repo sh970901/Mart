@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1")
+@RequestMapping("/v1/api")
 @RequiredArgsConstructor
-public class ItemController {
+public class ItemApiController {
 
     private final ItemService itemService;
 
-    @GetMapping("/api/items")
+    @GetMapping("/items")
     public List<ItemDto.ItemCreatResponseDto> getItems(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "18") int size) {
         return itemService.getItemList(page, size);
     }
