@@ -1,7 +1,9 @@
 package com.hun.market.order.pay.domain;
 
 import com.hun.market.base.entity.BaseEntity;
+import com.hun.market.core.event.Events;
 import com.hun.market.order.order.domain.Order;
+import com.hun.market.order.order.event.OrderCompletedEvent;
 import com.hun.market.order.pay.dto.PaymentDto.PaymentResponseDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -53,7 +55,9 @@ public class Payment extends BaseEntity {
     }
 
     public PaymentStatus process() {
+
         // 주문 상태 완료 발행
+        Events.raise(new OrderCompletedEvent(order));
         // 회원 코인 차감 발행
         // 상품 재고 차감 발행
         return null;

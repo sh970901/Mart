@@ -2,8 +2,11 @@ package com.hun.market.order.order.event;
 
 import com.hun.market.order.order.domain.Order;
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
+@Service
 public class OrderEventListener {
+
     @EventListener
     public void handleOrderCompletedEvent(OrderCompletedEvent event) {
         // 주문 완료 이벤트를 처리하는 로직을 여기에 구현
