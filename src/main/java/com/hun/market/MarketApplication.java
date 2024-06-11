@@ -1,6 +1,6 @@
 package com.hun.market;
 
-import org.springframework.boot.SpringApplication;
+import com.hun.market.core.web.MarketRunApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 public class MarketApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MarketApplication.class, args);
+		MarketRunApplication.run(MarketApplication.class, args);
 	}
 
 }
