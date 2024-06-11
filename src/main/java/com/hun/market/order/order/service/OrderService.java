@@ -10,6 +10,7 @@ import com.hun.market.order.order.domain.OrderItem;
 import com.hun.market.order.order.dto.OrderDto;
 import com.hun.market.order.order.dto.OrderDto.OrderItemCreateRequestDto;
 import com.hun.market.order.order.repository.OrderRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -34,42 +35,7 @@ public class OrderService {
     @Transactional
     public OrderDto.OrderCreateResponseDto createOrderByMember(OrderDto.OrderCreateRequestDto orderDto, String buyer) {
 
-        List<OrderItemCreateRequestDto> orderItemDtos = orderDto.getOrderItemDtos();
-
-        /**
-         * 하나씩 쿼리 vs 한 방 쿼리
-         */
-
-        List<OrderItem> orderItems = new ArrayList<>();
-
-//        for(OrderItemCreateRequestDto orderItemDto : orderItemDtos) {
-//            Item item = itemRepository.findById(orderItemDto.getItemId()).orElseThrow(()-> new ItemNotFoundException("상품이 없습니다."));
-//            OrderItem orderItem = OrderItem.createByItem(item, orderItemDto.getQuantity());
-//            orderItems.add(orderItem);
-//        }
-
-        // OrderItemCreateRequestDto에서 itemId 리스트를 추출
-        List<Long> itemIds = orderItemDtos.stream()
-                .map(OrderItemCreateRequestDto::getItemId)
-                .collect(Collectors.toList());
-
-        // itemId 리스트를 사용하여 한 번에 모든 Item 엔티티를 조회
-        List<Item> items = itemRepository.findAllById(itemIds);
-
-        // 조회한 Item 엔티티들을 Map으로 변환 (id -> Item)
-        Map<Long, Item> itemMap = items.stream()
-                .collect(Collectors.toMap(Item::getId, item -> item));
-
-        // 각 OrderItemCreateRequestDto를 OrderItem으로 변환
-        for (OrderItemCreateRequestDto orderItemDto : orderItemDtos) {
-            Long itemId = orderItemDto.getItemId();
-            Item item = itemMap.get(itemId);
-            if (item == null) {
-                throw new ItemNotFoundException("상품이 존재하지 않습니다.");
-            }
-            OrderItem orderItem = OrderItem.createByItem(item, orderItemDto.getQuantity());
-            orderItems.add(orderItem);
-        }
+        List<OrderItem> orderItems = createOrderItemsByOrderDto(orderDto);
 
         Member member = memberRepository.findByMbName(buyer).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
 
@@ -79,5 +45,38 @@ public class OrderService {
 
         return null;
 
+    }
+
+
+    private List<Long> getItemsIds(OrderDto.OrderCreateRequestDto orderDto){
+
+        List<OrderItemCreateRequestDto> orderItemDtos = orderDto.getOrderItemDtos();
+
+        return orderItemDtos.stream()
+                            .map(OrderItemCreateRequestDto::getItemId)
+                            .toList();
+
+    }
+
+    private List<OrderItem> createOrderItemsByOrderDto(OrderDto.OrderCreateRequestDto orderDto){
+        List<Item> items = itemRepository.findAllById(getItemsIds(orderDto));
+
+        List<OrderItem> orderItems = new ArrayList<>();
+
+        // 조회한 Item 엔티티들을 Map으로 변환 (id -> Item)
+        Map<Long, Item> itemsByIds = items.stream()
+                                          .collect(Collectors.toMap(Item::getId, item -> item));
+
+        // 각 OrderItemCreateRequestDto를 OrderItem으로 변환
+        for (OrderItemCreateRequestDto orderItemDto : orderDto.getOrderItemDtos()) {
+            Long itemId = orderItemDto.getItemId();
+
+            Item item = Optional.ofNullable(itemsByIds.get(itemId))
+                                .orElseThrow(() -> new ItemNotFoundException("상품이 존재하지 않습니다."));
+
+            OrderItem orderItem = OrderItem.createByItem(item, orderItemDto.getQuantity());
+            orderItems.add(orderItem);
+        }
+        return orderItems;
     }
 }
