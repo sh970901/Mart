@@ -61,6 +61,7 @@ public class Item extends BaseEntity {
                     .build();
     }
 
+    public void decreaseStock(int quantity) {
 
-
+    }
 }

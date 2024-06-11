@@ -2,6 +2,7 @@ package com.hun.market.order.order.domain;
 
 import com.hun.market.base.entity.BaseEntity;
 import com.hun.market.member.domain.Member;
+import com.hun.market.order.pay.domain.Payment;
 import com.hun.market.order.ship.domain.ShippingAddress;
 import jakarta.persistence.*;
 import lombok.*;
@@ -44,6 +45,9 @@ public class Order extends BaseEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Payment> payments = new ArrayList<>();
+
 
     public static Order createByMember(List<OrderItem> orderItems, Member buyer) {
 
@@ -78,5 +82,8 @@ public class Order extends BaseEntity {
             ", shippingAddress=" + shippingAddress +
             ", orderItems=" + orderItems +
             '}';
+    }
+
+    public void complete() {
     }
 }

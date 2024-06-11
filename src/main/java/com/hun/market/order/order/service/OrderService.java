@@ -10,6 +10,8 @@ import com.hun.market.order.order.domain.OrderItem;
 import com.hun.market.order.order.dto.OrderDto;
 import com.hun.market.order.order.dto.OrderDto.OrderItemCreateRequestDto;
 import com.hun.market.order.order.repository.OrderRepository;
+import com.hun.market.order.pay.domain.Payment;
+import com.hun.market.order.pay.service.PaymentService;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,6 +32,7 @@ public class OrderService {
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
     private final ItemRepository itemRepository;
+    private final PaymentService paymentCoinService;
 
     @Validated
     @Transactional
@@ -42,12 +45,11 @@ public class OrderService {
         Order order = Order.createByMember(orderItems, member);
         orderRepository.save(order);
 
-
+        processOrder(order);
 
         return null;
 
     }
-
 
     private List<Long> getItemsIds(OrderDto.OrderCreateRequestDto orderDto){
 
@@ -79,5 +81,9 @@ public class OrderService {
             orderItems.add(orderItem);
         }
         return orderItems;
+    }
+
+    private void processOrder(Order order) {
+        paymentCoinService.processPayment(order);
     }
 }

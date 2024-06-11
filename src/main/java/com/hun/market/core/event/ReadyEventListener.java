@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @ConditionalOnWebApplication
-public class ReadyEvent {
+public class ReadyEventListener {
 
     String banner = """
          
