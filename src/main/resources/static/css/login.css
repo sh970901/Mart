@@ -31,6 +31,7 @@ body {
     position: relative;
     min-height: 100vh;
     overflow: hidden;
+    /*min-width: 1000px;*/
 }
 
 .row {
@@ -278,7 +279,7 @@ body {
 
 /* RESPONSIVE */
 
-@media only screen and (max-width: 425px) {
+@media only screen and (max-width: 440px) {
 
     .container::before,
     .container.sign-in::before,

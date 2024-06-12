@@ -10,9 +10,7 @@ import com.hun.market.order.order.domain.OrderItem;
 import com.hun.market.order.order.dto.OrderDto;
 import com.hun.market.order.order.dto.OrderDto.OrderItemCreateRequestDto;
 import com.hun.market.order.order.repository.OrderRepository;
-import com.hun.market.order.pay.domain.Payment;
 import com.hun.market.order.pay.service.PaymentService;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -22,6 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

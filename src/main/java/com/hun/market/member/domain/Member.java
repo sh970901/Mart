@@ -4,6 +4,7 @@ import com.hun.market.base.entity.BaseEntity;
 import com.hun.market.item.domain.Item;
 import com.hun.market.item.dto.ItemDto;
 import com.hun.market.member.dto.MemberDto;
+import com.hun.market.order.cart.domain.Cart;
 import com.hun.market.order.order.domain.Order;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -35,6 +36,9 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
+
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Cart cart;
 
     @Embedded
     @AttributeOverrides({

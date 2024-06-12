@@ -1,6 +1,5 @@
 package com.hun.market.order.order.event;
 
-import com.hun.market.order.order.domain.Order;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 

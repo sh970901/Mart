@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/o")
 @RequiredArgsConstructor
 @Slf4j
 public class OrderApiController {
@@ -22,7 +22,6 @@ public class OrderApiController {
 
     @PostMapping("/orders/create")
     public OrderDto.OrderCreateResponseDto createOrder(@Valid @RequestBody OrderDto.OrderCreateRequestDto orderDto, @AuthenticationPrincipal MemberContext memberDto){
-
         String buyer = memberDto.getUsername();
         log.info("buyer: {}", buyer);
 
