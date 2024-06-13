@@ -34,7 +34,6 @@
         .user-info {
             margin-right: 20px;
         }
-
         a {
             text-decoration: none; /* 밑줄 제거 */
             color: white; /* 글자 색상을 하얀색으로 설정 */
@@ -68,30 +67,25 @@
     <!--    <button type="button" class="btn btn-primary">Primary</button>-->
 <!--    <nav>-->
 <!--        <ul>-->
-<!--            <li><a th:href="@{/main}" style="font-weight: bold; font-size: 1.2rem;">홈</a></li>-->
+<!--            <li><a th:href="@{/main}">홈</a></li>-->
 <!--            <li ><a th:href="@{/cart}" th:if="${#authorization.expression('isAuthenticated()')}">찜목록</a></li>-->
-<!--            <li ><a th:href="@{/myinfo}" th:if="${#authorization.expression('isAuthenticated()')}">내정보</a></li>-->
-<!--&lt;!&ndash;            <li><a href="#">카테고리 3</a></li>&ndash;&gt;-->
+<!--            <li ><a th:href="@{/myinfo}" th:if="${#authorization.expression('isAuthenticated()')}"  style="font-weight: bold; font-size: 1.2rem;">내정보</a></li>-->
+<!--            &lt;!&ndash;            <li><a href="#">카테고리 3</a></li>&ndash;&gt;-->
 <!--        </ul>-->
 <!--    </nav>-->
 </header>
 
 <main>
     <section>
-<!--        <h2>추천 상품</h2>-->
+        <!--        <h2>추천 상품</h2>-->
         <div class="item-list" id="item-list">
             <div class="item" th:each="item : ${itemList}">
                 <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/8-col/img%285%29.jpg" class="d-block w-100" alt="Exotic Fruits"/>
-<!--                <img th:src="@{/images/상품이미지.jpeg}" alt="상품 이미지">-->
-                <!--                <img th:src="${item.imageUrl}" th:alt="${item.name} Image" alt="상품 이미지">-->
                 <h3 th:text="${item.itemName}">상품 제목</h3>
                 <p th:text="${item.description}">상품 설명</p>
-<!--                <p th:text="'재고: ' + ${item.itemStock} + '개'">수량</p>-->
+                <!--                <p th:text="'재고: ' + ${item.itemStock} + '개'">수량</p>-->
                 <span th:text="'가격: ₩' + ${item.itemPrice}">가격: ₩</span>
-                <p><button class="btn btn-outline-primary me-2" th:onclick="|placeOrder(${item.itemId})|">바로 구매</button></p>
-                <p><button class="btn btn-outline-primary me-2" th:onclick="|addCart(${item.itemId})|">찜하기</button></p>
-<!--                <button class="btn btn-outline-primary me-2" th:onclick="|placeOrder(${item.itemId})|">바로 구매</button>-->
-<!--                <button class="btn btn-outline-primary me-2" th:onclick="|placeOrder(${item.itemId})|">찜하기</button>-->
+                <button class="btn btn-outline-primary me-2" th:onclick="|placeOrder(${item.itemId})|">바로 구매</button>
             </div>
         </div>
         <div id="loading-skeleton" class="skeleton" style="display: none;">
@@ -129,39 +123,6 @@
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(orderData)
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-
-            const result = await response.json();
-            console.log('Order placed successfully:', result);
-
-            // 주문 성공 시 사용자에게 알림 또는 페이지 이동
-            alert('Order placed successfully!');
-            // location.href = '/order-success'; // 주문 성공 페이지로 이동
-
-        } catch (error) {
-            console.error('There was a problem with the fetch operation:', error);
-            alert('Failed to place order: ' + error.message);
-        }
-    }
-
-
-    async function addCart(itemId) {
-        // 주문 데이터 설정
-        const cartData = {
-            itemId: itemId, quantity: 1
-        };
-
-        try {
-            const response = await fetch('/api/v1/c/cart/item', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(cartData)
             });
 
             if (!response.ok) {

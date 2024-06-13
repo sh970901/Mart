@@ -1,9 +1,13 @@
 package com.hun.market.order.order.domain;
 
 import com.hun.market.item.domain.Item;
+import com.hun.market.order.claim.domain.Claim;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.cache.annotation.EnableCaching;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -28,6 +32,9 @@ public class OrderItem {
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
+
+    @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Claim> claims = new ArrayList<>();
 
 
 

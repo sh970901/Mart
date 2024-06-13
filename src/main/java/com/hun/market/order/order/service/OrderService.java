@@ -37,7 +37,7 @@ public class OrderService {
     @Transactional
     public OrderDto.OrderCreateResponseDto createOrderByMember(OrderDto.OrderCreateRequestDto orderDto, String buyer) {
 
-        List<OrderItem> orderItems = createOrderItemsByOrderDto(orderDto);
+        List<OrderItem> orderItems = orderDto2OrderItems(orderDto);
 
         Member member = memberRepository.findByMbName(buyer).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
 
@@ -60,7 +60,7 @@ public class OrderService {
 
     }
 
-    private List<OrderItem> createOrderItemsByOrderDto(OrderDto.OrderCreateRequestDto orderDto){
+    private List<OrderItem> orderDto2OrderItems(OrderDto.OrderCreateRequestDto orderDto){
         List<Item> items = itemRepository.findAllById(getItemsIds(orderDto));
 
         List<OrderItem> orderItems = new ArrayList<>();

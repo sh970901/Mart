@@ -20,7 +20,7 @@ public class OrderApiController {
 
     private final OrderService orderService;
 
-    @PostMapping("/orders/create")
+    @PostMapping("/order/create")
     public OrderDto.OrderCreateResponseDto createOrder(@Valid @RequestBody OrderDto.OrderCreateRequestDto orderDto, @AuthenticationPrincipal MemberContext memberDto){
         String buyer = memberDto.getUsername();
         log.info("buyer: {}", buyer);

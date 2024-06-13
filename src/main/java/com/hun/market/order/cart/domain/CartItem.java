@@ -1,6 +1,7 @@
 package com.hun.market.order.cart.domain;
 
 import com.hun.market.item.domain.Item;
+import com.hun.market.order.cart.dto.CartDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
@@ -28,6 +29,16 @@ public class CartItem {
 
     @Column(name = "quantity", nullable = false)
     @Positive
-    private int quantity;
+    private Integer quantity;
 
+    public static CartItem createByItem(Item item, Integer quantity) {
+        return CartItem.builder()
+                .item(item)
+                .quantity(quantity)
+                .build();
+    }
+
+    public void mappingCart(Cart cart) {
+        this.cart = cart;
+    }
 }

@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function fetchMoreItems() {
     currentPage += 1;  // 페이지 값을 증가시킴
-    const url = `/api/v1/items?page=${currentPage}&size=${size}`;
+    const url = `/api/v1/i/items?page=${currentPage}&size=${size}`;
 
     // // 스켈레톤 표시
     document.getElementById('loading-skeleton').style.display = 'flex';
