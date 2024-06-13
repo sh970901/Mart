@@ -30,10 +30,13 @@ spring:
         format_sql: true
         default_batch_fetch_size: 100
 
-  data:
-    redis:
-      host: localhost
+  cache:
+    type: redis
+  redis:
+    cache:
+      host: 127.0.0.1
       port: 6379
+
 
 jasypt:
   encryptor:
