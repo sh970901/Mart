@@ -23,8 +23,7 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "member_id", nullable = false)
+    @OneToOne(mappedBy = "cart")
     private Member member;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -37,7 +36,22 @@ public class Cart {
                 .build();
 
         cartItem.mappingCart(cart);
+        member.mappingCart(cart);
 
         return cart;
+    }
+
+    public void addCartItem(CartItem cartItem){
+
+        for (CartItem existingCartItem : this.cartItems) {
+            if (existingCartItem.getItem().getId().equals(cartItem.getItem().getId())) {
+                // 동일한 아이템이 있는 경우 수량 증가
+                existingCartItem.increaseQuantity(cartItem.getQuantity());
+                cartItem.mappingCart(this);
+                return;
+            }
+        }
+        this.cartItems.add(cartItem);
+        cartItem.mappingCart(this);
     }
 }

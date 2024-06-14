@@ -38,7 +38,8 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "cart_id")
     private Cart cart;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -67,5 +68,9 @@ public class Member extends BaseEntity {
                 .mbCoin(memberDto.getMbCoin())
                 .department(memberDto.getDepartment())
                 .build();
+    }
+
+    public void mappingCart(Cart cart) {
+        this.cart = cart;
     }
 }

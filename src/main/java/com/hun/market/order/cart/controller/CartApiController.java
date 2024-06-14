@@ -23,15 +23,14 @@ public class CartApiController {
 
     @PostMapping("/cart/item")
     public CartDto.CartCreateResponseDto addCartItem(@Valid @RequestBody CartDto.CartItemCreateRequestDto cartItemDto, @AuthenticationPrincipal MemberContext memberDto){
-        log.info("여기1");
 
         // 카트는 일단 하나씩
         if (cartItemDto.getQuantity() != 1){
            return CartDto.CartCreateResponseDto.builder().description("no").build();
         }
-        log.info("여기2");
+
         String buyer = memberDto.getUsername();
-        log.info("buyer: {}", buyer);
+        log.info("member: {}", buyer);
 
         return cartService.addCartItemByMember(cartItemDto, buyer);
     }

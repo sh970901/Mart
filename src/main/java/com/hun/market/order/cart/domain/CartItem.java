@@ -41,4 +41,8 @@ public class CartItem {
     public void mappingCart(Cart cart) {
         this.cart = cart;
     }
+
+    public void increaseQuantity(Integer quantity){
+        this.quantity += quantity;
+    }
 }

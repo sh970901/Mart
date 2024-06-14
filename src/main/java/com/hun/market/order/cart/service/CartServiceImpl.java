@@ -40,16 +40,22 @@ public class CartServiceImpl implements CartService{
     @Validated
     @Override
     public CartDto.CartCreateResponseDto addCartItemByMember(@Valid CartDto.CartItemCreateRequestDto cartItemDto, String member) {
-        log.info("여기3");
 
         Member cartMember = memberRepository.findByMbName(member).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+
         /**
-         * TODO
          * 카트가 있다면 기존 카트 아이템 리스트에 추가
          * 카트가 없다면 카트 생성
          */
         CartItem cartItem = cartItemDto2CartItem(cartItemDto);
-        Cart cart = Cart.createByMember(cartItem, cartMember);
+
+        Cart cart = cartMember.getCart();
+        if (cart == null) {
+            cart = Cart.createByMember(cartItem, cartMember);
+        } else {
+            cart.addCartItem(cartItem);
+        }
+
         cartRepository.save(cart);
 
         return null;
