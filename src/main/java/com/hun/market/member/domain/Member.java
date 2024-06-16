@@ -5,6 +5,7 @@ import com.hun.market.item.domain.Item;
 import com.hun.market.item.dto.ItemDto;
 import com.hun.market.member.dto.MemberDto;
 import com.hun.market.order.cart.domain.Cart;
+import com.hun.market.order.cart.domain.CartItem;
 import com.hun.market.order.claim.domain.Claim;
 import com.hun.market.order.order.domain.Order;
 import jakarta.annotation.Nullable;
@@ -71,5 +72,18 @@ public class Member extends BaseEntity {
 
     public void mappingCart(Cart cart) {
         this.cart = cart;
+    }
+
+    public boolean isExistCart() {
+        return this.cart != null;
+    }
+
+    public Cart addCartItem(CartItem cartItem) {
+        if (isExistCart()) {
+            return cart.addCartItem(cartItem);
+        }
+        else {
+            return Cart.createByMember(cartItem, this);
+        }
     }
 }

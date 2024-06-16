@@ -50,14 +50,25 @@ public class CartServiceImpl implements CartService {
          */
         CartItem cartItem = cartItemDto2CartItem(cartItemDto);
 
-        Cart cart = cartMember.getCart();
+        Cart cart = null;
 
         try {
-            cart.addCartItem(cartItem, cartMember);
+             cart = cartMember.addCartItem(cartItem);
         }
         catch (CartFullException e){
             return CartDto.CartCreateResponseDto.builder().description("찜목록의 최대 갯수는 15개 입니다.").build();
         }
+//        Cart cart = cartMember.getCart();
+
+//        try {
+//            if (cart == null){
+//
+//            }
+//            else {
+//
+//            }
+//            cart = cart.addCartItem(cartItem, cartMember);
+//        }
 //        cart.addCartItem(cartItem, cartMember);
 //
 //        try {
