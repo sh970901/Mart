@@ -1,6 +1,7 @@
 package com.hun.market.core.exception;
 
 import com.hun.market.item.exception.ItemNotFoundException;
+import com.hun.market.order.cart.exception.CartNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +19,8 @@ public class ErrorControllerAdvice {
     @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(value = {
             ItemNotFoundException.class,
-            UsernameNotFoundException.class
+            UsernameNotFoundException.class,
+            CartNotFoundException.class
     })
     public void RuntimeException(HttpServletRequest request, HttpServletResponse response, Exception throwable) throws IOException {
         log.info("{}", throwable.getMessage());

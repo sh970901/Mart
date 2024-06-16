@@ -89,7 +89,15 @@
 <!--                <p th:text="'재고: ' + ${item.itemStock} + '개'">수량</p>-->
                 <span th:text="'가격: ₩' + ${item.itemPrice}">가격: ₩</span>
                 <p><button class="btn btn-outline-primary me-2" th:onclick="|placeOrder(${item.itemId})|">바로 구매</button></p>
-                <p><button class="btn btn-outline-primary me-2" th:onclick="|addCart(${item.itemId})|">찜하기</button></p>
+                <p>
+                    <button class="btn btn-outline-primary me-2"
+                            th:attr="data-item-id=${item.itemId}, data-item-name=${item.itemName}"
+                            onclick="addCart(this)">
+                        찜하기
+                    </button>
+<!--                    <button class="btn btn-outline-primary me-2"-->
+<!--                           th:onclick="|addCart('${item.itemId}', '${item.itemName}')|">찜하기</button>-->
+                </p>
 <!--                <button class="btn btn-outline-primary me-2" th:onclick="|placeOrder(${item.itemId})|">바로 구매</button>-->
 <!--                <button class="btn btn-outline-primary me-2" th:onclick="|placeOrder(${item.itemId})|">찜하기</button>-->
             </div>
@@ -114,11 +122,11 @@
 <script th:src="@{/js/display.js}"></script>
 <script th:inline="javascript">
     /*[[CDATA[*/
-    async function placeOrder(itemId) {
+    async function placeOrder(itemId, itemName) {
         // 주문 데이터 설정
         const orderData = {
             orderItemDtos: [
-                { itemId: itemId, quantity: 1 } // 기본적으로 수량 1로 설정
+                { itemId: itemId, quantity: 1, itemName: itemName } // 기본적으로 수량 1로 설정
             ]
         };
 
@@ -149,10 +157,14 @@
     }
 
 
-    async function addCart(itemId) {
+    async function addCart(button) {
+
+        const itemId = button.getAttribute('data-item-id');
+        const itemName = button.getAttribute('data-item-name');
+
         // 주문 데이터 설정
         const cartData = {
-            itemId: itemId, quantity: 1
+            itemId: itemId, quantity: 1, itemName: itemName
         };
 
         try {
@@ -172,7 +184,7 @@
             console.log('Order placed successfully:', result);
 
             // 주문 성공 시 사용자에게 알림 또는 페이지 이동
-            alert('Order placed successfully!');
+            alert(result.data.description);
             // location.href = '/order-success'; // 주문 성공 페이지로 이동
 
         } catch (error) {

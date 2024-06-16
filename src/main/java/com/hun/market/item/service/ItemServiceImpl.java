@@ -37,6 +37,7 @@ public class ItemServiceImpl implements ItemService {
                 .collect(Collectors.toList());
     }
 
+
 //    @Override
 //    public Page<ItemResponseDto> paging(Pageable pageable) {
 //        int page = pageable.getPageNumber(); // page 위치에 있는 값은 0부터 시작한다.
