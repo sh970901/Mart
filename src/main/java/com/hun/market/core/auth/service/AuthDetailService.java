@@ -5,6 +5,7 @@ import com.hun.market.member.domain.MemberContext;
 import com.hun.market.member.domain.MemberRole;
 import com.hun.market.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,15 +18,15 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class AuthDetailService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
 
     @Override
     public UserDetails loadUserByUsername(String mbName) throws UsernameNotFoundException {
-        Member member = memberRepository.findByMbName(mbName)
+        Member member = memberRepository.findByMbNameWithCart(mbName)
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
-
         List<GrantedAuthority> authorities = new ArrayList<>();
 
         // 임시 계정 생성

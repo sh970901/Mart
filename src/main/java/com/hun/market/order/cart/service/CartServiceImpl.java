@@ -41,7 +41,7 @@ public class CartServiceImpl implements CartService{
     @Override
     public CartDto.CartCreateResponseDto addCartItemByMember(@Valid CartDto.CartItemCreateRequestDto cartItemDto, String member) {
 
-        Member cartMember = memberRepository.findByMbName(member).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+        Member cartMember = memberRepository.findByMbNameWithCart(member).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
 
         /**
          * 카트가 있다면 기존 카트 아이템 리스트에 추가
