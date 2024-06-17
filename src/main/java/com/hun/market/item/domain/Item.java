@@ -2,6 +2,7 @@ package com.hun.market.item.domain;
 
 import com.hun.market.base.entity.BaseEntity;
 import com.hun.market.item.dto.ItemDto;
+import com.hun.market.item.exception.ItemStockException;
 import com.hun.market.order.order.domain.OrderItem;
 import jakarta.persistence.*;
 import lombok.*;
@@ -62,6 +63,12 @@ public class Item extends BaseEntity {
     }
 
     public void decreaseStock(int quantity) {
+        if ( itemStock < 1){
+            throw new ItemStockException("재고가 부족합니다. \n"+ itemName + "의 현재 재고는 "+itemStock+ "개 입니다.");
+        }
+        if (itemStock < quantity) {
+            throw new ItemStockException("재고가 부족합니다. \n"+ itemName + "의 현재 재고는 "+itemStock+ "개 입니다.");
+        }
         this.itemStock -= quantity;
     }
 }

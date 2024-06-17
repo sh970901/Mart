@@ -87,7 +87,7 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="card-body">
-                                    <input type="checkbox" th:id="${'itemCheckbox' + cartItem.cartItemId}" th:data-id="${cartItem.cartItemId}" th:data-quantity="${cartItem.quantity}" th:data-cartItemId="${cartItem.cartItemId}" class="itemCheckbox">
+                                    <input type="checkbox" th:id="${'itemCheckbox' + cartItem.cartItemId}" th:data-id="${cartItem.itemId}" th:data-quantity="${cartItem.quantity}" th:data-cartItemId="${cartItem.cartItemId}" class="itemCheckbox">
                                     <label th:for="${'itemCheckbox' + cartItem.cartItemId}" th:text="'상품: ' + ${cartItem.itemName}">상품 제목</label>
                                     <p class="card-text" th:text="'갯수: ' + ${cartItem.quantity}">상품 갯수</p>
                                     <p>
@@ -219,14 +219,15 @@
                 body: JSON.stringify(orderData)
             });
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-
             const result = await response.json();
-            console.log('Order placed successfully:', result);
 
-            alert('Selected items placed successfully!');
+            // if (!response.ok) {
+            //     throw new Error(result.data.description);
+            // }
+            //
+            // console.log('Order placed successfully:', result.data.description);
+
+            alert(result.data.description);
             location.reload();
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);

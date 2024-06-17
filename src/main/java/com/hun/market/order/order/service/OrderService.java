@@ -2,6 +2,7 @@ package com.hun.market.order.order.service;
 
 import com.hun.market.item.domain.Item;
 import com.hun.market.item.exception.ItemNotFoundException;
+import com.hun.market.item.exception.ItemStockException;
 import com.hun.market.item.repository.ItemRepository;
 import com.hun.market.member.domain.Member;
 import com.hun.market.member.repository.MemberRepository;
@@ -18,6 +19,7 @@ import com.hun.market.order.order.dto.OrderDto.OrderItemCreateRequestDto;
 import com.hun.market.order.order.repository.OrderRepository;
 import com.hun.market.order.pay.service.PaymentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +34,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class OrderService {
 
     private final MemberRepository memberRepository;
@@ -42,7 +45,7 @@ public class OrderService {
     private final CartService cartService;
 
     @Validated
-    @Transactional
+    @Transactional(rollbackFor = ItemStockException.class)
     public OrderDto.OrderCreateResponseDto createOrderByMemberCart(OrderDto.OrderCreateRequestDto orderDto, String buyer) {
 
         List<OrderItem> orderItems = orderDto2OrderItems(orderDto);
@@ -50,14 +53,23 @@ public class OrderService {
         Member member = memberRepository.findByMbName(buyer).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
 
         Order order = Order.createByMember(orderItems, member);
+
         orderRepository.save(order);
 
-        processOrder(order);
+        try {
+            paymentCartService.processPayment(order);
+        }
+        catch (ItemStockException e){
+            log.info("재고 부족");
+            return OrderDto.OrderCreateResponseDto.builder().description(e.getMessage()).build();
+        }
+
 
         List<Long> cartItemsIds = orderDto.getOrderItemDtos().stream().map(OrderItemByCartCreateRequestDto::getCartItemId).toList();
         cartService.deleteAllCartItem(cartItemsIds, buyer);
 
-        return null;
+
+        return OrderDto.OrderCreateResponseDto.builder().description("구매가 완료되었습니다.").build();
 
     }
 
@@ -93,7 +105,4 @@ public class OrderService {
         return orderItems;
     }
 
-    private void processOrder(Order order) {
-        paymentCartService.processPayment(order);
-    }
 }
