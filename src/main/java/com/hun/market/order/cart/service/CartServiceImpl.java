@@ -15,6 +15,7 @@ import com.hun.market.order.cart.exception.CartNotFoundException;
 import com.hun.market.order.cart.repository.CartItemRepository;
 import com.hun.market.order.cart.repository.CartRepository;
 import jakarta.validation.Valid;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -44,10 +45,6 @@ public class CartServiceImpl implements CartService {
 
         Member cartMember = memberRepository.findByMbNameWithCart(member).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
 
-        /**
-         * 카트가 있다면 기존 카트 아이템 리스트에 추가
-         * 카트가 없다면 카트 생성
-         */
         CartItem cartItem = cartItemDto2CartItem(cartItemDto);
 
         Cart cart = null;
@@ -56,35 +53,12 @@ public class CartServiceImpl implements CartService {
              cart = cartMember.addCartItem(cartItem);
         }
         catch (CartFullException e){
-            return CartDto.CartCreateResponseDto.builder().description("찜목록의 최대 갯수는 15개 입니다.").build();
+            return createCartResponse("최대 15개까지 찜등록이 가능합니다.");
         }
-//        Cart cart = cartMember.getCart();
-
-//        try {
-//            if (cart == null){
-//
-//            }
-//            else {
-//
-//            }
-//            cart = cart.addCartItem(cartItem, cartMember);
-//        }
-//        cart.addCartItem(cartItem, cartMember);
-//
-//        try {
-//            if (cart == null) {
-//                cart = Cart.createByMember(cartItem, cartMember);
-//            } else {
-//                cart.addCartItem(cartItem);
-//            }
-//        } catch (CartFullException e){
-//            return CartDto.CartCreateResponseDto.builder().description("찜목록의 최대 갯수는 15개 입니다.").build();
-//        }
-
 
         cartRepository.save(cart);
 
-        return CartDto.CartCreateResponseDto.builder().description("찜목록에 추가되었습니다.").build();
+        return createCartResponse("찜하기 성공");
     }
 
     @Override
@@ -123,6 +97,31 @@ public class CartServiceImpl implements CartService {
         }
     }
 
+    @Transactional
+    @Override
+    public CartDto.CartItemDeleteResponseDto deleteAllCartItem(List<Long> cartItemsIds, String username) {
+        List<CartItem> cartItems = cartItemRepository.findAllById(cartItemsIds);
+        if (cartItems.isEmpty()) {
+            throw new CartItemNotFoundException("CartItems not found");
+        }
+
+        Member member = memberRepository.findByMbName(username)
+                                        .orElseThrow(() -> new MemberNotMatchException("Unauthorized action"));
+
+        List<CartItem> itemsToDelete = cartItems.stream()
+                                                .filter(cartItem -> cartItem.getCart().getMember().getMbName().equals(username))
+                                                .toList();
+
+        if (itemsToDelete.size() != cartItems.size()) {
+            throw new MemberNotMatchException("Unauthorized action");
+        }
+
+        cartItemRepository.deleteAll(itemsToDelete);
+
+        return decreaseResponse("Selected cart items have been deleted.");
+    }
+
+
     private CartItem cartItemDto2CartItem(CartDto.CartItemCreateRequestDto cartItemDto) {
         Item item = itemRepository.findById(cartItemDto.getItemId()).orElseThrow(() -> new ItemNotFoundException("사용자를 찾을 수 없습니다."));
 
@@ -130,6 +129,10 @@ public class CartServiceImpl implements CartService {
     }
     private CartDto.CartItemDeleteResponseDto decreaseResponse(String description) {
         return CartDto.CartItemDeleteResponseDto.builder().description(description).build();
+    }
+
+    private CartDto.CartCreateResponseDto createCartResponse(String description) {
+        return CartDto.CartCreateResponseDto.builder().description(description).build();
     }
 
 

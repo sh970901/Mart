@@ -5,9 +5,15 @@ import com.hun.market.item.exception.ItemNotFoundException;
 import com.hun.market.item.repository.ItemRepository;
 import com.hun.market.member.domain.Member;
 import com.hun.market.member.repository.MemberRepository;
+import com.hun.market.order.cart.domain.Cart;
+import com.hun.market.order.cart.domain.CartItem;
+import com.hun.market.order.cart.repository.CartItemRepository;
+import com.hun.market.order.cart.repository.CartRepository;
+import com.hun.market.order.cart.service.CartService;
 import com.hun.market.order.order.domain.Order;
 import com.hun.market.order.order.domain.OrderItem;
 import com.hun.market.order.order.dto.OrderDto;
+import com.hun.market.order.order.dto.OrderDto.OrderItemByCartCreateRequestDto;
 import com.hun.market.order.order.dto.OrderDto.OrderItemCreateRequestDto;
 import com.hun.market.order.order.repository.OrderRepository;
 import com.hun.market.order.pay.service.PaymentService;
@@ -31,11 +37,13 @@ public class OrderService {
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
     private final ItemRepository itemRepository;
-    private final PaymentService paymentCoinService;
+    private final PaymentService paymentCartService;
+
+    private final CartService cartService;
 
     @Validated
     @Transactional
-    public OrderDto.OrderCreateResponseDto createOrderByMember(OrderDto.OrderCreateRequestDto orderDto, String buyer) {
+    public OrderDto.OrderCreateResponseDto createOrderByMemberCart(OrderDto.OrderCreateRequestDto orderDto, String buyer) {
 
         List<OrderItem> orderItems = orderDto2OrderItems(orderDto);
 
@@ -46,16 +54,19 @@ public class OrderService {
 
         processOrder(order);
 
+        List<Long> cartItemsIds = orderDto.getOrderItemDtos().stream().map(OrderItemByCartCreateRequestDto::getCartItemId).toList();
+        cartService.deleteAllCartItem(cartItemsIds, buyer);
+
         return null;
 
     }
 
     private List<Long> getItemsIds(OrderDto.OrderCreateRequestDto orderDto){
 
-        List<OrderItemCreateRequestDto> orderItemDtos = orderDto.getOrderItemDtos();
+        List<OrderItemByCartCreateRequestDto> orderItemDtos = orderDto.getOrderItemDtos();
 
         return orderItemDtos.stream()
-                            .map(OrderItemCreateRequestDto::getItemId)
+                            .map(OrderItemByCartCreateRequestDto::getItemId)
                             .toList();
 
     }
@@ -70,7 +81,7 @@ public class OrderService {
                                           .collect(Collectors.toMap(Item::getId, item -> item));
 
         // 각 OrderItemCreateRequestDto를 OrderItem으로 변환
-        for (OrderItemCreateRequestDto orderItemDto : orderDto.getOrderItemDtos()) {
+        for (OrderItemByCartCreateRequestDto orderItemDto : orderDto.getOrderItemDtos()) {
             Long itemId = orderItemDto.getItemId();
 
             Item item = Optional.ofNullable(itemsByIds.get(itemId))
@@ -83,6 +94,6 @@ public class OrderService {
     }
 
     private void processOrder(Order order) {
-        paymentCoinService.processPayment(order);
+        paymentCartService.processPayment(order);
     }
 }

@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class PaymentCoinService implements PaymentService{
+public class PaymentCartService implements PaymentService{
 
 
     @Transactional

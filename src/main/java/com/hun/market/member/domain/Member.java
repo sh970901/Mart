@@ -70,6 +70,10 @@ public class Member extends BaseEntity {
                 .build();
     }
 
+    public void deductCoin(int coin){
+        this.mbCoin -= coin;
+    }
+
     public void mappingCart(Cart cart) {
         this.cart = cart;
     }
@@ -79,6 +83,12 @@ public class Member extends BaseEntity {
     }
 
     public Cart addCartItem(CartItem cartItem) {
+
+        /**
+         * 카트가 있다면 기존 카트 아이템 리스트에 추가
+         * 카트가 없다면 카트 생성
+         */
+
         if (isExistCart()) {
             return cart.addCartItem(cartItem);
         }

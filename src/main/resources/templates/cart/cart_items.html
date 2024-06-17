@@ -13,12 +13,11 @@
             left: 0;
             width: 100%;
             display: flex;
-            /*justify-content: flex-end;*/
             align-items: center;
             padding: 10px 20px;
             background-color: white;
             border-bottom: 1px solid #ccc;
-            z-index: 1000; /* 헤더가 다른 요소들 위에 오도록 합니다. */
+            z-index: 1000;
             justify-content: space-between;
         }
         .header-main {
@@ -36,8 +35,13 @@
         }
 
         a {
-            text-decoration: none; /* 밑줄 제거 */
-            color: white; /* 글자 색상을 하얀색으로 설정 */
+            text-decoration: none;
+            color: white;
+        }
+
+        .centered {
+            text-align: center;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -48,8 +52,6 @@
             <img th:src="@{/images/character/logo.png}" alt="로고 이미지" style="max-width: 200px; max-height:40px; height: auto;">
         </div>
         <div class="login-div">
-            <!--            <span class="user-info" th:if="${#authorization.expression('isAuthenticated()')}"-->
-            <!--                  th:text="${#authentication.principal.username + '  ' + #authentication.principal.mbCoin + 'J₩' }"></span>-->
             <span class="user-info" th:if="${#authorization.expression('isAuthenticated()')}"
                   th:text="${#authentication.principal.username + '님'}"></span>
             <button class="btn btn-outline-primary me-2" sec:authorize="isAnonymous()" onclick="location.href='/login'">로그인</button>
@@ -64,45 +66,53 @@
             <a th:href="@{/main}">INNO Market</a>
         </h1>
     </div>
-
-    <!--    <button type="button" class="btn btn-primary">Primary</button>-->
-    <!--    <nav>-->
-    <!--        <ul>-->
-    <!--            <li><a th:href="@{/main}" style="font-weight: bold; font-size: 1.2rem;">홈</a></li>-->
-    <!--            <li ><a th:href="@{/cart}" th:if="${#authorization.expression('isAuthenticated()')}">찜목록</a></li>-->
-    <!--            <li ><a th:href="@{/myinfo}" th:if="${#authorization.expression('isAuthenticated()')}">내정보</a></li>-->
-    <!--&lt;!&ndash;            <li><a href="#">카테고리 3</a></li>&ndash;&gt;-->
-    <!--        </ul>-->
-    <!--    </nav>-->
 </header>
 
 <main>
     <section>
-        <!--        <h2>추천 상품</h2>-->
-        <div class="item-list" id="item-list" th:if="${cartItemList != null}">
-            <div class="item" th:each="cartItem : ${cartItemList}">
-                <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/8-col/img%285%29.jpg" class="d-block w-100" alt="Exotic Fruits"/>
-                <!--                <img th:src="@{/images/상품이미지.jpeg}" alt="상품 이미지">-->
-                <!--                <img th:src="${item.imageUrl}" th:alt="${item.name} Image" alt="상품 이미지">-->
-                <h3 th:text="'상품: ' +${cartItem.itemName}">상품 제목</h3>
-                <p th:text="'갯수: ' + ${cartItem.quantity}">상품 갯수</p>
-
-                <p><button class="btn btn-outline-primary me-2" th:onclick="|placeOrder(${cartItem.itemId})|">바로 구매</button></p>
-                <p><button class="btn btn-outline-primary me-2" th:onclick="|cancelCartItem(${cartItem.cartItemId})|">취소</button></p>
-            </div>
-        </div>
-        <div class="item-list" id="item-list2" th:if="${cartItemList == null}">
-            <div class="item">
-                찜목록 상품이 없습니다.
-            </div>
-        </div>
-        <div id="loading-skeleton" class="skeleton" style="display: none;">
-            <div class="skeleton-content">
-                <div class="skeleton-box">
+        <div class="container">
+            <div class="row centered">
+                <div class="col">
+                    <input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)">
+                    <label for="selectAll">전체 선택</label>
+                    <button class="btn btn-outline-primary" onclick="purchaseSelectedItems()">구매</button>
                 </div>
-                <div class="skeleton-box">
+            </div>
+            <div class="item-list" id="item-list" th:if="${cartItemList != null}">
+                <div class="item" th:each="cartItem : ${cartItemList}">
+                    <div class="card mb-3">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/8-col/img%285%29.jpg" class="img-fluid rounded-start" alt="상품 이미지">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <input type="checkbox" th:id="${'itemCheckbox' + cartItem.cartItemId}" th:data-id="${cartItem.cartItemId}" th:data-quantity="${cartItem.quantity}" th:data-cartItemId="${cartItem.cartItemId}" class="itemCheckbox">
+                                    <label th:for="${'itemCheckbox' + cartItem.cartItemId}" th:text="'상품: ' + ${cartItem.itemName}">상품 제목</label>
+                                    <p class="card-text" th:text="'갯수: ' + ${cartItem.quantity}">상품 갯수</p>
+                                    <p>
+                                        <button class="btn btn-outline-primary me-2" th:onclick="|placeOrder(${cartItem.itemId})|">바로 구매</button>
+                                        <button class="btn btn-outline-danger me-2" th:onclick="|cancelCartItem(${cartItem.cartItemId})|">취소</button>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="skeleton-box">
+            </div>
+            <div class="item-list" id="item-list2" th:if="${cartItemList == null}">
+                <div class="item">
+                    찜목록 상품이 없습니다.
+                </div>
+            </div>
+            <div id="loading-skeleton" class="skeleton" style="display: none;">
+                <div class="skeleton-content">
+                    <div class="skeleton-box">
+                    </div>
+                    <div class="skeleton-box">
+                    </div>
+                    <div class="skeleton-box">
+                    </div>
                 </div>
             </div>
         </div>
@@ -113,14 +123,12 @@
     <p>© 2024 이노마켓. All rights reserved.</p>
 </footer>
 
-<!--<script th:src="@{/js/display.js}"></script>-->
 <script th:inline="javascript">
     /*[[CDATA[*/
     async function placeOrder(itemId) {
-        // 주문 데이터 설정
         const orderData = {
             orderItemDtos: [
-                { itemId: itemId, quantity: 1 } // 기본적으로 수량 1로 설정
+                { itemId: itemId, quantity: 1 }
             ]
         };
 
@@ -139,20 +147,14 @@
 
             const result = await response.json();
             console.log('Order placed successfully:', result);
-
-            // 주문 성공 시 사용자에게 알림 또는 페이지 이동
             alert('Order placed successfully!');
-            // location.href = '/order-success'; // 주문 성공 페이지로 이동
-
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
             alert('Failed to place order: ' + error.message);
         }
     }
 
-
     async function cancelCartItem(cartItemId) {
-
         try {
             const response = await fetch(`/api/v1/c/cart/items/${cartItemId}`, {
                 method: 'DELETE',
@@ -167,17 +169,77 @@
 
             const result = await response.json();
             console.log('Order placed successfully:', result);
-
-            // 주문 성공 시 사용자에게 알림 또는 페이지 이동
             alert(result.data.description);
             location.reload();
-            // location.href = '/order-success'; // 주문 성공 페이지로 이동
-
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
             alert('Failed to place order: ' + error.message);
         }
     }
+
+    function toggleSelectAll(selectAllCheckbox) {
+        const checkboxes = document.querySelectorAll('.itemCheckbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = selectAllCheckbox.checked;
+        });
+    }
+
+    function handleItemCheckboxChange() {
+        const selectAllCheckbox = document.getElementById('selectAll');
+        const checkboxes = document.querySelectorAll('.itemCheckbox');
+        const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+        selectAllCheckbox.checked = allChecked;
+    }
+
+    async function purchaseSelectedItems() {
+        const selectedItems = [];
+        const checkboxes = document.querySelectorAll('.itemCheckbox:checked');
+        checkboxes.forEach(checkbox => {
+            const itemId = checkbox.getAttribute('data-id');
+            const quantity = checkbox.getAttribute('data-quantity');
+            const cartItemId = checkbox.getAttribute('data-cartItemId');
+            selectedItems.push({ itemId: itemId, quantity: quantity, cartItemId: cartItemId });
+        });
+
+        if (selectedItems.length === 0) {
+            alert('구매할 상품을 선택해주세요.');
+            return;
+        }
+
+        const orderData = {
+            orderItemDtos: selectedItems
+        };
+
+        try {
+            const response = await fetch('/api/v1/o/order/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(orderData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+
+            const result = await response.json();
+            console.log('Order placed successfully:', result);
+
+            alert('Selected items placed successfully!');
+            location.reload();
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+            alert('Failed to place order: ' + error.message);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const checkboxes = document.querySelectorAll('.itemCheckbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', handleItemCheckboxChange);
+        });
+    });
     /*]]>*/
 </script>
 </body>

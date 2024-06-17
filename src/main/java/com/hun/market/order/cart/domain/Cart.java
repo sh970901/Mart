@@ -46,7 +46,6 @@ public class Cart {
 
     public Cart addCartItem(CartItem cartItem){
         validCartSize();
-
         // 카트에 이미 존재하는지 확인
         Optional<CartItem> existingCartItem = findCartItemByItemId(cartItem.getItem().getId());
         if (existingCartItem.isPresent()) {
@@ -86,16 +85,5 @@ public class Cart {
             return createByMember(cartItem, cartMember);
         }
     }
-
-//    private Cart createByMember(CartItem cartItem, Member member) {
-//
-//        this.member = member;
-//        member.mappingCart(this);
-//
-//        this.cartItems.add(cartItem);
-//        cartItem.mappingCart(this);
-//
-//        return this;
-//    }
 
 }

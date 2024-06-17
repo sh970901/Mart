@@ -40,10 +40,9 @@ public class Payment extends BaseEntity {
 
     public PaymentStatus process() {
 
-        // 주문 상태 완료 발행
+
         Events.raise(new OrderCompletedEvent(order));
-        // 회원 코인 차감 발행
-        // 상품 재고 차감 발행
+
         return null;
     }
 }
