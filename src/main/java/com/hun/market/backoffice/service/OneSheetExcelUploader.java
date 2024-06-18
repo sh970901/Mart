@@ -17,11 +17,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-public class OneSheetExcelUpload<T> {
+public class OneSheetExcelUploader<T> {
 
     private final XSSFWorkbook workbook;
 
-    public OneSheetExcelUpload(Class<T> type, MultipartFile file) throws IOException {
+    public OneSheetExcelUploader(Class<T> type, MultipartFile file) throws IOException {
         this.workbook = new XSSFWorkbook(file.getInputStream());
         excelToDto(type);
     }

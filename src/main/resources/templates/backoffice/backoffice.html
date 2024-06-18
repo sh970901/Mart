@@ -9,17 +9,27 @@
   -->
   <!--  <script type="text/javascript" src="lib/js/jquery-1.10.2.js"></script>-->
   <!--  <script type="text/javascript" src="lib/js/jquery-ui.js"></script>-->
-  <!--  <script src="https://code.jquery.com/jquery-1.12.4.min.js" crossorigin="anonymous"></script>-->
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js" crossorigin="anonymous"></script>
   <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 </head>
 <body>
 백오피스화면입니다.
 <h1>서머노트 구현</h1>
-<form th:action="@{/backoffice/uploadExcel}" method="POST" enctype="multipart/form-data">
+<form th:action="@{/backoffice/upload/excel}" method="POST" enctype="multipart/form-data">
   <input type="file" th:name="excel">
   <input th:type="submit" value="업로드"/>
 </form>
+
+
+<!--<h1>이미지 업로드하기</h1>
+이미지 업로드하기
+<form th:action="@{/backoffice/upload/image}" method="POST" enctype="multipart/form-data">
+  <input type="file" th:name="image">
+  <input th:type="submit" value="업로드"/>
+</form>-->
+
+
 서머노트테스트
 <div class="post-form">
 	<textarea name="postContent" id="summernote">

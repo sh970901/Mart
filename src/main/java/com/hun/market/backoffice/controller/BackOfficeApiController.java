@@ -3,6 +3,7 @@ package com.hun.market.backoffice.controller;
 import com.hun.market.backoffice.service.ExcelService;
 import com.hun.market.backoffice.service.ImageService;
 import java.io.IOException;
+import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,14 +19,19 @@ public class BackOfficeApiController {
     private final ExcelService excelService;
     private final ImageService imageService;
 
-    @PostMapping("/uploadExcel")
+    @PostMapping("/upload/excel")
     public void uploadExcel(@RequestParam("excel") MultipartFile file) throws IOException {
         excelService.uploadExcel(file);
     }
 
-    @PostMapping("/uploadImage")
+    @PostMapping("/upload/image")
     public void uploadImage(@RequestParam("image") MultipartFile file) throws IOException {
         imageService.uploadImage(file);
+    }
+
+    @PostMapping("/upload/images")
+    public void uploadMultiImage(@RequestParam("images") ArrayList<MultipartFile> file) throws IOException {
+        imageService.uploadImages(file);
     }
 
 }
