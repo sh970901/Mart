@@ -1,6 +1,5 @@
 package com.hun.market.backoffice.service;
 
-import com.hun.market.backoffice.dto.ExcelUploadDto;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -20,6 +19,9 @@ import static java.lang.Long.parseLong;
 public class OneSheetExcelUploader<T> {
 
     private final XSSFWorkbook workbook;
+
+    //실제 반환 되어야 하는 결과 리스트(excel -> dto)
+    private final List<T> resultDtoList = new ArrayList<>();
 
     public OneSheetExcelUploader(Class<T> type, MultipartFile file) throws IOException {
         this.workbook = new XSSFWorkbook(file.getInputStream());
@@ -53,17 +55,17 @@ public class OneSheetExcelUploader<T> {
                         fields[j].set(object, dataFormatter.formatCellValue(row.getCell(j)));
                     }
                 }
-                list.add((T)object);
-            }
-
-            for (T t : list) {
-                System.out.println(t.toString());
+                this.resultDtoList.add((T)object);
             }
 
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             /*에러 핸들링 어떻게 할지 고민*/
             throw new RuntimeException(e);
         }
+    }
+
+    public List<T> getResultDtoList() {
+        return resultDtoList;
     }
 
     private String getFieldTypeName(Field field) {
@@ -79,24 +81,4 @@ public class OneSheetExcelUploader<T> {
         return workbook.getSheetAt(0);
     }
 
-    public void uploadExcel(@RequestParam("excel") MultipartFile file, Model model) throws IOException {
-
-        XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
-        XSSFSheet worksheet = workbook.getSheetAt(0);
-
-        for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {
-            ExcelUploadDto excelUploadDto = new ExcelUploadDto();
-
-            DataFormatter dataFormatter = new DataFormatter();
-            XSSFRow row = worksheet.getRow(i);
-
-            String userName = dataFormatter.formatCellValue(row.getCell(0));
-            Long coin = parseLong(dataFormatter.formatCellValue(row.getCell(1)));
-
-            excelUploadDto.setUserName(userName);
-            excelUploadDto.setCoin(coin);
-
-            //excelService.uploadExcel(excelUploadDto);
-        }
-    }
 }

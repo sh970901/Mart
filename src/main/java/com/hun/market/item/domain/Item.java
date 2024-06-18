@@ -31,6 +31,14 @@ public class Item extends BaseEntity {
     @Column(name="item_price", nullable = false, length = 1000)
     private Long itemPrice;
 
+    //상품 구매 링크
+    /*@Column(name="url", nullable = false, length = 1000)
+    private String url;*/
+
+    //이미지경로(S3)
+    /*@Column(name="image_path", nullable = false, length = 1000)
+    private String imagePath;*/
+
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 

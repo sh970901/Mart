@@ -1,5 +1,6 @@
 package com.hun.market.backoffice.controller;
 
+import com.hun.market.backoffice.enums.ExcelUploadType;
 import com.hun.market.backoffice.service.ExcelService;
 import com.hun.market.backoffice.service.ImageService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class BackOfficeApiController {
 
     @PostMapping("/upload/excel")
     public void uploadExcel(@RequestParam("excel") MultipartFile file) throws IOException {
-        excelService.uploadExcel(file);
+        excelService.uploadExcel(file, ExcelUploadType.EMPLOYEE);
     }
 
     @PostMapping("/upload/image")
@@ -34,5 +35,11 @@ public class BackOfficeApiController {
     public void uploadMultiImage(@RequestParam("images") ArrayList<MultipartFile> file) throws IOException {
         imageService.uploadImages(file);
     }
+
+    @PostMapping("/upload/items")
+    public void uploadMultiItems(@RequestParam("items") MultipartFile file) throws IOException {
+        excelService.uploadExcel(file, ExcelUploadType.ITEM);
+    }
+
 
 }

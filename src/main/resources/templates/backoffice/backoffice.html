@@ -15,9 +15,15 @@
 </head>
 <body>
 백오피스화면입니다.
-<h1>서머노트 구현</h1>
+<h1>사원 일고라업로드 </h1>
 <form th:action="@{/backoffice/upload/excel}" method="POST" enctype="multipart/form-data">
   <input type="file" th:name="excel">
+  <input th:type="submit" value="업로드"/>
+</form>
+
+<h1>상품일괄업로드</h1>
+<form th:action="@{/backoffice/upload/items}" method="POST" enctype="multipart/form-data">
+  <input type="file" th:name="items">
   <input th:type="submit" value="업로드"/>
 </form>
 

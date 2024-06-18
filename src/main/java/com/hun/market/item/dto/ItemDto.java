@@ -27,6 +27,16 @@ public class ItemDto {
         private Long itemPrice;
 
         private String description;
+
+        //테스트용 toString()
+        @Override public String toString() {
+            return "ItemCreateRequestDto{" +
+                "itemName='" + itemName + '\'' +
+                ", itemStock=" + itemStock +
+                ", itemPrice=" + itemPrice +
+                ", description='" + description + '\'' +
+                '}';
+        }
     }
 
     @Getter
