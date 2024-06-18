@@ -85,5 +85,6 @@ public class Order extends BaseEntity {
     }
 
     public void complete() {
+        orderStatus = OrderStatus.COMPLETE;
     }
 }

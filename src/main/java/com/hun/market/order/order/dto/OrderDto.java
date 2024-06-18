@@ -18,7 +18,7 @@ public class OrderDto {
     @Builder
     public static class OrderCreateRequestDto {
 
-        private List<OrderItemCreateRequestDto> orderItemDtos = new ArrayList<>();
+        private List<OrderItemByCartCreateRequestDto> orderItemDtos = new ArrayList<>();
 
     }
 
@@ -36,10 +36,22 @@ public class OrderDto {
         @Size(max = 10000, message = "quantity cannot exceed 10000")
         private Integer quantity;
 
-//        @NotNull(message = "Item name is required")
-//        @Size(max = 10000, message = "Price cannot exceed 10000")
-//        private Long price;
+    }
 
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @Builder
+    public static class OrderItemByCartCreateRequestDto {
+        @NotNull(message = "cartItem  is required")
+        private Long cartItemId;
+
+        @NotNull(message = "Item  is required")
+        private Long itemId;
+
+        @NotNull(message = "quantity is required")
+        @Size(max = 10000, message = "quantity cannot exceed 10000")
+        private Integer quantity;
 
     }
 

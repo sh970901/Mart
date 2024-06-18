@@ -7,6 +7,8 @@ import com.hun.market.order.order.dto.OrderDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +33,7 @@ public class CartApiController {
 
         return cartService.addCartItemByMember(cartItemDto, buyer);
     }
+
 
     @DeleteMapping("/cart/items/{cartItemId}")
     public CartDto.CartItemDeleteResponseDto deleteCartItem(@PathVariable Long cartItemId, @AuthenticationPrincipal MemberContext memberDto){

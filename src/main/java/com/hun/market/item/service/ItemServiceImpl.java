@@ -28,7 +28,7 @@ public class ItemServiceImpl implements ItemService {
      * 레디슨을 활용한 캐싱 처리
      */
     @Validated
-    @Cacheable(cacheNames = "itemListCache", key = "#root.targetClass + '.' + #root.methodName + '.' + #page + '.' + #size", sync = true, cacheManager = "itemCacheManager")
+//    @Cacheable(cacheNames = "itemListCache", key = "#root.targetClass + '.' + #root.methodName + '.' + #page + '.' + #size", sync = true, cacheManager = "itemCacheManager")
     public List<ItemDto.ItemCreatResponseDto> getItemList(int page, int size) {
         Page<Item> resultItemPage = itemRepository.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "id")));
         log.info("-----------------------good------------------------");

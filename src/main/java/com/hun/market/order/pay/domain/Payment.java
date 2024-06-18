@@ -15,6 +15,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder(access = AccessLevel.PRIVATE)
 public class Payment extends BaseEntity {
+
     @Id
     @Column(name = "payment_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +23,7 @@ public class Payment extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private PaymentStatus status;
+
     @Column(name = "payment_price", nullable = false)
     @PositiveOrZero
     private Long amount;
@@ -40,10 +42,8 @@ public class Payment extends BaseEntity {
 
     public PaymentStatus process() {
 
-        // 주문 상태 완료 발행
         Events.raise(new OrderCompletedEvent(order));
-        // 회원 코인 차감 발행
-        // 상품 재고 차감 발행
+
         return null;
     }
 }

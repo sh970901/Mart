@@ -11,4 +11,6 @@ public interface CartService {
     List<CartDto.CartItemCreateResponseDto> getCartItemList(Pageable pageable, String member);
 
     CartDto.CartItemDeleteResponseDto deleteCartItem(Long cartItemId, String username);
+
+    CartDto.CartItemDeleteResponseDto deleteAllCartItem (List<Long> cartItemIds, String username);
 }
