@@ -136,7 +136,7 @@
                 <ul id="selectedItemsList"></ul>
                 <p>총 가격: <span id="totalPrice"></span>원</p>
                 <p>보유 코인:
-                <span class="user-info" th:if="${#authorization.expression('isAuthenticated()')}"
+                <span class="user-info" id="mbCoinValue" th:if="${#authorization.expression('isAuthenticated()')}"
                       th:text="${#authentication.principal.mbCoin }"></span>
                 </p>
             </div>
@@ -152,60 +152,9 @@
 <footer>
     <p>© 2024 이노마켓. All rights reserved.</p>
 </footer>
-
+<script th:src="@{/js/order.js}"></script>
 <script th:inline="javascript">
     /*[[CDATA[*/
-    // async function placeOrder(itemId) {
-    //     const orderData = {
-    //         orderItemDtos: [
-    //             { itemId: itemId, quantity: 1 }
-    //         ]
-    //     };
-    //
-    //     try {
-    //         const response = await fetch('/api/v1/o/orders/create', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify(orderData)
-    //         });
-    //
-    //         if (!response.ok) {
-    //             throw new Error('Network response was not ok ' + response.statusText);
-    //         }
-    //
-    //         const result = await response.json();
-    //         console.log('Order placed successfully:', result);
-    //         alert('Order placed successfully!');
-    //     } catch (error) {
-    //         console.error('There was a problem with the fetch operation:', error);
-    //         alert('Failed to place order: ' + error.message);
-    //     }
-    // }
-
-    async function cancelCartItem(cartItemId) {
-        try {
-            const response = await fetch(`/api/v1/c/cart/items/${cartItemId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-
-            const result = await response.json();
-            console.log('Order placed successfully:', result);
-            alert(result.data.description);
-            location.reload();
-        } catch (error) {
-            console.error('There was a problem with the fetch operation:', error);
-            alert('Failed to place order: ' + error.message);
-        }
-    }
 
     function toggleSelectAll(selectAllCheckbox) {
         const checkboxes = document.querySelectorAll('.itemCheckbox');
@@ -248,44 +197,6 @@
         document.getElementById('totalPrice').textContent = totalPrice;
     }
 
-    async function purchaseSelectedItems() {
-        const selectedItems = [];
-        const checkboxes = document.querySelectorAll('.itemCheckbox:checked');
-        checkboxes.forEach(checkbox => {
-            const itemId = checkbox.getAttribute('data-id');
-            const quantity = checkbox.getAttribute('data-quantity');
-            const cartItemId = checkbox.getAttribute('data-cartItemId');
-            selectedItems.push({ itemId: itemId, quantity: quantity, cartItemId: cartItemId });
-        });
-
-        if (selectedItems.length === 0) {
-            alert('구매할 상품을 선택해주세요.');
-            return;
-        }
-
-        const orderData = {
-            orderItemDtos: selectedItems
-        };
-
-        try {
-            const response = await fetch('/api/v1/o/order/create', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(orderData)
-            });
-
-            const result = await response.json();
-
-
-            alert(result.data.description);
-            location.reload();
-        } catch (error) {
-            console.error('There was a problem with the fetch operation:', error);
-            alert('Failed to place order: ' + error.message);
-        }
-    }
 
     document.addEventListener('DOMContentLoaded', () => {
         const checkboxes = document.querySelectorAll('.itemCheckbox');
