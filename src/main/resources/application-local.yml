@@ -1,3 +1,7 @@
+server:
+  servlet:
+    session:
+      timeout: 20m
 spring:
   main:
     banner-mode: off
