@@ -63,6 +63,9 @@ public class Item extends BaseEntity {
     }
 
     public void decreaseStock(int quantity) {
+        if ( quantity < 1){
+            throw new ItemStockException("상품 처리 중 오류가 발생했습니다.");
+        }
         if ( itemStock < 1){
             throw new ItemStockException("재고가 부족합니다. \n"+ itemName + "의 현재 재고는 "+itemStock+ "개 입니다.");
         }

@@ -2,9 +2,6 @@ package com.hun.market.order.cart.domain;
 
 import com.hun.market.member.domain.Member;
 import com.hun.market.order.cart.exception.CartFullException;
-import com.hun.market.order.order.domain.Order;
-import com.hun.market.order.order.domain.OrderStatus;
-import com.hun.market.order.ship.domain.ShippingAddress;
 import jakarta.persistence.*;
 import lombok.*;
 

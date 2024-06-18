@@ -1,7 +1,8 @@
 package com.hun.market.member.domain;
 
 import jakarta.persistence.Embeddable;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
 
 @Embeddable
 @Getter

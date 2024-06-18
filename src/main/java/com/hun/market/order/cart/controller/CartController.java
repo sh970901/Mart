@@ -1,7 +1,5 @@
 package com.hun.market.order.cart.controller;
 
-import com.hun.market.item.dto.ItemDto;
-import com.hun.market.item.service.ItemService;
 import com.hun.market.member.domain.MemberContext;
 import com.hun.market.order.cart.dto.CartDto;
 import com.hun.market.order.cart.service.CartService;
@@ -13,8 +11,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 

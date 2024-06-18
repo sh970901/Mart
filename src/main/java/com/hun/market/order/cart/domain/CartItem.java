@@ -1,7 +1,6 @@
 package com.hun.market.order.cart.domain;
 
 import com.hun.market.item.domain.Item;
-import com.hun.market.order.cart.dto.CartDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
 import lombok.*;

@@ -1,7 +1,8 @@
 package com.hun.market.item.dto;
 
-import com.hun.market.item.domain.Item;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Getter

@@ -3,12 +3,9 @@ package com.hun.market.order.cart.controller;
 import com.hun.market.member.domain.MemberContext;
 import com.hun.market.order.cart.dto.CartDto;
 import com.hun.market.order.cart.service.CartService;
-import com.hun.market.order.order.dto.OrderDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,9 +1,9 @@
 package com.hun.market.member.domain;
 
 import com.hun.market.base.entity.BaseEntity;
-import com.hun.market.item.domain.Item;
-import com.hun.market.item.dto.ItemDto;
 import com.hun.market.member.dto.MemberDto;
+import com.hun.market.member.exception.MemberCoinLackException;
+import com.hun.market.member.exception.MemberValidException;
 import com.hun.market.order.cart.domain.Cart;
 import com.hun.market.order.cart.domain.CartItem;
 import com.hun.market.order.claim.domain.Claim;
@@ -71,6 +71,12 @@ public class Member extends BaseEntity {
     }
 
     public void deductCoin(int coin){
+        if (coin < 0){
+            throw new MemberValidException("회원정보 수정 중 오류가 발생했습니다.");
+        }
+        if (coin > mbCoin){
+            throw new MemberCoinLackException("코인이 부족합니다. \n 결제 코인: " + coin+" \n 잔여 코인: "+mbCoin);
+        }
         this.mbCoin -= coin;
     }
 

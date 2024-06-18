@@ -1,6 +1,7 @@
 package com.hun.market.order.pay.service;
 
 import com.hun.market.order.order.domain.Order;
+import com.hun.market.order.order.repository.OrderRepository;
 import com.hun.market.order.pay.PaymentRepository;
 import com.hun.market.order.pay.domain.Payment;
 import com.hun.market.order.pay.domain.PaymentStatus;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PaymentCartService implements PaymentService {
 
+    private final OrderRepository orderRepository;
     private final PaymentRepository paymentRepository;
 
 
@@ -23,6 +25,7 @@ public class PaymentCartService implements PaymentService {
         Payment payment = Payment.createByOrder(order);
         PaymentStatus status = payment.process();
 
+        orderRepository.save(order);
         paymentRepository.save(payment);
 
         boolean success = (status == PaymentStatus.COMPLETED);

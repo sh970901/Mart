@@ -1,21 +1,19 @@
 package com.hun.market.order.order.service;
 
+import com.hun.market.core.exception.ResponseServiceException;
 import com.hun.market.item.domain.Item;
 import com.hun.market.item.exception.ItemNotFoundException;
 import com.hun.market.item.exception.ItemStockException;
 import com.hun.market.item.repository.ItemRepository;
 import com.hun.market.member.domain.Member;
+import com.hun.market.member.exception.MemberCoinLackException;
+import com.hun.market.member.exception.MemberValidException;
 import com.hun.market.member.repository.MemberRepository;
-import com.hun.market.order.cart.domain.Cart;
-import com.hun.market.order.cart.domain.CartItem;
-import com.hun.market.order.cart.repository.CartItemRepository;
-import com.hun.market.order.cart.repository.CartRepository;
 import com.hun.market.order.cart.service.CartService;
 import com.hun.market.order.order.domain.Order;
 import com.hun.market.order.order.domain.OrderItem;
 import com.hun.market.order.order.dto.OrderDto;
 import com.hun.market.order.order.dto.OrderDto.OrderItemByCartCreateRequestDto;
-import com.hun.market.order.order.dto.OrderDto.OrderItemCreateRequestDto;
 import com.hun.market.order.order.repository.OrderRepository;
 import com.hun.market.order.pay.service.PaymentService;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +43,7 @@ public class OrderService {
     private final CartService cartService;
 
     @Validated
-    @Transactional(rollbackFor = ItemStockException.class)
+    @Transactional(rollbackFor = Exception.class)
     public OrderDto.OrderCreateResponseDto createOrderByMemberCart(OrderDto.OrderCreateRequestDto orderDto, String buyer) {
 
         List<OrderItem> orderItems = orderDto2OrderItems(orderDto);
@@ -54,14 +52,14 @@ public class OrderService {
 
         Order order = Order.createByMember(orderItems, member);
 
-        orderRepository.save(order);
+//        orderRepository.save(order);
 
         try {
             paymentCartService.processPayment(order);
         }
-        catch (ItemStockException e){
-            log.info("재고 부족");
-            return OrderDto.OrderCreateResponseDto.builder().description(e.getMessage()).build();
+        catch (ItemStockException | MemberCoinLackException | MemberValidException e){
+            log.info("주문 처리 중 예외 발생: " + e.getMessage());
+            throw new ResponseServiceException(e.getMessage());
         }
 
 

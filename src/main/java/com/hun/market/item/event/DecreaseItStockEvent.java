@@ -1,8 +1,6 @@
 package com.hun.market.item.event;
 
-import com.hun.market.item.domain.Item;
 import com.hun.market.order.order.domain.OrderItem;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
