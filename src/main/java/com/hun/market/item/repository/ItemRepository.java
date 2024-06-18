@@ -1,6 +1,8 @@
 package com.hun.market.item.repository;
 
 import com.hun.market.item.domain.Item;
+import jakarta.persistence.LockModeType;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -13,6 +15,8 @@ public interface ItemRepository extends PagingAndSortingRepository<Item, Long> {
 
     void save(Item item);
 
+//    @Lock(LockModeType.PESSIMISTIC_READ)
+    @Lock(LockModeType.OPTIMISTIC)
     @Query("SELECT i FROM Item i WHERE i.id IN :ids")
     List<Item> findAllById(@Param("ids") List<Long> ids);
 }

@@ -14,8 +14,10 @@ import com.hun.market.order.order.domain.Order;
 import com.hun.market.order.order.domain.OrderItem;
 import com.hun.market.order.order.dto.OrderDto;
 import com.hun.market.order.order.dto.OrderDto.OrderItemByCartCreateRequestDto;
+import com.hun.market.order.order.repository.OrderItemRepository;
 import com.hun.market.order.order.repository.OrderRepository;
 import com.hun.market.order.pay.service.PaymentService;
+import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -36,7 +38,7 @@ import java.util.stream.Collectors;
 public class OrderService {
 
     private final MemberRepository memberRepository;
-    private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
     private final ItemRepository itemRepository;
     private final PaymentService paymentCartService;
 
@@ -59,7 +61,10 @@ public class OrderService {
             log.info("주문 처리 중 예외 발생: " + e.getMessage());
             throw new ResponseServiceException(e.getMessage());
         }
-
+        catch (OptimisticLockException e){
+//            createOrderByMemberCart(orderDto, buyer);
+            throw new ResponseServiceException("주문 처리 중 오류가 발생했습니다. 다시 시도해주세요.");
+        }
 
         List<Long> cartItemsIds = orderDto.getOrderItemDtos().stream().map(OrderItemByCartCreateRequestDto::getCartItemId).toList();
         cartService.deleteAllCartItem(cartItemsIds, buyer);
