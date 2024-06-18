@@ -48,11 +48,9 @@ public class OrderService {
 
         List<OrderItem> orderItems = orderDto2OrderItems(orderDto);
 
-        Member member = memberRepository.findByMbName(buyer).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+        Member member = memberRepository.findByMbNameWithCart(buyer).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
 
         Order order = Order.createByMember(orderItems, member);
-
-//        orderRepository.save(order);
 
         try {
             paymentCartService.processPayment(order);
