@@ -6,6 +6,7 @@ import com.hun.market.item.exception.ItemNotFoundException;
 import com.hun.market.item.exception.ItemStockException;
 import com.hun.market.item.repository.ItemRepository;
 import com.hun.market.member.domain.Member;
+import com.hun.market.member.domain.MemberContext;
 import com.hun.market.member.exception.MemberCoinLackException;
 import com.hun.market.member.exception.MemberValidException;
 import com.hun.market.member.repository.MemberRepository;
@@ -14,10 +15,17 @@ import com.hun.market.order.order.domain.Order;
 import com.hun.market.order.order.domain.OrderItem;
 import com.hun.market.order.order.dto.OrderDto;
 import com.hun.market.order.order.dto.OrderDto.OrderItemByCartCreateRequestDto;
+import com.hun.market.order.order.repository.OrderItemRepository;
 import com.hun.market.order.order.repository.OrderRepository;
 import com.hun.market.order.pay.service.PaymentService;
+import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,9 +44,9 @@ import java.util.stream.Collectors;
 public class OrderService {
 
     private final MemberRepository memberRepository;
-    private final OrderRepository orderRepository;
     private final ItemRepository itemRepository;
     private final PaymentService paymentCartService;
+    private final AuthenticationManager authenticationManager;
 
     private final CartService cartService;
 
@@ -48,11 +56,9 @@ public class OrderService {
 
         List<OrderItem> orderItems = orderDto2OrderItems(orderDto);
 
-        Member member = memberRepository.findByMbName(buyer).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+        Member member = memberRepository.findByMbNameWithCart(buyer).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
 
         Order order = Order.createByMember(orderItems, member);
-
-//        orderRepository.save(order);
 
         try {
             paymentCartService.processPayment(order);
@@ -61,11 +67,15 @@ public class OrderService {
             log.info("주문 처리 중 예외 발생: " + e.getMessage());
             throw new ResponseServiceException(e.getMessage());
         }
-
+        catch (OptimisticLockException e){
+//            createOrderByMemberCart(orderDto, buyer);
+            throw new ResponseServiceException("주문 처리 중 오류가 발생했습니다. 다시 시도해주세요.");
+        }
 
         List<Long> cartItemsIds = orderDto.getOrderItemDtos().stream().map(OrderItemByCartCreateRequestDto::getCartItemId).toList();
         cartService.deleteAllCartItem(cartItemsIds, buyer);
 
+        updateAuthenticationSession(member);
 
         return OrderDto.OrderCreateResponseDto.builder().description("구매가 완료되었습니다.").build();
 
@@ -101,6 +111,18 @@ public class OrderService {
             orderItems.add(orderItem);
         }
         return orderItems;
+    }
+
+    private void updateAuthenticationSession(Member member){
+        // 현재 인증 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        // 현재 사용자의 정보를 이용하여 새로운 MemberContext 생성
+        MemberContext newMemberContext = new MemberContext(member, (List<GrantedAuthority>) authentication.getAuthorities());
+        // 새로운 MemberContext로 Principal을 변경
+        UsernamePasswordAuthenticationToken newAuthentication =
+                new UsernamePasswordAuthenticationToken(newMemberContext, authentication.getCredentials(), authentication.getAuthorities());
+        // 현재 세션에 새로운 인증 정보 설정
+        SecurityContextHolder.getContext().setAuthentication(newAuthentication);
     }
 
 }

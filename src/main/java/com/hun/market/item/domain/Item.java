@@ -45,6 +45,9 @@ public class Item extends BaseEntity {
     @Column(name="item_description", length = 1000)
     private String description;
 
+    @Version
+    private Long version;
+
     @Builder
     public Item(String itemName, Long itemPrice, Long itemStock, String description) {
         this.itemName = itemName;

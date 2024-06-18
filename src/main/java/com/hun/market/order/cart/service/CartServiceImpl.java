@@ -71,7 +71,7 @@ public class CartServiceImpl implements CartService {
 
 
         return cartItemsPage.stream()
-                .map(cartItem -> CartDto.CartItemCreateResponseDto.builder().cartItemId(cartItem.getId()).itemId(cartItem.getItem().getId()).itemName(cartItem.getItem().getItemName()).quantity(cartItem.getQuantity()).build())
+                .map(cartItem -> CartDto.CartItemCreateResponseDto.builder().cartItemId(cartItem.getId()).itemPrice(cartItem.getItem().getItemPrice()).itemId(cartItem.getItem().getId()).itemName(cartItem.getItem().getItemName()).quantity(cartItem.getQuantity()).build())
                 .toList();
     }
 
@@ -103,9 +103,6 @@ public class CartServiceImpl implements CartService {
             throw new CartItemNotFoundException("CartItems not found");
         }
 
-        Member member = memberRepository.findByMbName(username)
-                                        .orElseThrow(() -> new MemberNotMatchException("Unauthorized action"));
-
         List<CartItem> itemsToDelete = cartItems.stream()
                                                 .filter(cartItem -> cartItem.getCart().getMember().getMbName().equals(username))
                                                 .toList();
@@ -114,7 +111,7 @@ public class CartServiceImpl implements CartService {
             throw new MemberNotMatchException("Unauthorized action");
         }
 
-        cartItemRepository.deleteAll(itemsToDelete);
+        cartItemRepository.deleteAllByIds(cartItemsIds);
 
         return decreaseResponse("Selected cart items have been deleted.");
     }
