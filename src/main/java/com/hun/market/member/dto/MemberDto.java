@@ -1,5 +1,6 @@
 package com.hun.market.member.dto;
 
+import com.hun.market.backoffice.dto.EmployeeExcelUploadDto;
 import com.hun.market.member.domain.Department;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -27,6 +28,16 @@ public class MemberDto {
 
         private Department department;
 
+    }
+
+    public static MemberCreateRequestDto from(EmployeeExcelUploadDto excelUploadDto){
+
+        return MemberCreateRequestDto.builder()
+                                     .mbName(excelUploadDto.getEmployeeName())
+                                     .mbPassword(excelUploadDto.getEmployeeName())
+                                     .mbCoin(excelUploadDto.getCoin())
+                                     .department(Department.builder().departmentName(excelUploadDto.getDepartmentName()).teamName(excelUploadDto.getTeamName()).build())
+                                     .build();
     }
 
 }

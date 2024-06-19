@@ -9,9 +9,11 @@ public class EmployeeExcelUploadDto {
 
     private String employeeName;
 
+    private String departmentName;
+
     private String teamName;
 
-    private Long coin;
+    private int coin;
 
     @Override public String toString() {
         return "EmployeeExcelUploadDto{" +

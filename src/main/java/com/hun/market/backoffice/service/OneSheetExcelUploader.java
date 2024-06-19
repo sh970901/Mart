@@ -46,6 +46,8 @@ public class OneSheetExcelUploader<T> {
                 XSSFRow row = xssfSheet.getRow(i);
 
                 for (int j = 0; j < fields.length; j++) {
+                    // TODO
+                    //이미지 필드에는 값을 할당 하지 않게(어노 테이션) 혹은 엑셀 파일에 빈 값으로 넣어놓기
                     /*Excel 의 column 수와 Dto의 Field 수는 일치*/
                     fields[j].setAccessible(true);
                     //타입체크 먼저
