@@ -39,10 +39,12 @@ public class ItemServiceImpl implements ItemService {
                 .collect(Collectors.toList());
     }
 
-    @Override public void updateItem(ItemModifyDto itemModifyDto) {
+    @Override
+    @Transactional
+    public void updateItem(ItemModifyDto itemModifyDto) {
 
         Optional<Item> optionalItem = itemRepository.findById(itemModifyDto.getItemNo());
-
+        log.info("단독상품 수정 updateItem:{}", itemModifyDto.getItemNo());
         optionalItem.ifPresentOrElse(
             item -> {
                 item.updateItem(itemModifyDto);

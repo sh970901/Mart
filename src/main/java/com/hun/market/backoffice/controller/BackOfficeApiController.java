@@ -5,10 +5,16 @@ import com.hun.market.backoffice.dto.ItemModifyDto;
 import com.hun.market.backoffice.enums.ExcelUploadType;
 import com.hun.market.backoffice.service.ExcelService;
 import com.hun.market.backoffice.service.ImageService;
+import com.hun.market.item.dto.ItemDto;
+import com.hun.market.item.dto.ItemDto.ItemCreatResponseDto;
 import com.hun.market.item.service.ItemService;
+import com.hun.market.member.dto.MemberDto;
 import com.hun.market.member.service.MemberService;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,6 +66,17 @@ public class BackOfficeApiController {
     public void provideCoin(@Valid @RequestBody CoinProvideRequestDto coinProvideRequestDto) {
         memberService.provideCoin(coinProvideRequestDto);
     }
+
+    @GetMapping("/employee")
+    public List<MemberDto.MemberResponseDto> getAllMembers() {
+        return memberService.getAllMembers();
+    }
+
+    @GetMapping("/employee/{memberId}")
+    public MemberDto.MemberResponseDto getMember(@PathVariable Long memberId) {
+        return memberService.getMember(memberId);
+    }
+
 
 
 
