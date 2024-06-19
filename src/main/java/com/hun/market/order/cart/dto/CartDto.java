@@ -63,6 +63,10 @@ public class CartDto {
         @NotNull(message = "itemName is required")
         private String itemName;
 
+        @NotNull(message = "itemStock is required")
+        private Long itemStock;
+
+
         @NotNull(message = "itemPrice is required")
         private Long itemPrice;
 

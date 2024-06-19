@@ -29,9 +29,11 @@ async function purchaseSelectedItems() {
     let totalPrice = 0;
     checkboxes.forEach(checkbox => {
         const itemId = checkbox.getAttribute('data-id');
+        const itemName = checkbox.getAttribute('data-itemName');
         const quantity = checkbox.getAttribute('data-quantity');
         const cartItemId = checkbox.getAttribute('data-cartItemId');
-        selectedItems.push({ itemId: itemId, quantity: quantity, cartItemId: cartItemId });
+        const itemStock = checkbox.getAttribute('data-itemStock')
+        selectedItems.push({ itemId: itemId, quantity: quantity, cartItemId: cartItemId, itemStock: itemStock, itemName: itemName });
         totalPrice += parseInt(checkbox.getAttribute('data-price')) * quantity;
     });
 
@@ -43,6 +45,15 @@ async function purchaseSelectedItems() {
     if (totalPrice > mbCoin) {
         alert('현재 코인이 부족합니다. \n 현재 코인: '+ mbCoin + "\n 총 가격: " + totalPrice);
         return;
+    }
+
+    for (let i = 0; i < selectedItems.length; i++) {
+        const item = selectedItems[i];
+        if (item.itemStock < item.quantity) {
+            alert("상품의 재고가 부족합니다. \n" + "상품 이름: " + item.itemName + "\n 구매 수량: " + item.quantity + "\n 상품 재고: " + item.itemStock);
+            // 함수를 종료합니다.
+            return;
+        }
     }
 
     const orderData = {
