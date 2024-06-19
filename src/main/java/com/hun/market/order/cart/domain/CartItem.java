@@ -49,7 +49,6 @@ public class CartItem {
     public void decreaseQuantity() {
         if (this.quantity <= 1) {
             // 장바구니에 담긴 수량이 1개인 경우, 아이템을 삭제하고 재고 차감
-            this.cart.removeCartItem(this); // 카트에서 아이템 삭제
             deleteThis();
         } else {
             // 장바구니에 담긴 수량이 여러 개인 경우, 수량을 줄이고 재고 차감
@@ -57,7 +56,8 @@ public class CartItem {
         }
     }
 
-    private void deleteThis(){
+    public void deleteThis(){
+        this.cart.removeCartItem(this); // 카트에서 아이템 삭제
         this.cart = null;
     }
 }

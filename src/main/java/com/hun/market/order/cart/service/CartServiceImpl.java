@@ -9,6 +9,7 @@ import com.hun.market.member.repository.MemberRepository;
 import com.hun.market.order.cart.domain.Cart;
 import com.hun.market.order.cart.domain.CartItem;
 import com.hun.market.order.cart.dto.CartDto;
+import com.hun.market.order.cart.dto.CartDto.CartItemDeleteResponseDto;
 import com.hun.market.order.cart.exception.CartFullException;
 import com.hun.market.order.cart.exception.CartItemNotFoundException;
 import com.hun.market.order.cart.repository.CartItemRepository;
@@ -77,7 +78,24 @@ public class CartServiceImpl implements CartService {
 
     @Transactional
     @Override
-    public CartDto.CartItemDeleteResponseDto deleteCartItem(Long cartItemId, String username) {
+    public CartItemDeleteResponseDto deleteCartItem(Long cartItemId, String username) {
+
+        CartItem cartItem = cartItemRepository.findById(cartItemId)
+                                              .orElseThrow(() -> new CartItemNotFoundException("CartItem not found"));
+
+        if (!cartItem.getCart().getMember().getMbName().equals(username)) {
+            throw new MemberNotMatchException("Unauthorized action");
+        }
+
+        cartItem.deleteThis();
+//        cartItemRepository.delete(cartItem);
+
+        return decreaseResponse("찜목록이 취소되었습니다.");
+    }
+
+    @Transactional
+    @Override
+    public CartDto.CartItemDeleteResponseDto decreaseCartItem(Long cartItemId, String username) {
         CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(() -> new CartItemNotFoundException("CartItem not found"));
 
