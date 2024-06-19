@@ -70,6 +70,10 @@ public class Member extends BaseEntity {
                 .build();
     }
 
+    public void provideCoin(int coin) {
+        this.mbCoin += coin;
+    }
+
     public void deductCoin(int coin){
         if (coin < 0){
             throw new MemberValidException("회원정보 수정 중 오류가 발생했습니다.");

@@ -10,6 +10,8 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByMbName(String mbName);
 
+    Optional<Member> findById(Long memberId);
+
     @Query("SELECT m FROM Member m LEFT JOIN FETCH m.cart WHERE m.mbName = :name")
     Optional<Member> findByMbNameWithCart(@Param("name") String name);
 
