@@ -89,9 +89,10 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="card-body">
-                                    <input type="checkbox" th:id="${'itemCheckbox' + cartItem.cartItemId}" th:data-price="${cartItem.itemPrice}" th:data-itemName="${cartItem.itemName}" th:data-id="${cartItem.itemId}" th:data-quantity="${cartItem.quantity}" th:data-cartItemId="${cartItem.cartItemId}" class="itemCheckbox">
+                                    <input type="checkbox" th:id="${'itemCheckbox' + cartItem.cartItemId}" th:data-itemStock="${cartItem.itemStock}" th:data-price="${cartItem.itemPrice}" th:data-itemName="${cartItem.itemName}" th:data-id="${cartItem.itemId}" th:data-quantity="${cartItem.quantity}" th:data-cartItemId="${cartItem.cartItemId}" class="itemCheckbox">
                                     <label th:for="${'itemCheckbox' + cartItem.cartItemId}" th:text="'상품: ' + ${cartItem.itemName}">상품 제목</label>
-                                    <p class="card-text" th:text="'수량: ' + ${cartItem.quantity}">상품 갯수</p>
+                                    <p class="card-text" th:text="'찜 수량: ' + ${cartItem.quantity}">찜 갯수</p>
+                                    <p class="card-text" th:text="'상품 재고: ' + ${cartItem.itemStock}">상품 재고</p>
                                     <p>
 <!--                                        <button class="btn btn-outline-primary me-2" th:onclick="|placeOrder(${cartItem.itemId})|">바로 구매</button>-->
                                         <button class="btn btn-outline-danger me-2" th:onclick="|cancelCartItem(${cartItem.cartItemId})|">취소</button>
@@ -128,7 +129,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="orderModalLabel">구매 확인</h5>
+                <h5 class="modal-title" id="orderModalLabel">주문 확인</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -137,7 +138,7 @@
                 <p>총 가격: <span id="totalPrice"></span>원</p>
                 <p>보유 코인:
                 <span class="user-info" id="mbCoinValue" th:if="${#authorization.expression('isAuthenticated()')}"
-                      th:text="${#authentication.principal.mbCoin }"></span>
+                      th:text="|${#authentication.principal.mbCoin}원|"></span>
                 </p>
             </div>
             <div class="modal-footer">
@@ -179,7 +180,8 @@
             const itemId = checkbox.getAttribute('data-id');
             const quantity = checkbox.getAttribute('data-quantity');
             const itemName = checkbox.getAttribute('data-itemName');
-            selectedItems.push({ itemId, quantity, itemName });
+            const itemStock = checkbox.getAttribute('data-itemStock')
+            selectedItems.push({ itemId, quantity, itemName, itemStock });
             // 여기에 각 아이템의 가격을 가져와서 totalPrice에 더합니다.
             // 예를 들어: totalPrice += parseInt(checkbox.getAttribute('data-price')) * quantity;
             totalPrice += parseInt(checkbox.getAttribute('data-price')) * quantity;
@@ -190,7 +192,7 @@
 
         selectedItems.forEach(item => {
             const li = document.createElement('li');
-            li.textContent = `${item.itemName} - 수량: ${item.quantity}`;
+            li.textContent = `${item.itemName} - 수량: ${item.quantity} - 남은 재고: ${item.itemStock}`;
             selectedItemsList.appendChild(li);
         });
 
