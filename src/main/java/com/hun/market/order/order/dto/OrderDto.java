@@ -2,6 +2,7 @@ package com.hun.market.order.order.dto;
 
 import com.hun.market.item.domain.Item;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -33,7 +34,7 @@ public class OrderDto {
         private Long itemId;
 
         @NotNull(message = "quantity is required")
-        @Size(max = 10000, message = "quantity cannot exceed 10000")
+        @Positive
         private Integer quantity;
 
     }

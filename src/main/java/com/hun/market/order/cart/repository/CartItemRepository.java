@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
-    Page<CartItem> findByCart(Cart cart, Pageable pageable);
+    Page<CartItem> findByCartOrderByItemAsc(Cart cart, Pageable pageable);
 
     @Modifying
     @Transactional

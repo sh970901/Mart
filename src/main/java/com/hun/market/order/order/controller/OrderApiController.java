@@ -21,11 +21,19 @@ public class OrderApiController {
     private final OrderService orderService;
 
     @PostMapping("/order/create")
-    public OrderDto.OrderCreateResponseDto createOrder(@Valid @RequestBody OrderDto.OrderCreateRequestDto orderDto, @AuthenticationPrincipal MemberContext memberDto){
+    public OrderDto.OrderCreateResponseDto createOrderByCart(@Valid @RequestBody OrderDto.OrderCreateRequestDto orderDto, @AuthenticationPrincipal MemberContext memberDto){
         String buyer = memberDto.getUsername();
         log.info("buyer: {}", buyer);
 
         return orderService.createOrderByMemberCart(orderDto, buyer);
+    }
+
+    @PostMapping("/order/create/item")
+    public OrderDto.OrderCreateResponseDto createOrder(@Valid @RequestBody OrderDto.OrderItemCreateRequestDto orderItemDto, @AuthenticationPrincipal MemberContext memberDto){
+        String buyer = memberDto.getUsername();
+        log.info("buyer: {}", buyer);
+
+        return orderService.createOrderByMember(orderItemDto, buyer);
     }
 
 

@@ -83,7 +83,7 @@ public class OrderService {
 
         updateAuthenticationSession(member);
 
-        return OrderDto.OrderCreateResponseDto.builder().description("구매가 완료되었습니다.").build();
+        return OrderDto.OrderCreateResponseDto.builder().description("주문이 완료되었습니다.").build();
 
     }
 
@@ -119,6 +119,7 @@ public class OrderService {
         return orderItems;
     }
 
+
     private void updateAuthenticationSession(Member member){
         // 현재 인증 정보 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -146,4 +147,31 @@ public class OrderService {
         return OrderDto.OrderCreateResponseDto.builder().description("주문 처리 중 오류가 발생했습니다. 다시 시도해주세요.").build();
     }
 
+    @Validated
+    @Transactional(rollbackFor = Exception.class)
+    @Retryable(
+            retryFor = {ObjectOptimisticLockingFailureException.class, OptimisticLockException.class, StaleObjectStateException.class},
+            maxAttempts = 2,
+            backoff = @Backoff(100)
+    )
+    public OrderDto.OrderCreateResponseDto createOrderByMember(OrderDto.OrderItemCreateRequestDto orderItemDto, String buyer) {
+        Member member = memberRepository.findByMbNameWithCart(buyer).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+        Item item = itemRepository.findById(orderItemDto.getItemId()).orElseThrow(() -> new ItemNotFoundException("상품을 찾을 수 없습니다."));
+        OrderItem orderItem = OrderItem.createByItem(item, orderItemDto.getQuantity());
+
+        List<OrderItem> orderItems = List.of(orderItem);
+        Order order = Order.createByMember(orderItems, member);
+
+        try {
+            paymentCartService.processPayment(order);
+        }
+        catch (ItemStockException | MemberCoinLackException | MemberValidException e){
+            log.info("주문 처리 중 예외 발생: " + e.getMessage());
+            throw new ResponseServiceException(e.getMessage());
+        }
+
+        updateAuthenticationSession(member);
+
+        return OrderDto.OrderCreateResponseDto.builder().description("주문이 완료되었습니다.").build();
+    }
 }

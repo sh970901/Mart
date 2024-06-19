@@ -39,8 +39,7 @@ public class OrderItem {
 
 
     // dto to entity
-    public static OrderItem
-    createByItem(Item item, Integer quantity) {
+    public static OrderItem createByItem(Item item, Integer quantity) {
         return OrderItem.builder()
                 .item(item)
                 .quantity(quantity)

@@ -75,7 +75,7 @@
             <div class="row centered">
                 <div class="col">
                     <input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)">
-                    <label for="selectAll">전체 선택</label>
+                    <label for="selectAll">전체 선택</label><br/>
                     <button class="btn btn-outline-primary" onclick="showPurchaseModal()" data-bs-toggle="modal" data-bs-target="#orderModal" >구매</button>
 <!--                    <button class="btn btn-outline-primary" onclick="purchaseSelectedItems()">구매</button>-->
                 </div>
@@ -214,40 +214,6 @@
         });
     });
 
-    async function addCart(button) {
-
-        const itemId = button.getAttribute('data-item-id');
-        const itemName = button.getAttribute('data-item-name');
-
-        const cartData = {
-            itemId: itemId, quantity: 1, itemName: itemName
-        };
-
-        try {
-            const response = await fetch('/api/v1/c/cart/item', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(cartData)
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-
-            const result = await response.json();
-            console.log('Car placed successfully:', result);
-
-            alert(result.data.description);
-            location.reload();
-            // location.href = '/order-success'; // 주문 성공 페이지로 이동
-
-        } catch (error) {
-            console.error('There was a problem with the fetch operation:', error);
-            alert('Failed to place order: ' + error.message);
-        }
-    }
     /*]]>*/
 </script>
 </body>

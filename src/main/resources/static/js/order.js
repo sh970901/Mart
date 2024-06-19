@@ -1,3 +1,4 @@
+/*[[CDATA[*/
 async function cancelCartItem(cartItemId) {
     try {
         const response = await fetch(`/api/v1/c/cart/items/${cartItemId}`, {
@@ -64,7 +65,7 @@ async function purchaseSelectedItems() {
         alert('구매할 상품을 선택해주세요.');
         return;
     }
-    var mbCoin = document.getElementById('mbCoinValue').textContent.trim();
+    var mbCoin = parseInt(document.getElementById('mbCoinValue').textContent.trim());
     if (totalPrice > mbCoin) {
         alert('현재 코인이 부족합니다. \n 현재 코인: '+ mbCoin + "\n 총 가격: " + totalPrice);
         return;
@@ -102,3 +103,39 @@ async function purchaseSelectedItems() {
         alert('Failed to place order: ' + error.message);
     }
 }
+
+async function addCart(button) {
+
+    const itemId = button.getAttribute('data-item-id');
+    const itemName = button.getAttribute('data-item-name');
+
+    const cartData = {
+        itemId: itemId, quantity: 1, itemName: itemName
+    };
+
+    try {
+        const response = await fetch('/api/v1/c/cart/item', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(cartData)
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+
+        const result = await response.json();
+        console.log('Car placed successfully:', result);
+
+        alert(result.data.description);
+        location.reload();
+        // location.href = '/order-success'; // 주문 성공 페이지로 이동
+
+    } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+        alert('Failed to place order: ' + error.message);
+    }
+}
+/*]]>*/

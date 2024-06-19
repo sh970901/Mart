@@ -67,7 +67,7 @@ public class CartServiceImpl implements CartService {
         Cart cart = cartRepository.findByMember(cartMember).orElse(null);
         if (cart == null) return null;
 
-        Page<CartItem> cartItemsPage = cartItemRepository.findByCart(cart, pageable);
+        Page<CartItem> cartItemsPage = cartItemRepository.findByCartOrderByItemAsc(cart, pageable);
         if (cartItemsPage.getContent().isEmpty()) return null;
 
 
