@@ -9,8 +9,8 @@ import lombok.*;
 public class ItemDto {
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PUBLIC)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
     @Builder
     public static class ItemCreateRequestDto {
 
@@ -18,15 +18,18 @@ public class ItemDto {
         @Size(max = 100, message = "Item name must be less than 100 characters")
         private String itemName;
 
-        @NotNull(message = "Item stock is required")
-        @PositiveOrZero
-        private Long itemStock;
-
         @NotNull(message = "Item price is required")
         @PositiveOrZero
         private Long itemPrice;
 
+        @NotNull(message = "Item stock is required")
+        @PositiveOrZero
+        private Long itemStock;
+
+        private String imagePath;
+
         private String description;
+
 
         //테스트용 toString()
         @Override public String toString() {

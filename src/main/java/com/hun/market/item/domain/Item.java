@@ -1,5 +1,6 @@
 package com.hun.market.item.domain;
 
+import com.hun.market.backoffice.dto.ItemModifyDto;
 import com.hun.market.base.entity.BaseEntity;
 import com.hun.market.item.dto.ItemDto;
 import com.hun.market.item.exception.ItemStockException;
@@ -36,8 +37,8 @@ public class Item extends BaseEntity {
     private String url;*/
 
     //이미지경로(S3)
-    /*@Column(name="image_path", nullable = false, length = 1000)
-    private String imagePath;*/
+    @Column(name="image_path", nullable = false, length = 1000)
+    private String imagePath;
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
@@ -49,10 +50,11 @@ public class Item extends BaseEntity {
     private Long version;
 
     @Builder
-    public Item(String itemName, Long itemPrice, Long itemStock, String description) {
+    public Item(String itemName, Long itemStock, Long itemPrice, String imagePath, String description) {
         this.itemName = itemName;
-        this.itemPrice = itemPrice;
         this.itemStock = itemStock;
+        this.itemPrice = itemPrice;
+        this.imagePath = imagePath;
         this.description = description;
     }
 
@@ -66,11 +68,19 @@ public class Item extends BaseEntity {
 
     public static Item from(ItemDto.ItemCreateRequestDto itemDto){
         return Item.builder()
-                    .itemName(itemDto.getItemName())
-                    .itemStock(itemDto.getItemStock())
-                    .itemPrice(itemDto.getItemPrice())
-                    .description(itemDto.getDescription())
-                    .build();
+                   .itemName(itemDto.getItemName())
+                   .itemStock(itemDto.getItemStock())
+                   .itemPrice(itemDto.getItemPrice())
+                   .description(itemDto.getDescription())
+                   .imagePath(itemDto.getImagePath())
+                   .build();
+    }
+
+    public void updateItem(ItemModifyDto itemModifyDto) {
+        this.itemName = itemModifyDto.getItemName();
+        this.itemPrice = itemModifyDto.getItemPrice();
+        this.itemStock = itemModifyDto.getItemStock();
+        this.description = itemModifyDto.getDescription();
     }
 
     public void decreaseStock(int quantity) {

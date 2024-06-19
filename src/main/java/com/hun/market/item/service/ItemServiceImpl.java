@@ -1,8 +1,11 @@
 package com.hun.market.item.service;
 
+import com.hun.market.backoffice.dto.ItemModifyDto;
 import com.hun.market.item.domain.Item;
 import com.hun.market.item.dto.ItemDto;
+import com.hun.market.item.exception.ItemNotFoundException;
 import com.hun.market.item.repository.ItemRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -36,8 +39,23 @@ public class ItemServiceImpl implements ItemService {
                 .collect(Collectors.toList());
     }
 
+    @Override public void updateItem(ItemModifyDto itemModifyDto) {
 
-//    @Override
+        Optional<Item> optionalItem = itemRepository.findById(itemModifyDto.getItemNo());
+
+        optionalItem.ifPresentOrElse(
+            item -> {
+                item.updateItem(itemModifyDto);
+                itemRepository.save(item);
+            },
+            () -> {
+                throw new ItemNotFoundException("해당 번호의 상품은 존재하지 않습니다." + itemModifyDto.getItemNo());
+            }
+        );
+
+    }
+
+    //    @Override
 //    public Page<ItemResponseDto> paging(Pageable pageable) {
 //        int page = pageable.getPageNumber(); // page 위치에 있는 값은 0부터 시작한다.
 //        int pageLimit = pageable.getPageSize(); // 한페이지에 보여줄 글 개수

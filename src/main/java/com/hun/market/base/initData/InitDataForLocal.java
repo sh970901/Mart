@@ -30,12 +30,12 @@ public class InitDataForLocal extends AbstractInitData {
             if (initDataDone) return;
             before();
             for(int i = 0; i<100; i++){
-                ItemDto.ItemCreateRequestDto itemDto = ItemDto.ItemCreateRequestDto.builder().itemName("item"+i).itemPrice(2000L).itemStock(3L).description(i+"번 상품입니다.").build();
+                ItemDto.ItemCreateRequestDto itemDto = ItemDto.ItemCreateRequestDto.builder().itemName("item"+i).itemPrice(2000L).imagePath("이미지경로").itemStock(3L).description(i+"번 상품입니다.").build();
                 Item item = Item.from(itemDto);
                 itemRepository.save(item);
             }
             String password = passwordEncoder.encode("1234");
-            Department department = Department.builder().departmentName("1").teamName("1").position("1").build();
+            Department department = Department.builder().departmentName("1").teamName("1").build();
             MemberDto.MemberCreateRequestDto mbDto = MemberDto.MemberCreateRequestDto.builder().mbName("admin").mbPassword(password).mbCoin(1000).department(department).build();
             memberRepository.save(Member.from(mbDto));
 
