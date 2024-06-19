@@ -22,6 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Member extends BaseEntity {
+
     @Id
     @Column(name = "member_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,6 +45,9 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Claim> claims = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CoinTransHistory> coinTransHistories = new ArrayList<>();
 
     @Embedded
     @AttributeOverrides({
