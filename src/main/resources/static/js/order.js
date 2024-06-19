@@ -12,7 +12,30 @@ async function cancelCartItem(cartItemId) {
         }
 
         const result = await response.json();
-        console.log('Order placed successfully:', result);
+        console.log('cartItem cancel successfully:', result);
+        alert(result.data.description);
+        location.reload();
+    } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+        alert('Failed to place order: ' + error.message);
+    }
+}
+
+async function cancelCart(cartItemId) {
+    try {
+        const response = await fetch(`/api/v1/c/cart/${cartItemId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+
+        const result = await response.json();
+        console.log('cart cancel successfully:', result);
         alert(result.data.description);
         location.reload();
     } catch (error) {

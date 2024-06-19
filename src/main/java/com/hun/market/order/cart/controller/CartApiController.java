@@ -33,6 +33,11 @@ public class CartApiController {
 
 
     @DeleteMapping("/cart/items/{cartItemId}")
+    public CartDto.CartItemDeleteResponseDto deleteOrDecreaseCartItem(@PathVariable Long cartItemId, @AuthenticationPrincipal MemberContext memberDto){
+        return cartService.decreaseCartItem(cartItemId, memberDto.getUsername());
+    }
+
+    @DeleteMapping("/cart/{cartItemId}")
     public CartDto.CartItemDeleteResponseDto deleteCartItem(@PathVariable Long cartItemId, @AuthenticationPrincipal MemberContext memberDto){
         return cartService.deleteCartItem(cartItemId, memberDto.getUsername());
     }

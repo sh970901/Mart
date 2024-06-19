@@ -91,11 +91,18 @@
                                 <div class="card-body">
                                     <input type="checkbox" th:id="${'itemCheckbox' + cartItem.cartItemId}" th:data-itemStock="${cartItem.itemStock}" th:data-price="${cartItem.itemPrice}" th:data-itemName="${cartItem.itemName}" th:data-id="${cartItem.itemId}" th:data-quantity="${cartItem.quantity}" th:data-cartItemId="${cartItem.cartItemId}" class="itemCheckbox">
                                     <label th:for="${'itemCheckbox' + cartItem.cartItemId}" th:text="'상품: ' + ${cartItem.itemName}">상품 제목</label>
-                                    <p class="card-text" th:text="'찜 수량: ' + ${cartItem.quantity}">찜 갯수</p>
+                                    <div>
+                                        <p class="card-text" th:text="'찜 수량: ' + ${cartItem.quantity}">찜 갯수</p>
+                                        <button class="btn btn-outline-primary me-2"
+                                                th:attr="data-item-id=${cartItem.itemId}, data-item-name=${cartItem.itemName}"
+                                                onclick="addCart(this)">
+                                            추가
+                                        </button>
+                                        <button class="btn btn-outline-danger me-2" th:onclick="|cancelCartItem(${cartItem.cartItemId})|">감소</button>
+                                    </div>
                                     <p class="card-text" th:text="'상품 재고: ' + ${cartItem.itemStock}">상품 재고</p>
                                     <p>
-<!--                                        <button class="btn btn-outline-primary me-2" th:onclick="|placeOrder(${cartItem.itemId})|">바로 구매</button>-->
-                                        <button class="btn btn-outline-danger me-2" th:onclick="|cancelCartItem(${cartItem.cartItemId})|">취소</button>
+                                        <button class="btn btn-outline-danger me-2" th:onclick="|cancelCart(${cartItem.cartItemId})|">취소</button>
                                     </p>
                                 </div>
                             </div>
@@ -206,6 +213,41 @@
             checkbox.addEventListener('change', handleItemCheckboxChange);
         });
     });
+
+    async function addCart(button) {
+
+        const itemId = button.getAttribute('data-item-id');
+        const itemName = button.getAttribute('data-item-name');
+
+        const cartData = {
+            itemId: itemId, quantity: 1, itemName: itemName
+        };
+
+        try {
+            const response = await fetch('/api/v1/c/cart/item', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(cartData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+
+            const result = await response.json();
+            console.log('Car placed successfully:', result);
+
+            alert(result.data.description);
+            location.reload();
+            // location.href = '/order-success'; // 주문 성공 페이지로 이동
+
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+            alert('Failed to place order: ' + error.message);
+        }
+    }
     /*]]>*/
 </script>
 </body>
