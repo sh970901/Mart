@@ -21,6 +21,11 @@ import com.hun.market.order.pay.service.PaymentService;
 import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.StaleObjectStateException;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -52,6 +57,11 @@ public class OrderService {
 
     @Validated
     @Transactional(rollbackFor = Exception.class)
+    @Retryable(
+        retryFor = {ObjectOptimisticLockingFailureException.class, OptimisticLockException.class, StaleObjectStateException.class},
+        maxAttempts = 2,
+        backoff = @Backoff(100)
+    )
     public OrderDto.OrderCreateResponseDto createOrderByMemberCart(OrderDto.OrderCreateRequestDto orderDto, String buyer) {
 
         List<OrderItem> orderItems = orderDto2OrderItems(orderDto);
@@ -66,10 +76,6 @@ public class OrderService {
         catch (ItemStockException | MemberCoinLackException | MemberValidException e){
             log.info("주문 처리 중 예외 발생: " + e.getMessage());
             throw new ResponseServiceException(e.getMessage());
-        }
-        catch (OptimisticLockException e){
-//            createOrderByMemberCart(orderDto, buyer);
-            throw new ResponseServiceException("주문 처리 중 오류가 발생했습니다. 다시 시도해주세요.");
         }
 
         List<Long> cartItemsIds = orderDto.getOrderItemDtos().stream().map(OrderItemByCartCreateRequestDto::getCartItemId).toList();
@@ -123,6 +129,21 @@ public class OrderService {
                 new UsernamePasswordAuthenticationToken(newMemberContext, authentication.getCredentials(), authentication.getAuthorities());
         // 현재 세션에 새로운 인증 정보 설정
         SecurityContextHolder.getContext().setAuthentication(newAuthentication);
+    }
+
+    @Recover
+    public OrderDto.OrderCreateResponseDto recover(OptimisticLockException e) {
+        return OrderDto.OrderCreateResponseDto.builder().description("주문 처리 중 오류가 발생했습니다. 다시 시도해주세요.").build();
+    }
+
+    @Recover
+    public OrderDto.OrderCreateResponseDto recover(ObjectOptimisticLockingFailureException e, OrderDto.OrderCreateRequestDto orderDto, String buyer) {
+        return OrderDto.OrderCreateResponseDto.builder().description("주문 처리 중 오류가 발생했습니다. 다시 시도해주세요.").build();
+    }
+
+    @Recover
+    public OrderDto.OrderCreateResponseDto recover(StaleObjectStateException e, OrderDto.OrderCreateRequestDto orderDto, String buyer) {
+        return OrderDto.OrderCreateResponseDto.builder().description("주문 처리 중 오류가 발생했습니다. 다시 시도해주세요.").build();
     }
 
 }
