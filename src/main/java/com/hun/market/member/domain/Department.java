@@ -9,13 +9,11 @@ import lombok.Getter;
 public class Department {
     private String departmentName;
     private String teamName;
-    private String position;
 
     @Builder
-    public Department(String departmentName, String teamName, String position) {
+    public Department(String departmentName, String teamName) {
         this.departmentName = departmentName;
         this.teamName = teamName;
-        this.position = position;
     }
 
     public Department() {
