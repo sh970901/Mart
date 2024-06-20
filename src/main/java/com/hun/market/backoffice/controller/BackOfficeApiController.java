@@ -5,8 +5,6 @@ import com.hun.market.backoffice.dto.ItemModifyDto;
 import com.hun.market.backoffice.enums.ExcelUploadType;
 import com.hun.market.backoffice.service.ExcelService;
 import com.hun.market.backoffice.service.ImageService;
-import com.hun.market.item.dto.ItemDto;
-import com.hun.market.item.dto.ItemDto.ItemCreatResponseDto;
 import com.hun.market.item.service.ItemService;
 import com.hun.market.member.dto.MemberDto;
 import com.hun.market.member.service.MemberService;
@@ -62,6 +60,7 @@ public class BackOfficeApiController {
         // TODO 결과 반환은  api 재 호출로(화면단)
     }
 
+    // 코인 지급은 단독, 일괄 관련 없음(리스트로 받음)
     @PostMapping("/provide/coin")
     public void provideCoin(@Valid @RequestBody CoinProvideRequestDto coinProvideRequestDto) {
         memberService.provideCoin(coinProvideRequestDto);

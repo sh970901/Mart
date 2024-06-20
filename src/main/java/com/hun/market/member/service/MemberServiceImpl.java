@@ -3,6 +3,7 @@ package com.hun.market.member.service;
 import com.hun.market.backoffice.dto.CoinProvideRequestDto;
 import com.hun.market.item.exception.ItemNotFoundException;
 import com.hun.market.member.domain.CoinTransHistory;
+import com.hun.market.member.domain.CoinTransType;
 import com.hun.market.member.dto.MemberDto;
 import com.hun.market.member.dto.MemberDto.MemberResponseDto;
 import com.hun.market.member.repository.MemberRepository;
@@ -34,7 +35,7 @@ public class MemberServiceImpl implements MemberService {
                                     /*실제 코인 지급 부분*/
                                     member.provideCoin(provideCoin);
                                     /*이력 추가 부분*/
-                                    member.getCoinTransHistories().add(CoinTransHistory.createDepositTransaction(member, provideCoin));
+                                    member.getCoinTransHistories().add(CoinTransHistory.createDepositTransaction(member, coinProvideRequestDto));
                                     memberRepository.save(member);
                                 },
                                 () -> {

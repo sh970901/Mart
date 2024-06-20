@@ -1,5 +1,10 @@
 package com.hun.market.member.domain;
 
 public enum CoinTransType {
-    DEPOSIT, WITHDRAWAL
+
+    Techrel,
+    Study,
+    DeveloperCommunity,
+    Letter,
+    WITHDRAWAL,
 }
