@@ -209,3 +209,16 @@ footer {
 .sale-badge {
     background-color: #E53935
 }
+
+.search-result {
+    text-align: center;
+    margin: 20px 0;
+}
+.search-result .keyword {
+    font-size: 3rem;
+    font-weight: 800;
+}
+.search-result p {
+    font-size: 1rem;
+    font-weight: 600;
+}

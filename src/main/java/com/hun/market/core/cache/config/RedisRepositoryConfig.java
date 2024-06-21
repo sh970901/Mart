@@ -1,7 +1,14 @@
 package com.hun.market.core.cache.config;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hun.market.core.cache.RedisCacheProperties;
 import com.hun.market.core.cache.RedisProperties;
+import io.lettuce.core.resource.ClientResources;
+import io.lettuce.core.resource.DefaultClientResources;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -9,9 +16,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -22,15 +32,16 @@ import java.time.Duration;
 @EnableCaching
 public class RedisRepositoryConfig {
 
-    private final RedisProperties redisProperties;
+    private final RedisCacheProperties redisCacheProperties;
 
 
     @Bean
     public CacheManager itemCacheManager(RedisConnectionFactory redisConnectionFactory) {
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
+                                                                                 .disableCachingNullValues()
                                                                                  .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
                                                                                  .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()))
-                                                                                 .entryTtl(Duration.ofMinutes(3L));
+                                                                                 .entryTtl(Duration.ofSeconds(CacheExpireSec.DEFAULT_EXPIRE_SEC.getSec()));
 
         return RedisCacheManager
             .RedisCacheManagerBuilder
@@ -39,9 +50,28 @@ public class RedisRepositoryConfig {
             .build();
     }
 
-    @Bean
-    public RedisConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory(redisProperties.getHost(), redisProperties.getPort());
+//    @Bean
+//    public RedisConnectionFactory redisConnectionFactory() {
+//        return new LettuceConnectionFactory(redisProperties.getHost(), redisProperties.getPort());
+//    }
+
+    @Bean(destroyMethod = "shutdown")
+    ClientResources clientResources() {
+        return DefaultClientResources.create();
+    }
+
+    @Bean("redisCacheConnectionFactory")
+    public RedisConnectionFactory redisCacheConnectionFactory(ClientResources clientResources) {
+        LettuceClientConfiguration lettuceClientConfiguration =
+            LettuceClientConfiguration.builder()
+                                      .commandTimeout(Duration.ofMinutes(1))
+                                      .shutdownTimeout(Duration.ZERO)
+                                      .clientResources(clientResources())
+                                      .build();
+
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(redisCacheProperties.getHost(), redisCacheProperties.getPort());
+        redisStandaloneConfiguration.setPassword("");
+        return new LettuceConnectionFactory(redisStandaloneConfiguration, lettuceClientConfiguration);
     }
 
 //    @Bean
@@ -55,22 +85,30 @@ public class RedisRepositoryConfig {
 
 
     @Bean
-    public RedisTemplate<String, Object> redisTemplate() {
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory());
+    public RedisTemplate<?, ?> redisCacheTemplate(@Qualifier("redisCacheConnectionFactory") RedisConnectionFactory redisCacheConnectionFactory) {
+        RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisCacheConnectionFactory);
 
-        // 일반적인 key:value의 경우 시리얼라이저
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
 
-        // Hash를 사용할 경우 시리얼라이저
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        redisTemplate.setHashValueSerializer(new StringRedisSerializer());
-
-        // 모든 경우
-        redisTemplate.setDefaultSerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
 
         return redisTemplate;
     }
 
+    private enum CacheExpireSec {
+
+        DEFAULT_EXPIRE_SEC(60 * 1);
+        private final Integer sec;
+
+        CacheExpireSec(Integer sec) {
+            this.sec = sec;
+        }
+
+        public Integer getSec() {
+            return sec;
+        }
+    }
 }

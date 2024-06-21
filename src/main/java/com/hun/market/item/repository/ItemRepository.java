@@ -2,16 +2,14 @@ package com.hun.market.item.repository;
 
 import com.hun.market.item.domain.Item;
 import jakarta.persistence.LockModeType;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
-
-import java.util.List;
-import java.util.Optional;
 
 public interface ItemRepository extends PagingAndSortingRepository<Item, Long> {
     Optional<Item> findById(Long id);

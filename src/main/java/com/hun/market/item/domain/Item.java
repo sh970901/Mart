@@ -5,11 +5,22 @@ import com.hun.market.base.entity.BaseEntity;
 import com.hun.market.item.dto.ItemDto;
 import com.hun.market.item.exception.ItemStockException;
 import com.hun.market.order.order.domain.OrderItem;
-import jakarta.persistence.*;
-import lombok.*;
-
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
@@ -95,4 +106,5 @@ public class Item extends BaseEntity {
         }
         this.itemStock -= quantity;
     }
+
 }

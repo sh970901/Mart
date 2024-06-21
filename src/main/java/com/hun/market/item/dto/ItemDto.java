@@ -1,9 +1,14 @@
 package com.hun.market.item.dto;
 
+import com.hun.market.item.domain.Item;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 public class ItemDto {
@@ -43,8 +48,10 @@ public class ItemDto {
     }
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+//    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+//    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @NoArgsConstructor
+    @AllArgsConstructor
     @Builder
     public static class ItemCreatResponseDto {
 
@@ -64,8 +71,10 @@ public class ItemDto {
         private Long itemPrice;
 
         private String description;
+
+        public static ItemCreatResponseDto of(Item item){
+            return ItemDto.ItemCreatResponseDto.builder().itemId(item.getId()).itemName(item.getItemName()).itemPrice(item.getItemPrice()).itemStock(item.getItemStock()).description(item.getDescription()).build();
+        }
     }
 
-    public static class ItemSearchDto {
-    }
 }

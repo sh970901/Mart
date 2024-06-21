@@ -2,8 +2,6 @@ package com.hun.market.item.service;
 
 import com.hun.market.backoffice.dto.ItemModifyDto;
 import com.hun.market.item.dto.ItemDto;
-
-import com.hun.market.item.dto.ItemDto.ItemCreatResponseDto;
 import java.util.List;
 
 public interface ItemService {

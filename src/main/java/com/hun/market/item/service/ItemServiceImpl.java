@@ -6,10 +6,11 @@ import com.hun.market.item.dto.ItemDto;
 import com.hun.market.item.dto.ItemDto.ItemCreatResponseDto;
 import com.hun.market.item.exception.ItemNotFoundException;
 import com.hun.market.item.repository.ItemRepository;
+import com.hun.market.item.service.WrapperItemService.WrapperItemResponseDtos;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -17,37 +18,37 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Slf4j
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
+    private final WrapperItemService wrapperItemService;
 
     /**
      * TODO
-     * 레디슨을 활용한 캐싱 처리
+     * 캐시 처리 시 List는 GenericJackson2JsonRedisSerializer로 역직렬화 시
+     * @class 라는 Key 값에 클래스의 패키지 정보까지 전부 저장.
+     * List 를 통째로 저장하면 { "@class": "..." } 이 아니라 [{ "@class": "..."}] 로 저장되어 찾지 못해서 발생하는 이슈가 발생
+     * 따라서, List 를 감싸는 Wrapper 클래스를 만들어 주어 해결
+     * 
+     * Cacheable은 AOP Base라 클래스 분리 하지않으면 타지 않음. 따라서 WrapperService 생성
      */
-    @Validated
-    @Cacheable(cacheNames = "itemListCache", key = "#root.targetClass + '.' + #root.methodName + '.' + #page + '.' + #size", sync = true, cacheManager = "itemCacheManager")
+    @Override
     public List<ItemDto.ItemCreatResponseDto> getItemList(int page, int size) {
-        Page<Item> resultItemPage = itemRepository.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "id")));
-        log.info("-----------------------find------------------------");
-        return resultItemPage.getContent().stream()
-                .map(this::mapToItemResponseDto)
-                .toList();
+        // Redis cache or DB find
+        WrapperItemResponseDtos wrapperItemResponseDtos = wrapperItemService.getItemList(page, size);
+
+        return wrapperItemResponseDtos.getItemCreatResponseDtos();
     }
 
     @Override
     public List<ItemDto.ItemCreatResponseDto> getSearchItemList(String query, int page, int size) {
-        Page<Item> resultItemPage = itemRepository.findByItemNameContaining(query, PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "id")));
-        log.info("-----------------------search------------------------");
-        return resultItemPage.getContent().stream()
-                             .map(this::mapToItemResponseDto)
-                             .toList();
+        // Redis cache or DB find
+        WrapperItemResponseDtos wrapperItemResponseDtos = wrapperItemService.getSearchItemList(query, page, size);
+        
+        return wrapperItemResponseDtos.getItemCreatResponseDtos();
     }
 
     @Override
@@ -67,21 +68,4 @@ public class ItemServiceImpl implements ItemService {
         );
 
     }
-
-
-    //    @Override
-//    public Page<ItemResponseDto> paging(Pageable pageable) {
-//        int page = pageable.getPageNumber(); // page 위치에 있는 값은 0부터 시작한다.
-//        int pageLimit = pageable.getPageSize(); // 한페이지에 보여줄 글 개수
-//
-//        Page<Item> itemsPages = itemRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.ASC, "id")));
-//
-//        return itemsPages.map(
-//                this::mapToItemResponseDto);
-//    }
-
-    private ItemDto.ItemCreatResponseDto mapToItemResponseDto(Item item) {
-        return ItemDto.ItemCreatResponseDto.builder().itemId(item.getId()).itemName(item.getItemName()).itemPrice(item.getItemPrice()).itemStock(item.getItemStock()).description(item.getDescription()).build();
-    }
-
 }

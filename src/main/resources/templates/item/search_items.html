@@ -117,6 +117,9 @@
 
 <main>
   <section>
+    <div class="search-result">
+      <p><span th:text = "'\''+ ${keyword} + '\''" class="keyword"></span>에 대한 검색 결과입니다.</p>
+    </div>
     <div class="item-list" id="item-list" th:if="${itemList.size() > 0}" >
       <div class="item" th:each="item : ${itemList}">
         <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/8-col/img%285%29.jpg" class="d-block w-100" alt="Exotic Fruits"/>
@@ -138,9 +141,7 @@
       </div>
     </div>
     <div class="item-list" id="item-list2" th:if="${itemList.size() <= 0}">
-      <div class="item" >
         <p>'<span th:text="${keyword}"></span>'에 해당하는 상품이 없습니다.</p>
-      </div>
     </div>
     <div id="loading-skeleton" class="skeleton" style="display: none;">
       <div class="skeleton-content">
