@@ -35,83 +35,127 @@
         .user-info {
             margin-right: 20px;
         }
-
         a {
-            text-decoration: none; /* 밑줄 제거 */
-            color: white; /* 글자 색상을 하얀색으로 설정 */
+            text-decoration: none;
+            color: white;
+        }
+        .main-content {
+            margin-top: 10px;
+        }
+        .nav-pills .nav-link.active {
+            background-color: #0d6efd;
+        }
+        .profile-section, .purchase-history, .claim-history, .coin-history, .order-history {
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+        }
+        .custom-container {
+            max-width: 960px; /* 콘텐츠 최대 너비 */
+            margin: 0 auto; /* 중앙 정렬 */
+            padding: 0 15px; /* 양쪽 여백 설정 */
         }
     </style>
 </head>
 <body>
-<header>
-    <div class="header-top">
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <div class="container-fluid">
-                <img th:src="@{/images/character/logo.png}" alt="로고 이미지" style="max-width: 300px; max-height:100px; height: auto;">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarScroll">
-                    <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" th:href="@{/myinfo}">Exam</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Link
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/main}" style="color: #1859FF">INNO MARKET</a>
-                        </li>
-                    </ul>
-                    <form class="d-flex" th:action="@{/i/items}" method="get">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="q">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
+<div class="custom-container">
+<header th:insert="~{fragments/header :: headerFragment}"></header>
+
+<main class="container main-content">
+    <div class="row">
+        <div class="col-md-3">
+            <nav class="nav flex-column nav-pills">
+                <a class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">회원 정보</a>
+                <a class="nav-link" id="v-pills-coin-tab" data-bs-toggle="pill" href="#v-pills-coin" role="tab" aria-controls="v-pills-coin" aria-selected="false">코인 입출금</a>
+                <a class="nav-link" id="v-pills-order-tab" data-bs-toggle="pill" href="#v-pills-order" role="tab" aria-controls="v-pills-order" aria-selected="false">구매 내역</a>
+                <a class="nav-link" id="v-pills-claim-tab" data-bs-toggle="pill" href="#v-pills-claim" role="tab" aria-controls="v-pills-claim" aria-selected="false">환불 내역</a>
+                <a class="nav-link" id="v-pills-cart-tab" th:href="@{/c/cart}" role="tab" aria-selected="false">찜 목록</a>
+            </nav>
+        </div>
+        <div class="col-md-9">
+            <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                    <h2>회원 정보</h2>
+                    <section class="profile-section">
+<!--                        <h2>회원 정보</h2>-->
+                        <p><strong>이름: </strong> <span th:text="${memberDto.getMemberName()}">홍길동</span></p>
+                        <p><strong>부서: </strong> <span th:text="${memberDto.getDepartment()}">example@example.com</span></p>
+                        <p><strong>보유 코인: </strong> <span th:text="${memberDto.getMemberCoin()}">1000</span>원</p>
+                    </section>
+                </div>
+                <div class="tab-pane fade" id="v-pills-coin" role="tabpanel" aria-labelledby="v-pills-coin-tab">
+                    <section class="coin-history">
+                        <h2>코인 입출금</h2>
+                        <div>
+                            <div class="coin-history-item">
+                                <p><strong>날짜:</strong> <span>2024-06-18</span></p>
+                                <p><strong>구매 내역:</strong> <span>상품 A, 상품 B</span></p>
+                                <p><strong>금액:</strong> <span>30000</span>원</p>
+                            </div>
+                        </div>
+                        <div>
+                            <p>구매 내역이 없습니다.</p>
+                        </div>
+                    </section>
+                </div>
+                <div class="tab-pane fade" id="v-pills-order" role="tabpanel" aria-labelledby="v-pills-order-tab">
+                    <section class="order-history">
+                        <h2>구매 내역</h2>
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead>
+                                <tr>
+                                    <th scope="col">상품 정보</th>
+                                    <th scope="col">진행 상태</th>
+                                    <th scope="col">금액</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <!-- 예시로 하나의 구매 내역을 렌더링하는 예시 -->
+                                <tr >
+                                    <td>2024-06-18</td>
+                                    <td>상품 A, 상품 B</td>
+                                    <td>30,000원</td>
+                                </tr>
+                                <!-- 또 다른 구매 내역 추가 예시 -->
+                                <tr>
+                                    <td>2024-06-20</td>
+                                    <td>상품 C, 상품 D, 상품 E</td>
+                                    <td>50,000원</td>
+                                </tr>
+                                <!-- 더 많은 구매 내역들을 추가할 수 있습니다 -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div th:unless="${hasItems}" class="no-records">
+                            <p>구매 내역이 없습니다.</p>
+                        </div>
+                    </section>
+                </div>
+                <div class="tab-pane fade" id="v-pills-claim" role="tabpanel" aria-labelledby="v-pills-claim-tab">
+                    <section class="claim-history">
+                        <h2>환불 내역</h2>
+                        <div>
+                            <div class="claim-history-item">
+                                <p><strong>날짜:</strong> <span>2024-06-18</span></p>
+                                <p><strong>구매 내역:</strong> <span>상품 A, 상품 B</span></p>
+                                <p><strong>금액:</strong> <span>30000</span>원</p>
+                            </div>
+                        </div>
+                        <div>
+                            <p>구매 내역이 없습니다.</p>
+                        </div>
+                    </section>
                 </div>
             </div>
-        </nav>
-        <div class="login-div">
-            <!--            <span class="user-info" th:if="${#authorization.expression('isAuthenticated()')}"-->
-            <!--                  th:text="${#authentication.principal.username + '  ' + #authentication.principal.mbCoin + 'J₩' }"></span>-->
-            <span class="user-info" th:if="${#authorization.expression('isAuthenticated()')}"
-                  th:text="${#authentication.principal.username + '님'}"></span>
-            <button class="btn btn-outline-primary me-2" sec:authorize="isAnonymous()" onclick="location.href='/login'">로그인</button>
-            <a class="btn btn-outline-primary me-2" th:href="@{/myinfo}" sec:authorize="isAuthenticated()">내정보</a>
-            <a class="btn btn-outline-primary me-2" th:href="@{/cart}" sec:authorize="isAuthenticated()">찜목록</a>
-            <button class="btn btn-outline-danger me-2" sec:authorize="isAuthenticated()" onclick="location.href='/logout'">로그아웃</button>
         </div>
     </div>
-
-    <div class="header-main">
-        <h1>
-            <a th:href="@{/main}">INNO Market</a>
-        </h1>
-    </div>
-</header>
-
-<main>
-    <section>
-
-    </section>
 </main>
+</div>
 
+<footer th:insert="~{fragments/footer :: footerFragment}"></footer>
 
-<footer>
-    <p>© 2024 이노마켓. All rights reserved.</p>
-</footer>
-
-<script th:src="@{/js/display.js}"></script>
+<script th:src="@{/js/member.js}"></script>
 <script th:inline="javascript">
     /*[[CDATA[*/
 
