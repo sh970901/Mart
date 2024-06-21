@@ -66,8 +66,6 @@ public class ItemDto {
         private String description;
     }
 
-
-
-
-
+    public static class ItemSearchDto {
+    }
 }
