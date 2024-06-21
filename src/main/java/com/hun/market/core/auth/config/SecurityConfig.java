@@ -28,8 +28,8 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                         .requestMatchers("/resource/**", "/", "/main", "/login","/images/**", "/css/**", "/js/**", "/v1/api/items/**").permitAll()
-//                        .anyRequest().authenticated())
-                        .anyRequest().permitAll())
+                        .anyRequest().authenticated())
+//                        .anyRequest().permitAll())
 //                        .requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
                 .csrf(AbstractHttpConfigurer::disable)
 //                        .ignoringRequestMatchers(new AntPathRequestMatcher("/**")))

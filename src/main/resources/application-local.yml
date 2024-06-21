@@ -2,6 +2,9 @@ server:
   servlet:
     session:
       timeout: 20m
+  error:
+    whitelabel:
+      enabled: false
 spring:
   main:
     banner-mode: off

@@ -120,7 +120,7 @@
                 <!--                <img th:src="${item.imageUrl}" th:alt="${item.name} Image" alt="상품 이미지">-->
                 <h3 th:text="${item.itemName}">상품 제목</h3>
                 <p th:text="${item.description}">상품 설명</p>
-                <p th:text="'재고: ' + ${item.itemStock} + '개'">수량</p>
+<!--                <p th:text="'재고: ' + ${item.itemStock} + '개'">수량</p>-->
                 <span th:text="'가격: ₩' + ${item.itemPrice}">가격: ₩</span>
 <!--                <p><button class="btn btn-outline-primary me-2" th:onclick="|placeOrder(${item.itemId})|">바로 구매</button></p>-->
                 <p><button class="btn btn-outline-primary" th:itemId="${item.itemId}" th:itemName="${item.itemName}" th:itemStock="${item.itemStock}" th:itemPrice="${item.itemPrice}" th:onclick="|showPurchaseModal(this.getAttribute('itemId'), this.getAttribute('itemName'), this.getAttribute('itemStock'), this.getAttribute('itemPrice'))|" data-bs-toggle="modal" data-bs-target="#orderModal">바로 구매</button></p>

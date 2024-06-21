@@ -44,8 +44,8 @@ public class Item extends BaseEntity {
     private Long itemPrice;
 
     //상품 구매 링크
-    /*@Column(name="url", nullable = false, length = 1000)
-    private String url;*/
+//    /*@Column(name="url", nullable = false, length = 1000)
+//    private String url;*/
 
     //이미지경로(S3)
     @Column(name="image_path", nullable = false, length = 1000)

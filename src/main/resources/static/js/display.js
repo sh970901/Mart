@@ -76,18 +76,34 @@ function fetchMoreItems() {
 }
 
 function showPurchaseModal(itemId, itemName, itemStock, itemPrice) {
-    document.getElementById('selectedItem').textContent = itemName;
-    document.getElementById('itemStock').textContent = itemStock;
-    document.getElementById('itemPrice').textContent = itemPrice;
-    document.getElementById('totalPrice').textContent = itemPrice;
-    document.getElementById('itemQuantity').textContent = 1;
-    document.getElementById('selectedItemId').textContent = itemId;
-    document.getElementById('selectedItemId').style.display = 'none';
+
+    fetch(`/api/v1/i/items/${itemId}`)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(itemDetails => {
+        console.log(itemDetails);
+        document.getElementById('selectedItem').textContent = itemName;
+        document.getElementById('itemStock').textContent = itemDetails.data.itemStock;
+        document.getElementById('itemPrice').textContent = itemDetails.data.itemPrice;
+        document.getElementById('totalPrice').textContent = itemDetails.data.itemPrice;
+        document.getElementById('itemQuantity').textContent = 1;
+        document.getElementById('selectedItemId').textContent = itemId;
+        document.getElementById('selectedItemId').style.display = 'none';
+    })
+    .catch(error => {
+        console.error('Error fetching item details:', error);
+    });
 }
 
 function countItemQuantityP(){
     let itemQuantity = parseInt(document.getElementById('itemQuantity').textContent);
+
     let itemStock = parseInt(document.getElementById('itemStock').textContent);
+
     const itemPrice = parseInt(document.getElementById('itemPrice').textContent);
     if (itemQuantity < itemStock) { // 재고보다 많아지지 않도록 제한
         itemQuantity += 1;
@@ -113,12 +129,19 @@ function countItemQuantityM(){
 }
 
 async function purchaseItem(){
+    let itemStock = parseInt(document.getElementById('itemStock').textContent);
     let itemQuantity = parseInt(document.getElementById('itemQuantity').textContent);
     const itemId = parseInt(document.getElementById('selectedItemId').textContent);
 
     let totalPrice = parseInt(document.getElementById('totalPrice').textContent);
 
     var mbCoin = parseInt(document.getElementById('mbCoinValue').textContent.trim());
+
+    if(itemStock <= 0){
+         alert("재고가 존재하지 않습니다.");
+         return;
+    }
+
     if (totalPrice > mbCoin) {
         alert('현재 코인이 부족합니다. \n 현재 코인: '+ mbCoin + "\n 총 가격: " + totalPrice);
         return;
