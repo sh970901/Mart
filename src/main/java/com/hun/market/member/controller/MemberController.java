@@ -41,8 +41,7 @@ public class MemberController {
     }
 
     @PostMapping("/change-password")
-    public String changePassword(Model model,
-                                 @AuthenticationPrincipal MemberContext memberSession,
+    public String changePassword( @AuthenticationPrincipal MemberContext memberSession,
                                  @Valid @ModelAttribute MemberDto.MemberChangePwdRequestDto mbrChangePwdDto,
                                  BindingResult bindingResult,
                                  RedirectAttributes redirectAttributes){
