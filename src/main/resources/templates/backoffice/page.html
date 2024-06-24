@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 페이지</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!--<link rel="stylesheet" href="./styles.css">
+    <script defer src="./script.js"></script>-->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            display: grid;
+            grid-template-areas:
+                "nav header"
+                "nav main";
+            grid-template-rows: auto 1fr;
+            grid-template-columns: 200px 1fr;
+            height: 100vh;
+        }
+
+        .nav {
+            grid-area: nav;
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+        }
+
+        .nav ul {
+            list-style-type: none;
+        }
+
+        .nav li {
+            margin-bottom: 10px;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .header {
+            grid-area: header;
+            background-color: #34495e;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            overflow-x: auto; /* 가로 스크롤을 위한 설정 */
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info span {
+            margin-right: 20px;
+        }
+
+        .content {
+            grid-area: main;
+            padding: 20px;
+            overflow-x: auto; /* 가로 스크롤을 위한 설정 */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+            text-overflow: ellipsis; /* 글자가 너무 길 경우 ...으로 표시 */
+            overflow: hidden; /* 넘칠 경우 숨김 */
+            text-align: center; /* 가운데 정렬 */
+        }
+
+        th {
+            background-color: #f4f4f4;
+            position: sticky;
+            top: 0;
+        }
+
+        td {
+            max-width: 300px; /* 최대 너비 설정 */
+        }
+
+        /* Popup styles */
+        .popup {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .popup-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            text-align: center; /* 가운데 정렬 */
+            position: relative; /* 부모 위치 설정 */
+        }
+
+        .popup-content h2, .popup-content h3 {
+            text-align: center;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            color: #aaa;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: black;
+            text-decoration: none;
+        }
+        .employee-info div {
+            margin-bottom: 10px;
+        }
+
+        .employee-info label {
+            display: inline-block;
+            width: 150px;
+        }
+
+        .employee-info input {
+            width: calc(100% - 160px);
+            padding: 5px;
+            margin-top: 5px;
+        }
+
+        .employee-info button {
+            margin-top: 10px;
+        }
+        .upload-btn,
+        .grant-coins-btn {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .upload-btn:hover,
+        .grant-coins-btn:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <nav class="nav">
+        <ul>
+            <li><a href="#" onclick="showPage('employee')">사원관리</a></li>
+            <li><a href="#" onclick="showPage('product')">상품관리</a></li>
+        </ul>
+    </nav>
+    <header class="header">
+        <div class="user-info">
+            <span>관리자님 환영합니다</span>
+            <button>로그아웃</button>
+        </div>
+    </header>
+    <main class="content" id="content">
+        <!-- Default page (Employee Management) -->
+        <h1>사원관리</h1>
+        <table>
+            <thead>
+            <tr>
+                <th>no</th>
+                <th>이메일</th>
+                <th>이름</th>
+                <th>비밀번호</th>
+                <th>부서</th>
+                <th>팀</th>
+                <th>보유포인트</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            </tr>
+            <!-- 추가 데이터 행 -->
+            </tbody>
+        </table>
+    </main>
+</div>
+
+<div id="popup" class="popup">
+    <div class="popup-content">
+        <span class="close-btn" onclick="closePopup()">&times;</span>
+        <h2 style="margin-bottom: 20px;">사원정보수정</h2>
+        <div class="employee-info" style="margin-bottom: 20px;">
+            <div>
+                <label>no</label>
+                <input type="text" id="emp-id" disabled>
+            </div>
+            <div>
+                <label>이메일</label>
+                <input type="text" id="emp-email" disabled>
+            </div>
+            <div>
+                <label>이름</label>
+                <input type="text" id="emp-name" disabled>
+            </div>
+            <div>
+                <label>비밀번호</label>
+                <input type="password" id="emp-password">
+            </div>
+            <div>
+                <label>부서</label>
+                <input type="text" id="emp-department">
+            </div>
+            <div>
+                <label>팀</label>
+                <input type="text" id="emp-team">
+            </div>
+            <div>
+                <label>보유포인트</label>
+                <input type="number" id="emp-points">
+            </div>
+            <button>저장</button>
+        </div>
+        <h3>사원코인 입출금 이력</h3>
+        <table>
+            <thead>
+            <tr>
+                <th>no</th>
+                <th>이름</th>
+                <th>행사명</th>
+                <th>증감코인</th>
+                <th>보유코인</th>
+                <th>행사일</th>
+                <th>이력생성일</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- 추가 데이터 행 -->
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+<script>
+    function showPage(page) {
+        const content = document.getElementById('content');
+
+        if (page === 'employee') {
+            fetchEmployeeData();  // 사원관리 탭 클릭 시 API 호출
+            content.innerHTML = `
+
+            <div style="display: flex; align-items: center;">
+
+            <form action="/backoffice/upload/excel" method="POST" enctype="multipart/form-data" style="flex: 1;">
+                <input type="file" name="excel">
+                <input type="submit" value="업로드" class="upload-btn">
+            </form>
+            <button class="grant-coins-btn">코인 일괄 지급</button>
+            </div>
+
+
+
+            <h1>사원관리</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>아이디</th>
+                        <th>이메일</th>
+                        <th>이름</th>
+                        <th>비밀번호</th>
+                        <th>부서</th>
+                        <th>팀</th>
+                        <th>보유포인트</th>
+                        <th>수정</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>example1@example.com</td>
+                        <td>홍길동</td>
+                        <td>password1</td>
+                        <td>개발</td>
+                        <td>백엔드</td>
+                        <td>1000</td>
+                        <td><button onclick="openPopup(this)">수정</button></td>
+                    </tr>
+                    <!-- 추가 데이터 행 -->
+                </tbody>
+            </table>
+        `;
+        } else if (page === 'product') {
+            content.innerHTML = `
+            <h1>상품관리</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>아이디</th>
+                        <th>상품명</th>
+                        <th>상품재고</th>
+                        <th>상품가격</th>
+                        <th>이미지경로</th>
+                        <th>기타설명</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        `;
+        }
+    }
+
+    // API 호출하여 데이터를 가져오는 함수
+    async function fetchEmployeeData() {
+        try {
+            const response = await fetch('/backoffice/employee');  // API 엔드포인트로 수정
+            const responseBody = await response.json();
+
+            // response.data 필드가 배열인지 확인
+            if (Array.isArray(responseBody.data)) {
+                populateEmployeeTable(responseBody.data);  // 배열인 경우 테이블에 채움
+            } else {
+                console.error('Expected array data in response.data, received:', responseBody.data);
+            }
+        } catch (error) {
+            console.error('Error fetching employee data:', error);
+        }
+    }
+
+    // 표에 데이터를 동적으로 채우는 함수
+    function populateEmployeeTable(data) {
+        const tbody = document.querySelector('table tbody');
+        tbody.innerHTML = '';  // 기존 데이터를 지우고 새 데이터를 추가
+
+        data.forEach(employee => {
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+            <td>${employee.memberNo}</td>
+            <td>${employee.memberEmail}</td>
+            <td>${employee.memberName}</td>
+            <td>${employee.memberPassword}</td>
+            <td>${employee.department.departmentName}</td>
+            <td>${employee.department.teamName}</td>
+            <td>${employee.memberCoin}</td>
+            <td><button onclick="openPopup(this)">수정</button></td>
+        `;
+
+            tbody.appendChild(row);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchEmployeeData);
+
+    function openPopup(button) {
+        const row = button.closest('tr');
+        const cells = row.getElementsByTagName('td');
+
+        document.getElementById('emp-id').value = cells[0].innerText;
+        document.getElementById('emp-email').value = cells[1].innerText;
+        document.getElementById('emp-name').value = cells[2].innerText;
+        document.getElementById('emp-password').value = cells[3].innerText;
+        document.getElementById('emp-department').value = cells[4].innerText;
+        document.getElementById('emp-team').value = cells[5].innerText;
+        document.getElementById('emp-points').value = cells[6].innerText;
+
+        document.getElementById('popup').style.display = 'block';
+    }
+
+    function closePopup() {
+        document.getElementById('popup').style.display = 'none';
+    }
+</script>
+</html>
