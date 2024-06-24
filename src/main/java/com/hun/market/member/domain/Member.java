@@ -37,6 +37,9 @@ public class Member extends BaseEntity {
     @Column(name="member_coin", nullable = false, length = 1000)
     private int mbCoin;
 
+    @Column(name="member_email")
+    private String mbEmail;
+
     @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
 
@@ -67,11 +70,12 @@ public class Member extends BaseEntity {
     }
     public static Member from(MemberDto.MemberCreateRequestDto memberDto){
         return Member.builder()
-                .mbName(memberDto.getMbName())
-                .mbPassword(memberDto.getMbPassword())
-                .mbCoin(memberDto.getMbCoin())
-                .department(memberDto.getDepartment())
-                .build();
+                     .mbName(memberDto.getMbName())
+                     .mbPassword(memberDto.getMbPassword())
+                     .mbCoin(memberDto.getMbCoin())
+                     .mbEmail(memberDto.getMbEmail())
+                     .department(memberDto.getDepartment())
+                     .build();
     }
 
     public void provideCoin(int coin) {

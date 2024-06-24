@@ -10,6 +10,7 @@ import java.util.List;
 @Getter
 public class MemberContext extends User {
 
+    private Long memberId;
     private String mbName;
     private String mbPassword;
     private int mbCoin;
@@ -18,6 +19,8 @@ public class MemberContext extends User {
     public MemberContext(Member member, List<GrantedAuthority> authorities) {
         super(member.getMbName(), member.getMbPassword(), authorities);
         this.mbCoin = member.getMbCoin();
+        this.mbName = member.getMbName();
+        this.memberId = member.getId();
     }
 
     @Override

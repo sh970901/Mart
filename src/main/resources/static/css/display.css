@@ -140,8 +140,9 @@ section h2 {
 
 /* 푸터 스타일 */
 footer {
-    background-color: #333;
-    color: #fff;
+    /*background-color: #333;*/
+    /*color: #fff;*/
+    color: black;
     padding: 20px;
     text-align: center;
 }
