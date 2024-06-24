@@ -66,10 +66,6 @@ public class BackOfficeApiController {
         memberService.provideCoin(coinProvideRequestDto);
     }
 
-    @GetMapping("/employee")
-    public List<MemberDto.MemberResponseDto> getAllMembers() {
-        return memberService.getAllMembers();
-    }
 
     @GetMapping("/employee/{memberId}")
     public MemberDto.MemberResponseDto getMember(@PathVariable Long memberId) {

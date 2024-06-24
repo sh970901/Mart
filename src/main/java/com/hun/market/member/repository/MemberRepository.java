@@ -13,7 +13,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findById(Long memberId);
 
-    List<Member> findAll();
+    List<Member> findAllByOrderById();
 
     @Query("SELECT m FROM Member m LEFT JOIN FETCH m.cart WHERE m.mbName = :name")
     Optional<Member> findByMbNameWithCart(@Param("name") String name);

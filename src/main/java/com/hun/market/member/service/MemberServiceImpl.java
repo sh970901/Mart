@@ -3,8 +3,8 @@ package com.hun.market.member.service;
 import com.hun.market.backoffice.dto.CoinProvideRequestDto;
 import com.hun.market.item.exception.ItemNotFoundException;
 import com.hun.market.member.domain.CoinTransHistory;
-import com.hun.market.member.domain.CoinTransType;
 import com.hun.market.member.dto.MemberDto;
+import com.hun.market.member.dto.MemberDto.MemberRequestDto;
 import com.hun.market.member.dto.MemberDto.MemberResponseDto;
 import com.hun.market.member.repository.MemberRepository;
 import java.util.List;
@@ -49,7 +49,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<MemberResponseDto> getAllMembers() {
 
-        return memberRepository.findAll().stream()
+        return memberRepository.findAllByOrderById().stream()
                                .map(MemberDto::from)
                                .collect(Collectors.toList());
 
@@ -61,5 +61,21 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findById(memberId)
                                .map(MemberDto::from)
                                .orElseThrow(() -> new ItemNotFoundException("존재하지 않는 사원입니다. " + memberId));
+    }
+
+    @Override
+    @Transactional
+    public void updateMember(Long memberId, MemberRequestDto memberRequestDto) {
+        memberRepository.findById(memberId)
+                        .ifPresentOrElse(
+                            member -> {
+                                member.modify(memberRequestDto);
+                                memberRepository.save(member);
+                            },
+                            () -> {
+                                throw new ItemNotFoundException("존재하지 않는 사원입니다. " + memberId);
+                            }
+                        );
+
     }
 }
