@@ -62,6 +62,14 @@
 <header th:insert="~{fragments/header :: headerFragment}"></header>
 
 <main class="container main-content">
+    <p>
+        <strong>
+            <span th:text="|${memberDto.getMemberName()}|">이승훈</span>
+            <span th:text="${memberDto.getDepartment()}">example@example.com</span>
+        </strong>
+    </p>
+    <p><strong>부서: </strong> </p>
+    <p><strong>보유 코인: </strong> <span th:text="${memberDto.getMemberCoin()}">1000</span>원</p>
     <div class="row">
         <div class="col-md-3">
             <nav class="nav flex-column nav-pills">
@@ -75,7 +83,7 @@
         <div class="col-md-9">
             <div class="tab-content" id="v-pills-tabContent">
                 <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-                    <h2>회원 정보</h2>
+                    <h2>개인정보 수정</h2>
                     <section class="profile-section">
 <!--                        <h2>회원 정보</h2>-->
                         <p><strong>이름: </strong> <span th:text="${memberDto.getMemberName()}">홍길동</span></p>

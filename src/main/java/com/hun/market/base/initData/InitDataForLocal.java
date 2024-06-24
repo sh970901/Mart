@@ -35,8 +35,10 @@ public class InitDataForLocal extends AbstractInitData {
                 itemRepository.save(item);
             }
             String password = passwordEncoder.encode("1234");
+
             Department department = Department.builder().departmentName("커머스사업부").teamName("상품개발").build();
             MemberDto.MemberCreateRequestDto mbDto = MemberDto.MemberCreateRequestDto.builder().mbName("admin").mbEmail("이메일").mbPassword(password).mbCoin(1000).department(department).build();
+
             memberRepository.save(Member.from(mbDto));
 
             MemberDto.MemberCreateRequestDto mbDto2= MemberDto.MemberCreateRequestDto.builder().mbName("admin2").mbEmail("이메일").mbPassword(password).mbCoin(12000).department(department).build();
