@@ -193,9 +193,9 @@
         <!-- Default page (Employee Management) -->
         <div style="display: flex; align-items: center;">
 
-            <form action="/backoffice/upload/excel" method="POST" enctype="multipart/form-data" style="flex: 1;">
-                <input type="file" name="excel">
-                <input type="submit" value="업로드" class="upload-btn">
+            <form action="/backoffice/upload/employees" method="POST" enctype="multipart/form-data" style="flex: 1;">
+                <input type="file" name="employees">
+                <input type="submit" value="사원일괄등록 업로드" class="upload-btn">
             </form>
             <button class="grant-coins-btn">코인 일괄 지급</button>
         </div>
@@ -279,6 +279,29 @@
 </div>
 </body>
 <script>
+    // 폼 제출 이벤트를 처리하는 함수
+    document.getElementById('uploadForm').addEventListener('submit', function(event) {
+        event.preventDefault();  // 기본 제출 동작 방지
+
+        // 폼 데이터를 가져오기
+        let formData = new FormData(this);
+
+        // AJAX를 사용하여 API 호출
+        fetch('/backoffice/upload/employees', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Upload successful:', data);
+
+            // 업로드 후에 추가 작업 수행 (예: 새로운 데이터 로드)
+            fetchEmployeeData();  // 예시: 새로운 데이터를 로드하는 함수 호출
+        })
+        .catch(error => {
+            console.error('Error uploading file:', error);
+        });
+    });
     function saveEmployee() {
         // Get input values from the popup form
         const empId = document.getElementById('emp-id').value;
@@ -332,7 +355,7 @@
 
             <div style="display: flex; align-items: center;">
 
-            <form action="/backoffice/upload/excel" method="POST" enctype="multipart/form-data" style="flex: 1;">
+            <form id="uploadForm" action="/backoffice/upload/excel" method="POST" enctype="multipart/form-data" style="flex: 1;">
                 <input type="file" name="excel">
                 <input type="submit" value="업로드" class="upload-btn">
             </form>

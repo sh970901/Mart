@@ -7,9 +7,11 @@ import lombok.Setter;
 @Setter
 public class EmployeeExcelUploadDto {
 
+    private String email;
+
     private String employeeName;
 
-    private String email;
+    private String password;
 
     private String departmentName;
 
