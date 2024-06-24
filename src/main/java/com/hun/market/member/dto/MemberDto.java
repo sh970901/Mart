@@ -10,11 +10,12 @@ import lombok.*;
 
 public class MemberDto {
 
+
     @Getter
     @NoArgsConstructor(access = AccessLevel.PUBLIC)
     @AllArgsConstructor(access = AccessLevel.PUBLIC)
     @Builder
-    public static class MemberCreateRequestDto {
+    public static class MemberRequestDto {
 
         @NotNull(message = "member name is required")
         @Size(max = 100, message = "member name must be less than 100 characters")
@@ -54,15 +55,15 @@ public class MemberDto {
 
     }
 
-    public static MemberCreateRequestDto from(EmployeeExcelUploadDto excelUploadDto) {
+    public static MemberRequestDto from(EmployeeExcelUploadDto excelUploadDto) {
 
-        return MemberCreateRequestDto.builder()
-                                     .mbName(excelUploadDto.getEmployeeName())
-                                     .mbEmail(excelUploadDto.getEmail())
-                                     .mbPassword(excelUploadDto.getEmployeeName())
-                                     .mbCoin(excelUploadDto.getCoin())
-                                     .department(Department.builder().departmentName(excelUploadDto.getDepartmentName()).teamName(excelUploadDto.getTeamName()).build())
-                                     .build();
+        return MemberRequestDto.builder()
+                               .mbName(excelUploadDto.getEmployeeName())
+                               .mbEmail(excelUploadDto.getEmail())
+                               .mbPassword(excelUploadDto.getEmployeeName())
+                               .mbCoin(excelUploadDto.getCoin())
+                               .department(Department.builder().departmentName(excelUploadDto.getDepartmentName()).teamName(excelUploadDto.getTeamName()).build())
+                               .build();
     }
 
     public static MemberResponseDto from(Member member) {

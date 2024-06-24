@@ -5,7 +5,7 @@ import com.hun.market.item.dto.ItemDto;
 import com.hun.market.item.repository.ItemRepository;
 import com.hun.market.member.domain.Department;
 import com.hun.market.member.domain.Member;
-import com.hun.market.member.dto.MemberDto;
+import com.hun.market.member.dto.MemberDto.MemberRequestDto;
 import com.hun.market.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -36,13 +36,13 @@ public class InitDataForLocal extends AbstractInitData {
             }
             String password = passwordEncoder.encode("1234");
             Department department = Department.builder().departmentName("커머스사업부").teamName("상품개발").build();
-            MemberDto.MemberCreateRequestDto mbDto = MemberDto.MemberCreateRequestDto.builder().mbName("admin").mbEmail("이메일").mbPassword(password).mbCoin(1000).department(department).build();
+            MemberRequestDto mbDto = MemberRequestDto.builder().mbName("admin").mbEmail("이메일").mbPassword(password).mbCoin(1000).department(department).build();
             memberRepository.save(Member.from(mbDto));
 
-            MemberDto.MemberCreateRequestDto mbDto2= MemberDto.MemberCreateRequestDto.builder().mbName("admin2").mbEmail("이메일").mbPassword(password).mbCoin(12000).department(department).build();
+            MemberRequestDto mbDto2= MemberRequestDto.builder().mbName("admin2").mbEmail("이메일").mbPassword(password).mbCoin(12000).department(department).build();
             memberRepository.save(Member.from(mbDto2));
 
-            MemberDto.MemberCreateRequestDto mbDto3= MemberDto.MemberCreateRequestDto.builder().mbName("김성수").mbEmail("이메일").mbPassword(password).mbCoin(12000).department(department).build();
+            MemberRequestDto mbDto3= MemberRequestDto.builder().mbName("김성수").mbEmail("이메일").mbPassword(password).mbCoin(12000).department(department).build();
             memberRepository.save(Member.from(mbDto3));
 
 
