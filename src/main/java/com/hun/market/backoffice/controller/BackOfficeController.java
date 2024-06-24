@@ -10,8 +10,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Slf4j
 public class BackOfficeController {
 
-    @GetMapping("/backoffice/home")
+    /*@GetMapping("/backoffice/home")
     public String backOfficeHomeView() {
         return "backoffice/backoffice";
+    }*/
+
+    @GetMapping("/backoffice/home")
+    public String backOfficeHomeView() {
+        return "backoffice/page";
     }
 }

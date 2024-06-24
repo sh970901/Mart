@@ -11,8 +11,8 @@ import lombok.*;
 public class MemberDto {
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PUBLIC)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
     @Builder
     public static class MemberCreateRequestDto {
 
@@ -22,6 +22,9 @@ public class MemberDto {
 
         @NotNull(message = "password is required")
         private String mbPassword;
+
+        @NotNull(message = "email is required")
+        private String mbEmail;
 
         @NotNull
         @PositiveOrZero
@@ -45,6 +48,8 @@ public class MemberDto {
 
         private int memberCoin;
 
+        private String memberEmail;
+
         private Department department;
 
     }
@@ -53,6 +58,7 @@ public class MemberDto {
 
         return MemberCreateRequestDto.builder()
                                      .mbName(excelUploadDto.getEmployeeName())
+                                     .mbEmail(excelUploadDto.getEmail())
                                      .mbPassword(excelUploadDto.getEmployeeName())
                                      .mbCoin(excelUploadDto.getCoin())
                                      .department(Department.builder().departmentName(excelUploadDto.getDepartmentName()).teamName(excelUploadDto.getTeamName()).build())
@@ -65,6 +71,7 @@ public class MemberDto {
                                 .memberName(member.getMbName())
                                 .memberPassword(member.getMbPassword())
                                 .memberCoin(member.getMbCoin())
+                                .memberEmail(member.getMbEmail())
                                 .department(member.getDepartment())
                                 .build();
     }
