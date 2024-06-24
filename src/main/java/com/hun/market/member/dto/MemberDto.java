@@ -54,6 +54,27 @@ public class MemberDto {
 
     }
 
+    @Getter
+    @Setter
+    @NoArgsConstructor(access = AccessLevel.PUBLIC)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
+    @Builder
+    public static class MemberChangePwdRequestDto {
+
+//        @NotNull(message = "member name is required")
+//        @Size(max = 100, message = "member name must be less than 100 characters")
+//        private String mbName;
+
+        @NotNull(message = "password is required")
+        private String currentPassword;
+
+        @NotNull(message = "password is required")
+        private String newPassword;
+
+        @NotNull(message = "password is required")
+        private String confirmPassword;
+    }
+
     public static MemberCreateRequestDto from(EmployeeExcelUploadDto excelUploadDto) {
 
         return MemberCreateRequestDto.builder()
@@ -75,5 +96,7 @@ public class MemberDto {
                                 .department(member.getDepartment())
                                 .build();
     }
+
+
 
 }
