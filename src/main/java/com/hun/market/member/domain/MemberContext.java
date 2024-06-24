@@ -21,6 +21,7 @@ public class MemberContext extends User {
         this.mbCoin = member.getMbCoin();
         this.mbName = member.getMbName();
         this.memberId = member.getId();
+        this.mbPassword = member.getMbPassword();
     }
 
     @Override
