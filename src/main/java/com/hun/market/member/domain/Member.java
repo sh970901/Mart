@@ -120,4 +120,8 @@ public class Member extends BaseEntity {
             return Cart.createByMember(cartItem, this);
         }
     }
+
+    public void modifyPassword(String encodingPwd) {
+        this.mbPassword = encodingPwd;
+    }
 }

@@ -3,9 +3,11 @@ package com.hun.market.member.service;
 import com.hun.market.backoffice.dto.CoinProvideRequestDto;
 import com.hun.market.item.exception.ItemNotFoundException;
 import com.hun.market.member.domain.CoinTransHistory;
+import com.hun.market.member.domain.Member;
 import com.hun.market.member.dto.MemberDto;
 import com.hun.market.member.dto.MemberDto.MemberRequestDto;
 import com.hun.market.member.dto.MemberDto.MemberResponseDto;
+import com.hun.market.member.exception.MemberNotMatchException;
 import com.hun.market.member.repository.MemberRepository;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -77,5 +79,13 @@ public class MemberServiceImpl implements MemberService {
                             }
                         );
 
+    }
+
+    @Transactional
+    @Override
+    public void updatePassword(Long memberId, String encodingPwd) {
+        Member member = memberRepository.findById(memberId).orElseThrow(()-> new MemberNotMatchException("존재하지 않는 사원입니다."));
+        member.modifyPassword(encodingPwd);
+        memberRepository.save(member);
     }
 }

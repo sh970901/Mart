@@ -78,16 +78,16 @@
     <div class="row">
         <div class="col-md-3">
             <nav class="nav flex-column nav-pills">
-                <a class="nav-link active" id="v-pills-coin-tab" data-bs-toggle="pill" href="#v-pills-coin" role="tab" aria-controls="v-pills-coin" aria-selected="true">코인 입출금</a>
+                <a class="nav-link" id="v-pills-coin-tab" data-bs-toggle="pill" href="#v-pills-coin" role="tab" aria-controls="v-pills-coin" aria-selected="true" th:classappend="${activeTab == null || activeTab != 'profile' ? 'active' : ''}">코인 입출금</a>
                 <a class="nav-link" id="v-pills-order-tab" data-bs-toggle="pill" href="#v-pills-order" role="tab" aria-controls="v-pills-order" aria-selected="false">구매 내역</a>
                 <a class="nav-link" id="v-pills-claim-tab" data-bs-toggle="pill" href="#v-pills-claim" role="tab" aria-controls="v-pills-claim" aria-selected="false">환불 내역</a>
-                <a class="nav-link" id="v-pills-home-tab" data-bs-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="false">회원 정보</a>
+                <a class="nav-link" id="v-pills-home-tab" data-bs-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="false" th:classappend="${activeTab == 'profile' ? 'active' : ''}">회원 정보</a>
                 <a class="nav-link" id="v-pills-cart-tab" th:href="@{/c/cart}" role="tab" aria-selected="false">찜 목록</a>
             </nav>
         </div>
         <div class="col-md-9">
             <div class="tab-content" id="v-pills-tabContent">
-                <div class="tab-pane fade show active" id="v-pills-coin" role="tabpanel" aria-labelledby="v-pills-coin-tab">
+                <div class="tab-pane fade" id="v-pills-coin" role="tabpanel" aria-labelledby="v-pills-coin-tab" th:classappend="${activeTab == null || activeTab != 'profile' ? 'show active' : ''}">
                     <section class="coin-history">
                         <h2>코인 입출금</h2>
                         <div>
@@ -102,10 +102,13 @@
                         </div>
                     </section>
                 </div>
-                <div class="tab-pane fade" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                <div class="tab-pane fade" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" th:classappend="${activeTab == 'profile' ? 'show active' : ''}">
                     <h2>개인정보 수정</h2>
                     <section class="password-change-section">
                         <h3>비밀번호 변경</h3>
+                        <!-- Flash Attributes 메시지 표시 -->
+                        <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+                        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
                         <form th:action="@{/m/change-password}" method="post" onsubmit="return validatePassword()">
                             <div class="mb-3">
                                 <label for="currentPassword" class="form-label">현재 비밀번호</label>

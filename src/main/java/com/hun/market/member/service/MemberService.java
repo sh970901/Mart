@@ -14,4 +14,6 @@ public interface MemberService {
     MemberResponseDto getMember(Long memberId);
 
     void updateMember(Long memberId, MemberRequestDto memberRequestDto);
+
+    void updatePassword(Long memberId, String encode);
 }
