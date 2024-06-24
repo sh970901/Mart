@@ -1,7 +1,7 @@
 package com.hun.market.member.domain;
 
 import com.hun.market.base.entity.BaseEntity;
-import com.hun.market.member.dto.MemberDto;
+import com.hun.market.member.dto.MemberDto.MemberRequestDto;
 import com.hun.market.member.exception.MemberCoinLackException;
 import com.hun.market.member.exception.MemberValidException;
 import com.hun.market.order.cart.domain.Cart;
@@ -68,7 +68,8 @@ public class Member extends BaseEntity {
                 ", coin='" + mbCoin + '\'' +
                 '}';
     }
-    public static Member from(MemberDto.MemberCreateRequestDto memberDto){
+
+    public static Member from(MemberRequestDto memberDto) {
         return Member.builder()
                      .mbName(memberDto.getMbName())
                      .mbPassword(memberDto.getMbPassword())
@@ -76,6 +77,11 @@ public class Member extends BaseEntity {
                      .mbEmail(memberDto.getMbEmail())
                      .department(memberDto.getDepartment())
                      .build();
+    }
+
+    public void modify(MemberRequestDto memberRequestDto) {
+      this.mbCoin = memberRequestDto.getMbCoin();
+      this.department = memberRequestDto.getDepartment();
     }
 
     public void provideCoin(int coin) {

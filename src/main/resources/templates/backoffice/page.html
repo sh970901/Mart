@@ -191,6 +191,15 @@
     </header>
     <main class="content" id="content">
         <!-- Default page (Employee Management) -->
+        <div style="display: flex; align-items: center;">
+
+            <form action="/backoffice/upload/employees" method="POST" enctype="multipart/form-data" style="flex: 1;">
+                <input type="file" name="employees">
+                <input type="submit" value="사원일괄등록 업로드" class="upload-btn">
+            </form>
+            <button class="grant-coins-btn">코인 일괄 지급</button>
+        </div>
+
         <h1>사원관리</h1>
         <table>
             <thead>
@@ -247,7 +256,7 @@
                 <label>보유포인트</label>
                 <input type="number" id="emp-points">
             </div>
-            <button>저장</button>
+            <button onclick="saveEmployee()">저장</button>
         </div>
         <h3>사원코인 입출금 이력</h3>
         <table>
@@ -270,6 +279,73 @@
 </div>
 </body>
 <script>
+    // 폼 제출 이벤트를 처리하는 함수
+    document.getElementById('uploadForm').addEventListener('submit', function(event) {
+        event.preventDefault();  // 기본 제출 동작 방지
+
+        // 폼 데이터를 가져오기
+        let formData = new FormData(this);
+
+        // AJAX를 사용하여 API 호출
+        fetch('/backoffice/upload/employees', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Upload successful:', data);
+
+            // 업로드 후에 추가 작업 수행 (예: 새로운 데이터 로드)
+            fetchEmployeeData();  // 예시: 새로운 데이터를 로드하는 함수 호출
+        })
+        .catch(error => {
+            console.error('Error uploading file:', error);
+        });
+    });
+    function saveEmployee() {
+        // Get input values from the popup form
+        const empId = document.getElementById('emp-id').value;
+        const empPassword = document.getElementById('emp-password').value;
+        const empDepartment = document.getElementById('emp-department').value;
+        const empTeam = document.getElementById('emp-team').value;
+        const empPoints = document.getElementById('emp-points').value;
+
+        // Construct request body
+        const requestBody = {
+            mbPassword: empPassword,
+            department: {
+                departmentName: empDepartment,
+                teamName: empTeam
+            },
+            mbCoin: empPoints
+        };
+
+        // Send PUT request to update employee
+        fetch(`/api/v1/m/modify/${empId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to update employee');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Employee updated successfully:', data);
+            // Close the popup after successful update
+            closePopup();
+            // Refresh employee data or perform necessary UI updates
+            fetchEmployeeData(); // Example: Refresh employee data table
+        })
+        .catch(error => {
+            console.error('Error updating employee:', error);
+            // Handle error condition, e.g., show error message to user
+        });
+    }
     function showPage(page) {
         const content = document.getElementById('content');
 
@@ -279,7 +355,7 @@
 
             <div style="display: flex; align-items: center;">
 
-            <form action="/backoffice/upload/excel" method="POST" enctype="multipart/form-data" style="flex: 1;">
+            <form id="uploadForm" action="/backoffice/upload/excel" method="POST" enctype="multipart/form-data" style="flex: 1;">
                 <input type="file" name="excel">
                 <input type="submit" value="업로드" class="upload-btn">
             </form>
@@ -292,27 +368,17 @@
             <table>
                 <thead>
                     <tr>
-                        <th>아이디</th>
-                        <th>이메일</th>
-                        <th>이름</th>
-                        <th>비밀번호</th>
-                        <th>부서</th>
-                        <th>팀</th>
-                        <th>보유포인트</th>
-                        <th>수정</th>
+                      <th>no</th>
+                      <th>이메일</th>
+                      <th>이름</th>
+                      <th>비밀번호</th>
+                      <th>부서</th>
+                      <th>팀</th>
+                      <th>보유포인트</th>
+                      <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>example1@example.com</td>
-                        <td>홍길동</td>
-                        <td>password1</td>
-                        <td>개발</td>
-                        <td>백엔드</td>
-                        <td>1000</td>
-                        <td><button onclick="openPopup(this)">수정</button></td>
-                    </tr>
                     <!-- 추가 데이터 행 -->
                 </tbody>
             </table>
@@ -338,10 +404,10 @@
         }
     }
 
-    // API 호출하여 데이터를 가져오는 함수
+
     async function fetchEmployeeData() {
         try {
-            const response = await fetch('/backoffice/employee');  // API 엔드포인트로 수정
+            const response = await fetch('/api/v1/m/employee');
             const responseBody = await response.json();
 
             // response.data 필드가 배열인지 확인
