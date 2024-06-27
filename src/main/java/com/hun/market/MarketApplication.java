@@ -13,5 +13,4 @@ public class MarketApplication {
 	public static void main(String[] args) {
 		MarketRunApplication.run(MarketApplication.class, args);
 	}
-
 }
