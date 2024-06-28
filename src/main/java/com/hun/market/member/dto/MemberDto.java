@@ -75,6 +75,27 @@ public class MemberDto {
         private String confirmPassword;
     }
 
+    @Getter
+    @Setter
+    @NoArgsConstructor(access = AccessLevel.PUBLIC)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
+    @Builder
+    public static class MemberForgotPwdRequestDto {
+
+        @Email
+        String email;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor(access = AccessLevel.PUBLIC)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
+    @Builder
+    public static class MemberForgotPwdResponseDto {
+
+        String description;
+    }
+
 
     public static MemberRequestDto from(EmployeeExcelUploadDto excelUploadDto) {
 

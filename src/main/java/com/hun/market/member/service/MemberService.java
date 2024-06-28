@@ -13,7 +13,11 @@ public interface MemberService {
 
     MemberResponseDto getMember(Long memberId);
 
+    MemberResponseDto getMember(String email);
+
     void updateMember(Long memberId, MemberRequestDto memberRequestDto);
 
     void updatePassword(Long memberId, String encode);
+
+    void resetPassword(String email);
 }

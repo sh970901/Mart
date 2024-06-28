@@ -1,9 +1,12 @@
 package com.hun.market.member.controller;
 
+import com.hun.market.core.exception.ResponseServiceException;
 import com.hun.market.core.response.CommonResponse;
+import com.hun.market.member.domain.Member;
 import com.hun.market.member.dto.MemberDto;
 import com.hun.market.member.dto.MemberDto.MemberRequestDto;
 import com.hun.market.member.dto.MemberDto.MemberResponseDto;
+import com.hun.market.member.exception.MemberNotMatchException;
 import com.hun.market.member.service.MemberService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +26,15 @@ public class MemberApiController {
     }
 
     @PostMapping("/send-password-email")
-    public CommonResponse<Object> sendPasswordEmail(@RequestBody String email) {
-        System.out.println(email);
-//        return CommonResponse.<String>from().data("ok").build();
-        return CommonResponse.fail("등록되지 않은 계정입니다. \n관리자에게 문의 부탁드립니다.");
+    public MemberDto.MemberForgotPwdResponseDto sendPasswordEmail(@RequestBody MemberDto.MemberForgotPwdRequestDto forgotPwdRequestDto) {
+        try{
+            memberService.resetPassword(forgotPwdRequestDto.getEmail());
+        }
+        catch (MemberNotMatchException e){
+            throw new ResponseServiceException(e.getMessage());
+        }
+
+        return MemberDto.MemberForgotPwdResponseDto.builder().description("등록된 메일 주소로 임시 비밀번호가 발송되었습니다.").build();
     }
 
     @GetMapping("/employee")

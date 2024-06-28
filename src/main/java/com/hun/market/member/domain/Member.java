@@ -1,7 +1,9 @@
 package com.hun.market.member.domain;
 
 import com.hun.market.base.entity.BaseEntity;
+import com.hun.market.core.event.Events;
 import com.hun.market.member.dto.MemberDto.MemberRequestDto;
+import com.hun.market.member.event.MbResetRandomPasswordEvent;
 import com.hun.market.member.exception.MemberCoinLackException;
 import com.hun.market.member.exception.MemberValidException;
 import com.hun.market.order.cart.domain.Cart;
@@ -11,6 +13,8 @@ import com.hun.market.order.order.domain.Order;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,5 +127,11 @@ public class Member extends BaseEntity {
 
     public void modifyPassword(String encodingPwd) {
         this.mbPassword = encodingPwd;
+    }
+
+    public void resetPassword(String newPassword) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        this.mbPassword = passwordEncoder.encode(newPassword);
+        Events.raise(new MbResetRandomPasswordEvent(mbEmail, newPassword));
     }
 }

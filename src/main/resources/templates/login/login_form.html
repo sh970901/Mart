@@ -140,8 +140,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                등록된 계정으로 임시 비밀번호를 발급합니다.
-                로그인 후 내정보에서 비밀번호를 변경해주세요.
+                등록된 계정으로 임시 비밀번호를 발급합니다.<br/>
+                로그인 후 내정보에서 비밀번호를 변경해주세요.<br/>
+                메일 발송이 최대 3분 소요될 수 있습니다.
                 <div class="mb-3 mt-3">
                     <label for="email" class="form-label">이메일 주소</label>
                     <input type="email" class="form-control" id="email" placeholder="이메일을 입력하세요" required>
@@ -196,15 +197,8 @@
         const result = await response.json();
 
         if (response.ok) {
-            console.log(result.resultCode);
-            if (result.resultCode === 200){
-                alert('임시 비밀번호가 발송되었습니다. 이메일을 확인하세요.');
-                location.reload();
-            }
-            else {
-                alert(result.resultMessage)
-            }
-
+            alert(result.data.description);
+            location.reload();
         }
         else {
             emailError.textContent = result.message || '임시 비밀번호 발송에 실패했습니다.';

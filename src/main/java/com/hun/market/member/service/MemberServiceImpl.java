@@ -1,6 +1,7 @@
 package com.hun.market.member.service;
 
 import com.hun.market.backoffice.dto.CoinProvideRequestDto;
+import com.hun.market.core.util.RandomStringGenerator;
 import com.hun.market.item.exception.ItemNotFoundException;
 import com.hun.market.member.domain.CoinTransHistory;
 import com.hun.market.member.domain.Member;
@@ -10,6 +11,7 @@ import com.hun.market.member.dto.MemberDto.MemberResponseDto;
 import com.hun.market.member.exception.MemberNotMatchException;
 import com.hun.market.member.repository.MemberRepository;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,7 +64,15 @@ public class MemberServiceImpl implements MemberService {
 
         return memberRepository.findById(memberId)
                                .map(MemberDto::from)
-                               .orElseThrow(() -> new ItemNotFoundException("존재하지 않는 사원입니다. " + memberId));
+                               .orElseThrow(() -> new MemberNotMatchException("존재하지 않는 사원입니다. " + memberId));
+    }
+
+    @Override
+    public MemberResponseDto getMember(String email) {
+
+        return memberRepository.findByMbEmail(email)
+                .map(MemberDto::from)
+                .orElseThrow(() -> new MemberNotMatchException("존재하지 않는 사원입니다. " + email));
     }
 
     @Override
@@ -75,7 +85,7 @@ public class MemberServiceImpl implements MemberService {
                                 memberRepository.save(member);
                             },
                             () -> {
-                                throw new ItemNotFoundException("존재하지 않는 사원입니다. " + memberId);
+                                throw new MemberNotMatchException("존재하지 않는 사원입니다. " + memberId);
                             }
                         );
 
@@ -88,4 +98,14 @@ public class MemberServiceImpl implements MemberService {
         member.modifyPassword(encodingPwd);
         memberRepository.save(member);
     }
+
+    @Transactional
+    @Override
+    public void resetPassword(String email) {
+        Member member = memberRepository.findByMbEmail(email).orElseThrow(()-> new MemberNotMatchException("존재하지 않는 사원입니다."));
+        String newPassword = RandomStringGenerator.generateRandomString(20);
+        member.resetPassword(newPassword);
+        memberRepository.save(member);
+    }
+
 }
