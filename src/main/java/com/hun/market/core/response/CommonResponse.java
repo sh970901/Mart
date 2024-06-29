@@ -15,7 +15,10 @@ public class CommonResponse<T> {
     @JsonIgnore
     private static final String MESSAGE_FAIL_RESULT = "fail";
     @JsonIgnore
-    private static final String MESSAGE_FAIL_RESULT_CODE = "500";
+    private static final String MESSAGE_FAIL_RESULT_CODE_4 = "400";
+
+    @JsonIgnore
+    private static final String MESSAGE_FAIL_RESULT_CODE_5 = "500";
     @JsonIgnore
     private static final String MESSAGE_SUCCESS_RESULT = "success";
     @JsonIgnore
@@ -31,7 +34,15 @@ public class CommonResponse<T> {
 
     public static CommonResponse<Object> fail(String message) {
         return CommonResponse.from()
-                .resultCode(MESSAGE_FAIL_RESULT_CODE)
+                .resultCode(MESSAGE_FAIL_RESULT_CODE_5)
+                .resultMessage(message)
+                .build();
+    }
+
+    public static CommonResponse<Object> fail2(String message) {
+        return CommonResponse.from()
+                .resultCode(MESSAGE_FAIL_RESULT_CODE_4)
+                .data(DescriptionResponseDto.builder().description(message).build())
                 .resultMessage(message)
                 .build();
     }

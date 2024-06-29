@@ -7,18 +7,17 @@ async function cancelCartItem(cartItemId) {
                 'Content-Type': 'application/json',
             },
         });
+        const result = await response.json();
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
+        if (response.ok  || result.resultCode === 200) {
+            successAlert(result.data.description)
+        }
+        else {
+            failAlert(result.data.description)
         }
 
-        const result = await response.json();
-        console.log('cartItem cancel successfully:', result);
-        alert(result.data.description);
-        location.reload();
     } catch (error) {
-        console.error('There was a problem with the fetch operation:', error);
-        alert('Failed to place order: ' + error.message);
+        failAlert("서버 통신이 실패했습니다.");
     }
 }
 
@@ -31,21 +30,17 @@ async function cancelCart(cartItemId) {
             },
         });
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
-
         const result = await response.json();
-        console.log('cart cancel successfully:', result);
-        alert(result.data.description);
-        location.reload();
+        if (response.ok  || result.resultCode === 200) {
+            successAlert(result.data.description)
+        }
+        else {
+            failAlert(result.data.description)
+        }
     } catch (error) {
-        console.error('There was a problem with the fetch operation:', error);
-        alert('Failed to place order: ' + error.message);
+        failAlert("서버 통신에 실패했습니다.")
     }
 }
-
-
 
 async function purchaseSelectedItems() {
     const selectedItems = [];
@@ -62,19 +57,19 @@ async function purchaseSelectedItems() {
     });
 
     if (selectedItems.length === 0) {
-        alert('구매할 상품을 선택해주세요.');
+        warnAlert('구매할 상품을 선택해주세요.');
         return;
     }
     var mbCoin = parseInt(document.getElementById('mbCoinValue').textContent.trim());
     if (totalPrice > mbCoin) {
-        alert('현재 코인이 부족합니다. \n 현재 코인: '+ mbCoin + "\n 총 가격: " + totalPrice);
+        warnAlert('현재 코인이 부족합니다. \n 현재 코인: '+ mbCoin + "\n 총 가격: " + totalPrice);
         return;
     }
 
     for (let i = 0; i < selectedItems.length; i++) {
         const item = selectedItems[i];
         if (item.itemStock < item.quantity) {
-            alert("상품의 재고가 부족합니다. \n" + "상품 이름: " + item.itemName + "\n 구매 수량: " + item.quantity + "\n 상품 재고: " + item.itemStock);
+            warnAlert("상품의 재고가 부족합니다. \n" + "상품 이름: " + item.itemName + "\n 구매 수량: " + item.quantity + "\n 상품 재고: " + item.itemStock);
             // 함수를 종료합니다.
             return;
         }
@@ -95,12 +90,14 @@ async function purchaseSelectedItems() {
 
         const result = await response.json();
 
-
-        alert(result.data.description);
-        location.reload();
+        if (response.ok  || result.resultCode === 200) {
+            successAlert(result.data.description)
+        }
+        else {
+            failAlert(result.data.description)
+        }
     } catch (error) {
-        console.error('There was a problem with the fetch operation:', error);
-        alert('Failed to place order: ' + error.message);
+        failAlert("서버 통신에 실패했습니다.")
     }
 }
 
@@ -122,20 +119,16 @@ async function addCart(button) {
             body: JSON.stringify(cartData)
         });
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
+        const result = await response.json();
+        if (response.ok  || result.resultCode === 200) {
+            successAlert(result.data.description)
+        }
+        else {
+            failAlert(result.data.description)
         }
 
-        const result = await response.json();
-        console.log('Car placed successfully:', result);
-
-        alert(result.data.description);
-        location.reload();
-        // location.href = '/order-success'; // 주문 성공 페이지로 이동
-
     } catch (error) {
-        console.error('There was a problem with the fetch operation:', error);
-        alert('Failed to place order: ' + error.message);
+        failAlert("서버 통신에 실패했습니다.")
     }
 }
 /*]]>*/

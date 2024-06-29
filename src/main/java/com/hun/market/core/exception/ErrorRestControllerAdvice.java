@@ -30,11 +30,9 @@ public class ErrorRestControllerAdvice {
         response.sendError(HttpServletResponse.SC_OK, throwable.getMessage());
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ResponseServiceException.class)
-    public CommonResponse<DescriptionResponseDto> handleException(ResponseServiceException e) {
-        return CommonResponse.<DescriptionResponseDto>from()
-                .data(DescriptionResponseDto.builder().description(e.getMessage()).build())
-                .build();
+    public CommonResponse<Object> handleException(ResponseServiceException e) {
+        return CommonResponse.fail2(e.getMessage());
     }
 }
