@@ -4,6 +4,8 @@ import com.hun.market.backoffice.dto.CoinProvideRequestDto;
 import com.hun.market.base.entity.BaseEntity;
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import lombok.*;
 
 
@@ -38,7 +40,7 @@ public class CoinTransHistory extends BaseEntity {
     //  * 지급같은 경우에는 이벤트 생성일 별도 지정
     //  * 주문같은 경우는 엔티티 생성일 = 이벤트 생성일
     @Column(name = "event_date")
-    private LocalDate eventDate;
+    private LocalDateTime eventDate;
 
     @Column(name = "description")
     private String description;
@@ -60,6 +62,7 @@ public class CoinTransHistory extends BaseEntity {
                 .member(member)
                 .amount(amount)
                 .transactionType(CoinTransType.WITHDRAWAL)
+                .eventDate(LocalDateTime.now())
                 .description("주문")
                 .build();
     }

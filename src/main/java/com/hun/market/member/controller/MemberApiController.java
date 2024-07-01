@@ -3,6 +3,7 @@ package com.hun.market.member.controller;
 import com.hun.market.core.exception.ResponseServiceException;
 import com.hun.market.core.response.CommonResponse;
 import com.hun.market.member.domain.Member;
+import com.hun.market.member.domain.MemberContext;
 import com.hun.market.member.dto.MemberDto;
 import com.hun.market.member.dto.MemberDto.MemberRequestDto;
 import com.hun.market.member.dto.MemberDto.MemberResponseDto;
@@ -10,6 +11,7 @@ import com.hun.market.member.exception.MemberNotMatchException;
 import com.hun.market.member.service.MemberService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -40,6 +42,12 @@ public class MemberApiController {
     public List<MemberResponseDto> getAllMembers() {
         return memberService.getAllMembers();
     }
+
+    @GetMapping("/coinHistory")
+    public List<MemberDto.MemberCoinHistoryResponseDto> getMemberCoinHistory(@AuthenticationPrincipal MemberContext memberSession) {
+        return memberService.getMemberCoinHistory(memberSession.getMemberId());
+    }
+
 
 //    @GetMapping("/member/{id}")
 //    public String memberInfo(@PathVariable(value = "id") Long memberId){
