@@ -27,6 +27,9 @@ public class CoinTransHistory extends BaseEntity {
     @Column(name = "amount", nullable = false)
     private int amount;
 
+    @Column(name = "total_coin", nullable = false)
+    private int totalCoin;
+
     @Column(name = "trans_type", nullable = false)
     @Enumerated(EnumType.STRING)
     private CoinTransType transactionType;
@@ -40,13 +43,11 @@ public class CoinTransHistory extends BaseEntity {
     @Column(name = "description")
     private String description;
 
-
-
-
     public static CoinTransHistory createDepositTransaction(Member member, CoinProvideRequestDto coinProvideRequestDto) {
         return CoinTransHistory.builder()
                                .member(member)
                                .amount(coinProvideRequestDto.getCoin())
+                               .totalCoin(member.getMbCoin() + coinProvideRequestDto.getCoin())
                                .transactionType(coinProvideRequestDto.getCoinTransType())
                                .eventDate(coinProvideRequestDto.getPaymentDate())
                                .description(coinProvideRequestDto.getDescription())
