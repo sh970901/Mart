@@ -96,6 +96,9 @@ public class Member extends BaseEntity {
     public void provideCoin(int coin, CoinTransType type) {
         this.mbCoin += coin;
         CoinTransHistory coinTransHistory = CoinTransHistory.builder().member(this).transactionType(type).amount(coin).build();
+        /**
+         * createWithdrawalTransaction이런식으로 메소드에서 정의할까? 성수님 ㄱㄱ
+         */
         this.coinTransHistories.add(coinTransHistory);
     }
 

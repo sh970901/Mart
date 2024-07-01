@@ -19,6 +19,6 @@ public class MbDeductCoinEvent implements MemberEvent {
     }
 
     @Override public void process() {
-        member.deductCoin(payCoin, CoinTransType.WITHDRAWAL);
+        member.deductCoin(payCoin);
     }
 }
