@@ -59,6 +59,8 @@ public class CoinTransHistory extends BaseEntity {
                 .member(member)
                 .amount(amount)
                 .transactionType(CoinTransType.WITHDRAWAL)
+                .description("주문")
                 .build();
     }
+
 }

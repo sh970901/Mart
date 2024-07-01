@@ -3,6 +3,7 @@ package com.hun.market.member.domain;
 import com.hun.market.base.entity.BaseEntity;
 import com.hun.market.core.event.Events;
 import com.hun.market.member.dto.MemberDto.MemberRequestDto;
+import com.hun.market.member.event.MbCoinHistoryEvent;
 import com.hun.market.member.event.MbResetRandomPasswordEvent;
 import com.hun.market.member.exception.MemberCoinLackException;
 import com.hun.market.member.exception.MemberValidException;
@@ -92,6 +93,12 @@ public class Member extends BaseEntity {
         this.mbCoin += coin;
     }
 
+    public void provideCoin(int coin, CoinTransType type) {
+        this.mbCoin += coin;
+        CoinTransHistory coinTransHistory = CoinTransHistory.builder().member(this).transactionType(type).amount(coin).build();
+        this.coinTransHistories.add(coinTransHistory);
+    }
+
     public void deductCoin(int coin){
         if (coin < 0){
             throw new MemberValidException("회원정보 수정 중 오류가 발생했습니다.");
@@ -100,6 +107,8 @@ public class Member extends BaseEntity {
             throw new MemberCoinLackException("코인이 부족합니다. \n 결제 코인: " + coin+" \n 잔여 코인: "+mbCoin);
         }
         this.mbCoin -= coin;
+        CoinTransHistory coinTransHistory = CoinTransHistory.createWithdrawalTransaction(this, coin);
+        this.coinTransHistories.add(coinTransHistory);
     }
 
     public void mappingCart(Cart cart) {
