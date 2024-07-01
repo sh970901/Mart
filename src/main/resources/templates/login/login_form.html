@@ -7,6 +7,14 @@
 <!--    <link rel="stylesheet" type="text/css" th:href="@{/css/display.css}">-->
     <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+
+<!--    스윗알럿-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/common/js/common.js"></script>
+
 </head>
 <body>
 <header>
@@ -76,7 +84,7 @@
                         </form>
                         <p>
                             <b>
-                                Forgot password?
+                                <a class="" style="text-decoration: none" data-bs-toggle="modal" data-bs-target="#passwordModal">Forgot password?</a>
                             </b>
                         </p>
                         <p>
@@ -130,6 +138,34 @@
 
 </main>
 
+<!-- Modal HTML -->
+<div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="passwordModalLabel">비밀번호 찾기</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                등록된 계정으로 임시 비밀번호를 발급합니다.<br/>
+                로그인 후 내정보에서 비밀번호를 변경해주세요.<br/>
+                메일 발송이 최대 3분 소요될 수 있습니다.
+                <div class="mb-3 mt-3">
+                    <label for="email" class="form-label">이메일 주소</label>
+                    <input type="email" class="form-control" id="email" placeholder="이메일을 입력하세요" required>
+                    <span id="emailError" class="text-danger"></span>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                <button type="button" class="btn btn-primary" th:onclick="callMessageApi()">발송</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <footer th:insert="~{fragments/footer :: footerFragment}"></footer>
 </body>
 <script>
@@ -143,5 +179,39 @@
     setTimeout(() => {
         container.classList.add('sign-in')
     }, 200)
+
+
+    async function callMessageApi() {
+        const emailInput = document.getElementById('email');
+        const emailError = document.getElementById('emailError');
+
+        if (!emailInput.checkValidity()) {
+            emailError.textContent = '유효한 이메일 주소를 입력하세요.';
+            return;
+        }
+
+        emailError.textContent = '';
+
+        const email = emailInput.value;
+
+        const response = await fetch('/api/v1/m/send-password-email', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(email)
+        });
+
+        const result = await response.json();
+
+        if (response.ok  || result.resultCode === 200) {
+            // alert(result.data.description);
+            successAlert("메일이 발송되었습니다.")
+        }
+        else {
+            warnAlert("존재하지 않는 사원입니다. 관리자에게 문의 부탁드립니다.")
+            emailError.textContent = result.data.description || '임시 비밀번호 발송에 실패했습니다.';
+        }
+    }
 </script>
 </html>

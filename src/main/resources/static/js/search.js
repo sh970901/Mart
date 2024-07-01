@@ -110,7 +110,7 @@ function countItemQuantityP(){
     document.getElementById('itemQuantity').textContent = itemQuantity;
     document.getElementById('totalPrice').textContent = newTotalPrice;
   } else {
-    alert("재고가 부족합니다.");
+    warnAlert("재고가 부족합니다.");
   }
 }
 
@@ -123,7 +123,7 @@ function countItemQuantityM(){
     document.getElementById('itemQuantity').textContent = itemQuantity;
     document.getElementById('totalPrice').textContent = newTotalPrice;
   } else {
-    alert("최소 주문은 한 개 이상입니다.");
+    warnAlert("최소 주문은 한 개 이상입니다.");
   }
 }
 
@@ -136,12 +136,12 @@ async function purchaseItem(){
 
   var mbCoin = parseInt(document.getElementById('mbCoinValue').textContent.trim());
   if(itemStock <= 0){
-    alert("재고가 존재하지 않습니다.");
+    warnAlert("재고가 존재하지 않습니다.");
     return;
   }
 
   if (totalPrice > mbCoin) {
-    alert('현재 코인이 부족합니다. \n 현재 코인: '+ mbCoin + "\n 총 가격: " + totalPrice);
+    warnAlert('현재 코인이 부족합니다. \n 현재 코인: '+ mbCoin + "\n 총 가격: " + totalPrice);
     return;
   }
 
@@ -158,20 +158,17 @@ async function purchaseItem(){
       body: JSON.stringify(orderData)
     });
 
-    if (!response.ok) {
-      throw new Error('Network response was not ok ' + response.statusText);
+    const result = await response.json();
+    if (response.ok  || result.resultCode === 200) {
+      successAlert(result.data.description)
     }
 
-    const result = await response.json();
-    console.log('Order placed successfully:', result);
-
-    // 주문 성공 시 사용자에게 알림 또는 페이지 이동
-    alert(result.data.description);
-    location.reload();
+    else {
+      failAlert(result.data.description)
+    }
 
   } catch (error) {
-    console.error('There was a problem with the fetch operation:', error);
-    alert('Failed to place order: ' + error.message);
+    failAlert("서버 통신에 문제가 발생했습니다.")
   }
 }
 
@@ -192,19 +189,18 @@ async function addCartJs(itemId, itemName) {
       body: JSON.stringify(cartData)
     });
 
-    if (!response.ok) {
-      throw new Error('Network response was not ok ' + response.statusText);
+    const result = await response.json();
+    if (response.ok  || result.resultCode === 200) {
+      successAlert(result.data.description)
     }
 
-    const result = await response.json();
-    console.log('Car placed successfully:', result);
-
-    alert(result.data.description);
-    // location.href = '/order-success'; // 주문 성공 페이지로 이동
+    else{
+      failAlert(result.data.description)
+    }
 
   } catch (error) {
     console.error('There was a problem with the fetch operation:', error);
-    alert('Failed to place order: ' + error.message);
+    failAlert("서버 통신에 실패했습니다.");
   }
   // 필요한 API 호출 등의 로직 추가
 }
