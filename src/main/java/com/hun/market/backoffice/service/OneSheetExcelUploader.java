@@ -1,5 +1,6 @@
 package com.hun.market.backoffice.service;
 
+import lombok.Getter;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -21,6 +22,7 @@ public class OneSheetExcelUploader<T> {
     private final XSSFWorkbook workbook;
 
     //실제 반환 되어야 하는 결과 리스트(excel -> dto)
+    @Getter
     private final List<T> resultDtoList = new ArrayList<>();
 
     public OneSheetExcelUploader(Class<T> type, MultipartFile file) throws IOException {
@@ -64,10 +66,6 @@ public class OneSheetExcelUploader<T> {
             /*에러 핸들링 어떻게 할지 고민*/
             throw new RuntimeException(e);
         }
-    }
-
-    public List<T> getResultDtoList() {
-        return resultDtoList;
     }
 
     private String getFieldTypeName(Field field) {

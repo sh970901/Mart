@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>관리자 페이지</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
     <!--<link rel="stylesheet" href="./styles.css">
     <script defer src="./script.js"></script>-->
     <style>
@@ -156,7 +158,8 @@
         }
 
         .employee-info button {
-            margin-top: 10px;
+            margin-top: 20px;
+
         }
         .upload-btn,
         .grant-coins-btn {
@@ -172,6 +175,60 @@
         .upload-btn:hover,
         .grant-coins-btn:hover {
             background-color: #2980b9;
+        }
+
+
+        /* 코인 일괄 지급 팝업 스타일 */
+        .grant-coins-popup-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 800px;
+            text-align: center; /* 가운데 정렬 */
+            position: relative; /* 부모 위치 설정 */
+        }
+
+        .grant-coins-popup-content h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .grant-coins-popup-content .form-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .grant-coins-popup-content .form-row label {
+            width: 150px;
+            text-align: right;
+            margin-right: 10px;
+        }
+
+        .grant-coins-popup-content .form-row input,
+        .grant-coins-popup-content .form-row select {
+            width: calc(100% - 170px);
+            padding: 5px;
+        }
+
+        .grant-coins-popup-content .employee-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .grant-coins-popup-content .employee-list table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .grant-coins-popup-content .employee-list th,
+        .grant-coins-popup-content .employee-list td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
         }
     </style>
 </head>
@@ -197,11 +254,11 @@
                 <input type="file" name="employees">
                 <input type="submit" value="사원일괄등록 업로드" class="upload-btn">
             </form>
-            <button class="grant-coins-btn">코인 일괄 지급</button>
+            <button class="grant-coins-btn" onclick="openGrantCoinsPopup()">코인 일괄 지급</button>
         </div>
 
         <h1>사원관리</h1>
-        <table>
+        <table id="employee-table">
             <thead>
             <tr>
                 <th>no</th>
@@ -269,6 +326,7 @@
                 <th>보유코인</th>
                 <th>행사일</th>
                 <th>이력생성일</th>
+                <th>상세설명</th>
             </tr>
             </thead>
             <tbody>
@@ -277,8 +335,68 @@
         </table>
     </div>
 </div>
+
+<!-- 코인 일괄 지급 팝업 -->
+<div id="grant-coins-popup" class="popup">
+    <div class="grant-coins-popup-content">
+        <span class="close-btn" onclick="closeGrantCoinsPopup()">&times;</span>
+        <h2>코인 일괄 지급</h2>
+        <div class="form-row">
+            <label for="event-name">행사명</label>
+            <select id="event-name">
+                <option value="TechRel">테크렐</option>
+                <option value="Study">스터디</option>
+                <option value="DevCommunity">개발커뮤니티</option>
+                <option value="ThankYouLetter">감사편지</option>
+                <option value="Cancellation">지급취소</option>
+            </select>
+        </div>
+        <div class="form-row">
+            <label for="event-date">날짜</label>
+            <input type="text" class=datePicker name="event-date" id="event-date" autocomplete="off">
+        </div>
+        <div class="form-row">
+            <label for="event-coins">코인</label>
+            <input type="number" id="event-coins" min="0">
+        </div>
+        <div class="form-row">
+            <label for="event-description">상세설명</label>
+            <input type="text" id="event-description">
+        </div>
+        <h3>사원목록</h3>
+        <div class="employee-list">
+            <table>
+                <thead>
+                <tr>
+                    <th>체크박스</th>
+                    <th>사원번호</th>
+                    <th>사원명</th>
+                    <th>부서</th>
+                    <th>팀</th>
+                </tr>
+                </thead>
+                <tbody id="employee-list-tbody">
+                <!-- 사원 목록 데이터 행 -->
+                </tbody>
+            </table>
+        </div>
+        <button onclick="grantCoins()">지급</button>
+    </div>
+</div>
+
 </body>
 <script>
+    $(function() {
+        $(".datePicker").datepicker({
+            dateFormat: 'yy-mm-dd'
+        });
+    });
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        fetchEmployeeData();  // 페이지가 로드될 때 사원 데이터를 가져옴
+    });
+
     // 폼 제출 이벤트를 처리하는 함수
     document.getElementById('uploadForm').addEventListener('submit', function(event) {
         event.preventDefault();  // 기본 제출 동작 방지
@@ -359,13 +477,13 @@
                 <input type="file" name="excel">
                 <input type="submit" value="업로드" class="upload-btn">
             </form>
-            <button class="grant-coins-btn">코인 일괄 지급</button>
+             <button class="grant-coins-btn" onclick="openGrantCoinsPopup()">코인 일괄 지급</button>
             </div>
 
 
 
             <h1>사원관리</h1>
-            <table>
+            <table id="employee-table">
                 <thead>
                     <tr>
                       <th>no</th>
@@ -463,6 +581,82 @@
 
     function closePopup() {
         document.getElementById('popup').style.display = 'none';
+    }
+
+    function openGrantCoinsPopup() {
+        copyEmployeeTableToPopup();
+        document.getElementById("grant-coins-popup").style.display = "block";
+    }
+
+    // Function to close the "Grant Coins" popup
+    function closeGrantCoinsPopup() {
+        document.getElementById("grant-coins-popup").style.display = "none";
+    }
+    // Function to copy employee table data to the popup
+    function copyEmployeeTableToPopup() {
+        var tableBody = document.getElementById("employee-table").getElementsByTagName("tbody")[0];
+        var popupTableBody = document.getElementById("employee-list-tbody");
+
+        popupTableBody.innerHTML = ""; // Clear previous content
+
+        for (var i = 0; i < tableBody.rows.length; i++) {
+            var row = tableBody.rows[i];
+            var newRow = popupTableBody.insertRow();
+
+            var cellCheckbox = newRow.insertCell(0);
+            var cellId = newRow.insertCell(1);
+            var cellName = newRow.insertCell(2);
+            var cellDepartment = newRow.insertCell(3);
+            var cellTeam = newRow.insertCell(4);
+
+            cellId.textContent = row.cells[0].textContent;
+            cellCheckbox.innerHTML = '<input type="checkbox" value="' + row.cells[0].textContent + '">';
+            cellName.textContent = row.cells[2].textContent;
+            cellDepartment.textContent = row.cells[4].textContent;
+            cellTeam.textContent = row.cells[5].textContent;
+        }
+    }
+
+    // Function to grant coins
+    function grantCoins() {
+        var eventName = document.getElementById("event-name").value;
+        var eventDate = document.getElementById("event-date").value;
+        var eventCoins = document.getElementById("event-coins").value;
+        var eventDescription = document.getElementById("event-description").value;
+
+        var selectedEmployees = [];
+        document.querySelectorAll("#employee-list-tbody input[type='checkbox']:checked").forEach(function(checkbox) {
+            selectedEmployees.push(checkbox.value);
+        });
+
+        // Make an AJAX request to grant coins
+        fetch("/backoffice/provide/coin", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                coinTransType: eventName,
+                coin: eventCoins,
+                paymentDate: eventDate,
+                description: eventDescription,
+                employeeList: selectedEmployees
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.json();
+        })
+        .then(data => {
+            closeGrantCoinsPopup();
+            location.reload(); // Reload the page after granting coins
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+
     }
 </script>
 </html>

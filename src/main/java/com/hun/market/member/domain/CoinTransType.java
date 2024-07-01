@@ -6,5 +6,6 @@ public enum CoinTransType {
     Study,
     DeveloperCommunity,
     Letter,
+    Cancel,
     WITHDRAWAL,
 }

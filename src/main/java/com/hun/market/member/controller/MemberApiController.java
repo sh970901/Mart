@@ -23,7 +23,6 @@ public class MemberApiController {
     @PostMapping("/modify/{memberId}")
     public void updateEmployee(@PathVariable Long memberId, @RequestBody MemberRequestDto memberModifyRequestDto) {
         memberService.updateMember(memberId, memberModifyRequestDto);
-        // TODO 결과 반환은  api 재 호출로(화면단)
     }
 
     @GetMapping("/employee")
