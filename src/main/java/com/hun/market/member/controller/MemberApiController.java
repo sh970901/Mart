@@ -44,7 +44,7 @@ public class MemberApiController {
     }
 
     @GetMapping("/coinHistory")
-    public List<MemberDto.MemberCoinHistoryResponseDto> getMemberCoinHistory(@AuthenticationPrincipal MemberContext memberSession) {
+    public List<MemberDto.MemberCoinHistoryResponseDto> getMemberCoinHistory(@AuthenticationPrincipal MemberContext memberSession) throws InterruptedException {
         return memberService.getMemberCoinHistory(memberSession.getMemberId());
     }
 
