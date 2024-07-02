@@ -11,6 +11,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public class MemberDto {
 
 
@@ -154,6 +157,34 @@ public class MemberDto {
                                 .build();
     }
 
+
+    /**
+     * 전체 정보를 한번에 조회할까? 탭마다 API를 조회할까?
+     */
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class MemberCoinHistoryResponseDto {
+
+        private CoinTransType transactionType;
+        private int amount;
+        private int totalCoin;
+        private LocalDateTime eventDate;
+        private String description;
+
+    }
+
+    public static MemberCoinHistoryResponseDto fromE(CoinTransHistory coinTransHistory) {
+        return MemberCoinHistoryResponseDto.builder()
+                .transactionType(coinTransHistory.getTransactionType())
+                .amount(coinTransHistory.getAmount())
+                .totalCoin(coinTransHistory.getTotalCoin())
+                .eventDate(coinTransHistory.getEventDate())
+                .description(coinTransHistory.getDescription())
+                .build();
+    }
 
 
 }

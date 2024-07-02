@@ -48,3 +48,16 @@ function failAlert(message) {
         }
     });
 }
+
+function failAlertNoReload(message) {
+    Swal.fire({
+        title: '',
+        text: message,
+        icon: 'error',
+        showConfirmButton: true,
+        timer: 2000,
+        customClass: {
+            popup: 'animate__animated animate__bounceIn' // 애니메이션 클래스
+        }
+    })
+}

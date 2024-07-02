@@ -10,7 +10,9 @@ import com.hun.market.member.dto.MemberDto.MemberCoinHistoryResponseDto;
 import com.hun.market.member.dto.MemberDto.MemberRequestDto;
 import com.hun.market.member.dto.MemberDto.MemberResponseDto;
 import com.hun.market.member.exception.MemberNotMatchException;
+import com.hun.market.member.repository.CoinTransHistoryRepository;
 import com.hun.market.member.repository.MemberRepository;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,6 +31,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+
+    private final CoinTransHistoryRepository coinTransHistoryRepository;
 
     @Override
     @Transactional
@@ -118,5 +122,14 @@ public class MemberServiceImpl implements MemberService {
 
     }
 
+
+    @Override
+    public List<MemberDto.MemberCoinHistoryResponseDto> getMemberCoinHistory(Long memberId) {
+        List<CoinTransHistory> coinTransHistories = coinTransHistoryRepository.findByMemberIdOrderByEventDateDesc(memberId);
+
+        return coinTransHistories.stream()
+                .map(MemberDto::fromE)
+                .toList();
+    }
 
 }
