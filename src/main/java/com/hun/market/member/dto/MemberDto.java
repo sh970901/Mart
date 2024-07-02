@@ -1,9 +1,14 @@
 package com.hun.market.member.dto;
 
 import com.hun.market.backoffice.dto.EmployeeExcelUploadDto;
+import com.hun.market.member.domain.CoinTransHistory;
+import com.hun.market.member.domain.CoinTransType;
 import com.hun.market.member.domain.Department;
 import com.hun.market.member.domain.Member;
 import jakarta.validation.constraints.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.*;
 
 public class MemberDto {
@@ -94,6 +99,36 @@ public class MemberDto {
     public static class MemberForgotPwdResponseDto {
 
         String description;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor(access = AccessLevel.PUBLIC)
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
+    @Builder
+    public static class MemberCoinHistoryResponseDto {
+
+        private Long id;
+        private CoinTransType eventName;
+        private int coin;
+        private int totalCoin;
+        private LocalDate eventDate;
+        private LocalDateTime createDate;
+        private String description;
+
+    }
+
+    public static MemberCoinHistoryResponseDto from(CoinTransHistory coinTransHistory) {
+
+        return MemberCoinHistoryResponseDto.builder().
+                                           id(coinTransHistory.getId())
+                                           .eventName(coinTransHistory.getTransactionType())
+                                           .coin(coinTransHistory.getAmount())
+                                           .totalCoin(coinTransHistory.getTotalCoin())
+                                           .eventDate(coinTransHistory.getEventDate())
+                                           .createDate(coinTransHistory.getCreateDate())
+                                           .description(coinTransHistory.getDescription()).build();
+
     }
 
 

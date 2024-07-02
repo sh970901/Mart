@@ -1,5 +1,6 @@
 package com.hun.market.member.domain;
 
+import com.hun.market.backoffice.dto.CoinProvideRequestDto;
 import com.hun.market.base.entity.BaseEntity;
 import com.hun.market.core.event.Events;
 import com.hun.market.member.dto.MemberDto.MemberRequestDto;
@@ -93,13 +94,9 @@ public class Member extends BaseEntity {
         this.mbCoin += coin;
     }
 
-    public void provideCoin(int coin, CoinTransType type) {
-        this.mbCoin += coin;
-        CoinTransHistory coinTransHistory = CoinTransHistory.builder().member(this).transactionType(type).amount(coin).build();
-        /**
-         * createWithdrawalTransaction이런식으로 메소드에서 정의할까? 성수님 ㄱㄱ
-         */
-        this.coinTransHistories.add(coinTransHistory);
+    public void provideCoin(CoinProvideRequestDto coinProvideRequestDto) {
+        this.mbCoin += coinProvideRequestDto.getCoin();
+        this.coinTransHistories.add(CoinTransHistory.createDepositTransaction(this, coinProvideRequestDto));
     }
 
     public void deductCoin(int coin){

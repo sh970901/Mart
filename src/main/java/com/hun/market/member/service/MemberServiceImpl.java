@@ -6,11 +6,15 @@ import com.hun.market.item.exception.ItemNotFoundException;
 import com.hun.market.member.domain.CoinTransHistory;
 import com.hun.market.member.domain.Member;
 import com.hun.market.member.dto.MemberDto;
+import com.hun.market.member.dto.MemberDto.MemberCoinHistoryResponseDto;
 import com.hun.market.member.dto.MemberDto.MemberRequestDto;
 import com.hun.market.member.dto.MemberDto.MemberResponseDto;
 import com.hun.market.member.exception.MemberNotMatchException;
 import com.hun.market.member.repository.MemberRepository;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -30,16 +34,11 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public void provideCoin(CoinProvideRequestDto coinProvideRequestDto) {
 
-        int provideCoin = coinProvideRequestDto.getCoin();
-
         coinProvideRequestDto.getEmployeeList().forEach(memberId ->
             memberRepository.findById(memberId)
                             .ifPresentOrElse(
                                 member -> {
-                                    /*실제 코인 지급 부분*/
-                                    member.provideCoin(provideCoin);
-                                    /*이력 추가 부분*/
-                                    member.getCoinTransHistories().add(CoinTransHistory.createDepositTransaction(member, coinProvideRequestDto));
+                                    member.provideCoin(coinProvideRequestDto);
                                     memberRepository.save(member);
                                 },
                                 () -> {
@@ -107,5 +106,17 @@ public class MemberServiceImpl implements MemberService {
         member.resetPassword(newPassword);
         memberRepository.save(member);
     }
+
+    @Override
+    public List<MemberCoinHistoryResponseDto> getMemberHistory(Long memberId) {
+        return memberRepository.findById(memberId)
+                               .map(Member::getCoinTransHistories)
+                               .orElseGet(Collections::emptyList)
+                               .stream()
+                               .map(MemberDto::from)
+                               .collect(Collectors.toList());
+
+    }
+
 
 }
