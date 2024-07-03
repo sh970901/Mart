@@ -33,10 +33,8 @@ public class OrderItem {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Claim> claims = new ArrayList<>();
-
-
+    @OneToOne(mappedBy = "orderItem", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Claim claim;
 
     // dto to entity
     public static OrderItem createByItem(Item item, Integer quantity) {

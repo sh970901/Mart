@@ -5,6 +5,7 @@ import com.hun.market.member.domain.CoinTransHistory;
 import com.hun.market.member.domain.CoinTransType;
 import com.hun.market.member.domain.Department;
 import com.hun.market.member.domain.Member;
+import com.hun.market.order.claim.domain.ClaimStatus;
 import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -186,5 +187,33 @@ public class MemberDto {
                 .build();
     }
 
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class MemberClaimsResponseDto {
+
+        private ClaimStatus claimStatus;
+        private Long refundAmount;
+        private LocalDateTime t;
+
+
+    }
+
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class MemberOrdersResponseDto {
+
+        private CoinTransType transactionType;
+        private int amount;
+        private int totalCoin;
+        private LocalDateTime eventDate;
+        private String description;
+
+    }
 
 }

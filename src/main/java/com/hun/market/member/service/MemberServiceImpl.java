@@ -6,8 +6,10 @@ import com.hun.market.item.exception.ItemNotFoundException;
 import com.hun.market.member.domain.CoinTransHistory;
 import com.hun.market.member.domain.Member;
 import com.hun.market.member.dto.MemberDto;
+import com.hun.market.member.dto.MemberDto.MemberClaimsResponseDto;
 import com.hun.market.member.dto.MemberDto.MemberCoinHistoryResponseDto;
 import com.hun.market.member.dto.MemberDto.MemberCoinHistoryResponseDtos;
+import com.hun.market.member.dto.MemberDto.MemberOrdersResponseDto;
 import com.hun.market.member.dto.MemberDto.MemberRequestDto;
 import com.hun.market.member.dto.MemberDto.MemberResponseDto;
 import com.hun.market.member.exception.MemberNotMatchException;
@@ -126,9 +128,16 @@ public class MemberServiceImpl implements MemberService {
 
     }
 
+    @Override public List<MemberClaimsResponseDto> getMemberClaims(Long memberId) {
+        return null;
+    }
+
+    @Override public List<MemberOrdersResponseDto> getMemberOrders(Long memberId) {
+        return null;
+    }
 
     @Override
-    public List<MemberDto.MemberCoinHistoryResponseDto> getMemberCoinHistory(Long memberId) {
+    public List<MemberDto.MemberCoinHistoryResponseDto> getMemberCoinTransHistory(Long memberId) {
         List<CoinTransHistory> coinTransHistories = coinTransHistoryRepository.findByMemberIdOrderByEventDateDesc(memberId);
 
         return coinTransHistories.stream()

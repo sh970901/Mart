@@ -291,27 +291,33 @@
         return valid;
     }
 
+    // AbortController를 스코프a 변수로 선언
+    let controller = new AbortController();
 
     document.getElementById('v-pills-coin-tab').addEventListener('click', function () {
         loadTabContent('coinHistory');
     });
 
     document.getElementById('v-pills-order-tab').addEventListener('click', function () {
-        loadTabContent('order');
+        loadTabContent('orders');
     });
 
     document.getElementById('v-pills-claim-tab').addEventListener('click', function () {
-        loadTabContent('claim');
+        loadTabContent('claims');
     });
 
     // 페이지가 로드될 때 기본 탭을 로드합니다.
-    loadTabContent('coinHistory');
+    loadTabContent('coinTransHistory');
 
     function loadTabContent(tab) {
+        // 이전 요청 취소
+        controller.abort();
+        controller = new AbortController();
+
         const container = document.getElementById('coinHistoryContainer');
         container.innerHTML = '<div class="spinner-container"><div class="spinner"></div></div>'; // 로딩 스피너 추가
 
-        const controller = new AbortController();
+
         const signal = controller.signal;
         const timeoutId = setTimeout(() => {
             controller.abort();
@@ -332,9 +338,10 @@
             .catch(error => {
                 if (error.name === 'AbortError') {
                     failAlertNoReload("서버 응답이 지연되었습니다. 다시 시도해주세요.");
-                } else {
-                    failAlertNoReload("서버 로딩에 실패했습니다.");
                 }
+                // else {
+                //     failAlertNoReload("서버 로딩에 실패했습니다.");
+                // }
                 renderTabNullContent(container);
             });
 

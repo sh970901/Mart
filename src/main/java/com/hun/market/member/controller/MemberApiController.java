@@ -50,11 +50,22 @@ public class MemberApiController {
         return memberService.getMemberHistory(memberId);
     }
 
-    @GetMapping("/coinHistory")
-    public List<MemberDto.MemberCoinHistoryResponseDto> getMemberCoinHistory(@AuthenticationPrincipal MemberContext memberSession) throws InterruptedException {
-        return memberService.getMemberCoinHistory(memberSession.getMemberId());
+    @GetMapping("/coinTransHistory")
+    public List<MemberDto.MemberCoinHistoryResponseDto> getMemberCoinTransHistory(@AuthenticationPrincipal MemberContext memberSession) throws InterruptedException {
+        return memberService.getMemberCoinTransHistory(memberSession.getMemberId());
     }
 
+    @GetMapping("/claims")
+    public List<MemberDto.MemberClaimsResponseDto> getMemberClaims(@AuthenticationPrincipal MemberContext memberSession) throws InterruptedException {
+        //        Thread.sleep(20000);
+        return memberService.getMemberClaims(memberSession.getMemberId());
+    }
+
+    @GetMapping("/orders")
+    public List<MemberDto.MemberOrdersResponseDto> getMemberOrders(@AuthenticationPrincipal MemberContext memberSession) throws InterruptedException {
+        //        Thread.sleep(20000);
+        return memberService.getMemberOrders(memberSession.getMemberId());
+    }
 
 //    @GetMapping("/member/{id}")
 //    public String memberInfo(@PathVariable(value = "id") Long memberId){

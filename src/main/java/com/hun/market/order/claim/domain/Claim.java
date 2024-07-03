@@ -26,8 +26,8 @@ public class Claim extends BaseEntity {
     @Column(name = "refund_amount", nullable = false)
     private Long refundAmount;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_item_id", nullable = false)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_item_id")
     private OrderItem orderItem;
 
     @ManyToOne(fetch = FetchType.LAZY)
