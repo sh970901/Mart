@@ -16,6 +16,7 @@ import com.hun.market.member.repository.MemberRepository;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -114,12 +115,14 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public List<MemberCoinHistoryResponseDtos> getMemberHistory(Long memberId) {
+
         return memberRepository.findById(memberId)
                                .map(Member::getCoinTransHistories)
                                .orElseGet(Collections::emptyList)
                                .stream()
                                .map(MemberDto::from)
-                               .collect(Collectors.toList());
+                               .sorted(Comparator.comparing(MemberCoinHistoryResponseDtos::getCreateDate).reversed())
+                               .toList();
 
     }
 

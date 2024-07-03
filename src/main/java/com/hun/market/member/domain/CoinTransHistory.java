@@ -47,7 +47,7 @@ public class CoinTransHistory extends BaseEntity {
         return CoinTransHistory.builder()
                                .member(member)
                                .amount(coinProvideRequestDto.getCoin())
-                               .totalCoin(member.getMbCoin() + coinProvideRequestDto.getCoin())
+                               .totalCoin(member.getMbCoin())
                                .transactionType(coinProvideRequestDto.getCoinTransType())
                                .eventDate(coinProvideRequestDto.getPaymentDate())
                                .description(coinProvideRequestDto.getDescription())

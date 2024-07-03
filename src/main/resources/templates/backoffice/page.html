@@ -316,11 +316,10 @@
             <button onclick="saveEmployee()">저장</button>
         </div>
         <h3>사원코인 입출금 이력</h3>
-        <table>
+        <table id="coin-history-table">
             <thead>
             <tr>
                 <th>no</th>
-                <th>이름</th>
                 <th>행사명</th>
                 <th>증감코인</th>
                 <th>보유코인</th>
@@ -344,7 +343,7 @@
         <div class="form-row">
             <label for="event-name">행사명</label>
             <select id="event-name">
-                <option value="TechRel">테크렐</option>
+                <option value="Techrel">테크렐</option>
                 <option value="Study">스터디</option>
                 <option value="DevCommunity">개발커뮤니티</option>
                 <option value="ThankYouLetter">감사편지</option>
@@ -568,6 +567,8 @@
         const row = button.closest('tr');
         const cells = row.getElementsByTagName('td');
 
+        const empId = cells[0].innerText;
+
         document.getElementById('emp-id').value = cells[0].innerText;
         document.getElementById('emp-email').value = cells[1].innerText;
         document.getElementById('emp-name').value = cells[2].innerText;
@@ -577,6 +578,46 @@
         document.getElementById('emp-points').value = cells[6].innerText;
 
         document.getElementById('popup').style.display = 'block';
+
+        // 사원 코인 이력 가져오기
+        fetchCoinHistory(empId);
+    }
+    function fetchCoinHistory(memberId) {
+        fetch(`/api/v1/m/employee/history/${memberId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch coin history');
+            }
+            return response.json();
+        })
+        .then(data => {
+            populateCoinHistoryTable(data.data);
+        })
+        .catch(error => {
+            console.error('Error fetching coin history:', error);
+        });
+    }
+
+    function populateCoinHistoryTable(data) {
+
+        const tbody = document.getElementById('coin-history-table').getElementsByTagName('tbody')[0];
+        tbody.innerHTML = '';  // 기존 데이터를 지우고 새 데이터를 추가
+
+        data.forEach((history, index) => {
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${history.eventName}</td>
+            <td>${history.coin}</td>
+            <td>${history.totalCoin}</td>
+            <td>${new Date(history.eventDate).toLocaleDateString()}</td>
+            <td>${new Date(history.createDate).toLocaleDateString()}</td>
+            <td>${history.description}</td>
+        `;
+
+            tbody.appendChild(row);
+        });
     }
 
     function closePopup() {
@@ -621,6 +662,8 @@
     function grantCoins() {
         var eventName = document.getElementById("event-name").value;
         var eventDate = document.getElementById("event-date").value;
+        const localDate = new Date(eventDate);
+        const localDateTime = localDate.toISOString().split('T')[0] + 'T00:00:00';
         var eventCoins = document.getElementById("event-coins").value;
         var eventDescription = document.getElementById("event-description").value;
 
@@ -638,14 +681,14 @@
             body: JSON.stringify({
                 coinTransType: eventName,
                 coin: eventCoins,
-                paymentDate: eventDate,
+                paymentDate: localDateTime,
                 description: eventDescription,
                 employeeList: selectedEmployees
             })
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error("Network response was not ok");
+                throw new Error(` ${response.status} 발생`);
             }
             return response.json();
         })
