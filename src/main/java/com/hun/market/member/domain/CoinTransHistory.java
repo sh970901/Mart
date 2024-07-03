@@ -36,9 +36,7 @@ public class CoinTransHistory extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private CoinTransType transactionType;
 
-    // Todo 엔티티 생성일과 별개로 코인 지급 사유 발생일 저장(재고는 엔티티 생성일 기준 으로 맞추 도록 할까요)
-    //  * 지급같은 경우에는 이벤트 생성일 별도 지정
-    //  * 주문같은 경우는 엔티티 생성일 = 이벤트 생성일
+
     @Column(name = "event_date")
     private LocalDateTime eventDate;
 

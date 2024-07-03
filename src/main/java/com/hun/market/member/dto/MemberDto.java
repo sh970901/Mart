@@ -109,22 +109,22 @@ public class MemberDto {
     @NoArgsConstructor(access = AccessLevel.PUBLIC)
     @AllArgsConstructor(access = AccessLevel.PUBLIC)
     @Builder
-    public static class MemberCoinHistoryResponseDto {
+    public static class MemberCoinHistoryResponseDtos {
 
         private Long id;
         private CoinTransType eventName;
         private int coin;
         private int totalCoin;
-        private LocalDate eventDate;
+        private LocalDateTime eventDate;
         private LocalDateTime createDate;
         private String description;
 
     }
 
-    public static MemberCoinHistoryResponseDto from(CoinTransHistory coinTransHistory) {
+    public static MemberCoinHistoryResponseDtos from(CoinTransHistory coinTransHistory) {
 
-        return MemberCoinHistoryResponseDto.builder().
-                                           id(coinTransHistory.getId())
+        return MemberCoinHistoryResponseDtos.builder()
+                                           .id(coinTransHistory.getId())
                                            .eventName(coinTransHistory.getTransactionType())
                                            .coin(coinTransHistory.getAmount())
                                            .totalCoin(coinTransHistory.getTotalCoin())

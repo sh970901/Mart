@@ -4,6 +4,7 @@ import com.hun.market.backoffice.dto.CoinProvideRequestDto;
 import com.hun.market.member.domain.CoinTransHistory;
 import com.hun.market.member.dto.MemberDto.MemberCoinHistoryResponseDto;
 import com.hun.market.member.dto.MemberDto;
+import com.hun.market.member.dto.MemberDto.MemberCoinHistoryResponseDtos;
 import com.hun.market.member.dto.MemberDto.MemberRequestDto;
 import com.hun.market.member.dto.MemberDto.MemberResponseDto;
 import java.util.List;
@@ -26,5 +27,5 @@ public interface MemberService {
 
     List<MemberDto.MemberCoinHistoryResponseDto> getMemberCoinHistory(Long memberId);
 
-    List<MemberCoinHistoryResponseDto> getMemberHistory(Long memberId);
+    List<MemberCoinHistoryResponseDtos> getMemberHistory(Long memberId);
 }

@@ -4,7 +4,6 @@ import com.hun.market.backoffice.dto.CoinProvideRequestDto;
 import com.hun.market.base.entity.BaseEntity;
 import com.hun.market.core.event.Events;
 import com.hun.market.member.dto.MemberDto.MemberRequestDto;
-import com.hun.market.member.event.MbCoinHistoryEvent;
 import com.hun.market.member.event.MbResetRandomPasswordEvent;
 import com.hun.market.member.exception.MemberCoinLackException;
 import com.hun.market.member.exception.MemberValidException;
