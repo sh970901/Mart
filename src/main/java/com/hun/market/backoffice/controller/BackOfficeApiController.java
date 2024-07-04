@@ -12,6 +12,7 @@ import com.hun.market.member.service.MemberService;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,6 +66,11 @@ public class BackOfficeApiController {
     @PostMapping("/provide/coin")
     public void provideCoin(@Valid @RequestBody CoinProvideRequestDto coinProvideRequestDto) {
         memberService.provideCoin(coinProvideRequestDto);
+    }
+
+    @DeleteMapping("/employee/{memberId}")
+    public void deleteMember(@PathVariable Long memberId) {
+        memberService.deleteMember(memberId);
     }
 
 

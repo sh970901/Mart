@@ -34,4 +34,6 @@ public interface MemberService {
     List<MemberClaimsResponseDto> getMemberClaims(Long memberId);
 
     List<MemberOrdersResponseDto> getMemberOrders(Long memberId);
+
+    void deleteMember(Long memberId);
 }

@@ -136,6 +136,13 @@ public class MemberServiceImpl implements MemberService {
         return null;
     }
 
+    @Transactional
+    @Override
+    public void deleteMember(Long memberId) {
+        memberRepository.findById(memberId)
+                        .ifPresent(memberRepository::delete);
+    }
+
     @Override
     public List<MemberDto.MemberCoinHistoryResponseDto> getMemberCoinTransHistory(Long memberId) {
         List<CoinTransHistory> coinTransHistories = coinTransHistoryRepository.findByMemberIdOrderByEventDateDesc(memberId);
