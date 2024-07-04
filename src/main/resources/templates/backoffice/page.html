@@ -509,7 +509,7 @@
           <div style="display: flex; align-items: center;">
 
             <form id="uploadForm" action="/backoffice/upload/items" method="POST" enctype="multipart/form-data" style="flex: 1;">
-                <input type="file" name="excel">
+                <input type="file" name="items">
                 <input type="submit" value="업로드" class="upload-btn">
             </form>
 <!--            <button class="grant-coins-btn" onclick="openGrantCoinsPopup()">코인 일괄 지급</button>-->
@@ -522,8 +522,8 @@
                     <tr>
                         <th>no</th>
                         <th>상품명</th>
-                        <th>재고</th>
                         <th>가격</th>
+                        <th>재고</th>
                         <th>이미지</th>
                         <th>설명</th>
                         <th></th> <!--저장-->
@@ -580,8 +580,8 @@
             row.innerHTML = `
             <td>${item.itemId}</td>
             <td><input class = "item-name" type="text" value="${item.itemName}" name="item-name-${item.itemId}"/></td>
-            <td><input class = "item-stock" type="number" value="${item.itemStock}" name="item-stock-${item.itemId}" /></td>
             <td><input class = "item-price"  type="number" value="${item.itemPrice}" name="item-price-${item.itemId}" /></td>
+            <td><input class = "item-stock" type="number" value="${item.itemStock}" name="item-stock-${item.itemId}" /></td>
             <td>${item.imagePath}</td>
             <td><input class = "item-desc" type="text" value="${item.description}"  name="item-desc-${item.itemId}"/></td>
             <td><button onclick="openImagePopup(this)">이미지</button></td>
