@@ -13,4 +13,6 @@ public interface ItemService {
     List<ItemDto.ItemCreatResponseDto> getSearchItemList(String query, int page, int size);
 
     ItemDto.ItemCreatResponseDto getItemOne(Long itemId);
+
+    List<ItemDto.ItemCreatResponseDto> getAllItems();
 }

@@ -70,10 +70,12 @@ public class ItemDto {
         @PositiveOrZero
         private Long itemPrice;
 
+        private String imagePath;
+
         private String description;
 
         public static ItemCreatResponseDto of(Item item){
-            return ItemDto.ItemCreatResponseDto.builder().itemId(item.getId()).itemName(item.getItemName()).itemPrice(item.getItemPrice()).itemStock(item.getItemStock()).description(item.getDescription()).build();
+            return ItemCreatResponseDto.builder().itemId(item.getId()).itemName(item.getItemName()).itemPrice(item.getItemPrice()).itemStock(item.getItemStock()).description(item.getDescription()).imagePath("이미지경로").build();
         }
     }
 

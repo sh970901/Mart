@@ -5,6 +5,7 @@ import com.hun.market.backoffice.dto.ItemModifyDto;
 import com.hun.market.backoffice.enums.ExcelUploadType;
 import com.hun.market.backoffice.service.ExcelService;
 import com.hun.market.backoffice.service.ImageService;
+import com.hun.market.item.dto.ItemDto;
 import com.hun.market.item.service.ItemService;
 import com.hun.market.member.dto.MemberDto;
 import com.hun.market.member.service.MemberService;
@@ -70,6 +71,11 @@ public class BackOfficeApiController {
     @GetMapping("/employee/{memberId}")
     public MemberDto.MemberResponseDto getMember(@PathVariable Long memberId) {
         return memberService.getMember(memberId);
+    }
+
+    @GetMapping("/items")
+    public List<ItemDto.ItemCreatResponseDto> getAllItems() {
+        return itemService.getAllItems();
     }
 
 

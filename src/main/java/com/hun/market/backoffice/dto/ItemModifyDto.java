@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 public class ItemModifyDto {
 
-    @NotNull(message = "존재하지 않는 상품번호 입니다.")
+    @NotNull(message = "상품번호는 필수값 입니다.")
     private Long itemNo;
 
     @NotNull(message = "상품명은 필수값 입니다.")
@@ -22,8 +22,6 @@ public class ItemModifyDto {
     @NotNull(message = "상품 재고는 필수값 입니다.(0개 이상)")
     @PositiveOrZero
     private Long itemStock;
-
-    private String imagePath;
 
     private String description;
 

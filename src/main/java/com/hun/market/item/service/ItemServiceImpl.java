@@ -7,8 +7,10 @@ import com.hun.market.item.dto.ItemDto.ItemCreatResponseDto;
 import com.hun.market.item.exception.ItemNotFoundException;
 import com.hun.market.item.repository.ItemRepository;
 import com.hun.market.item.service.WrapperItemService.WrapperItemResponseDtos;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -59,6 +61,12 @@ public class ItemServiceImpl implements ItemService {
         return ItemCreatResponseDto.of(item);
     }
 
+    @Override
+    public List<ItemDto.ItemCreatResponseDto> getAllItems() {
+        return itemRepository.findAllByOrderById().stream()
+                             .map(ItemDto.ItemCreatResponseDto::of)
+                             .collect(Collectors.toList());
+    }
 
     @Override
     @Transactional

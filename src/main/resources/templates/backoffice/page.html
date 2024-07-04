@@ -501,17 +501,32 @@
             </table>
         `;
         } else if (page === 'product') {
+
+            fetchItemData();
+
             content.innerHTML = `
+
+          <div style="display: flex; align-items: center;">
+
+            <form id="uploadForm" action="/backoffice/upload/items" method="POST" enctype="multipart/form-data" style="flex: 1;">
+                <input type="file" name="excel">
+                <input type="submit" value="업로드" class="upload-btn">
+            </form>
+<!--            <button class="grant-coins-btn" onclick="openGrantCoinsPopup()">코인 일괄 지급</button>-->
+            </div>
+
+
             <h1>상품관리</h1>
             <table>
                 <thead>
                     <tr>
-                        <th>아이디</th>
+                        <th>no</th>
                         <th>상품명</th>
-                        <th>상품재고</th>
-                        <th>상품가격</th>
-                        <th>이미지경로</th>
-                        <th>기타설명</th>
+                        <th>재고</th>
+                        <th>가격</th>
+                        <th>이미지</th>
+                        <th>설명</th>
+                        <th></th> <!--저장-->
                     </tr>
                 </thead>
                 <tbody>
@@ -537,6 +552,89 @@
             console.error('Error fetching employee data:', error);
         }
     }
+
+
+    async function fetchItemData() {
+        try {
+            const response = await fetch('/backoffice/items');
+            const responseBody = await response.json();
+
+            // response.data 필드가 배열인지 확인
+            if (Array.isArray(responseBody.data)) {
+                populateItemTable(responseBody.data);
+            } else {
+                console.error('Expected array data in response.data, received:', responseBody.data);
+            }
+        } catch (error) {
+            console.error('Error fetching employee data:', error);
+        }
+    }
+    //ItemTableData
+    function populateItemTable(data) {
+        const tbody = document.querySelector('table tbody');
+        tbody.innerHTML = '';  // 기존 데이터를 지우고 새 데이터를 추가
+
+        data.forEach(item => {
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+            <td>${item.itemId}</td>
+            <td><input class = "item-name" type="text" value="${item.itemName}" name="item-name-${item.itemId}"/></td>
+            <td><input class = "item-stock" type="number" value="${item.itemStock}" name="item-stock-${item.itemId}" /></td>
+            <td><input class = "item-price"  type="number" value="${item.itemPrice}" name="item-price-${item.itemId}" /></td>
+            <td>${item.imagePath}</td>
+            <td><input class = "item-desc" type="text" value="${item.description}"  name="item-desc-${item.itemId}"/></td>
+            <td><button onclick="openImagePopup(this)">이미지</button></td>
+            <td><button onclick="modifyItem(${item.itemId})">${item.itemId}번 수정</button></td>
+        `;
+
+            tbody.appendChild(row);
+        });
+    }
+
+    /*상품 수정*/
+    function modifyItem(itemNo) {
+
+        const itemName = $('[name="item-name-' + itemNo + '"]').val();
+        const itemStock = $('[name="item-stock-' + itemNo + '"]').val();
+        const itemPrice = $('[name="item-price-' + itemNo + '"]').val();
+        const itemDesc = $('[name="item-desc-' + itemNo + '"]').val();
+
+
+        // Construct request body
+        const requestBody = {
+            itemNo: itemNo,
+            itemName: itemName,
+            itemPrice: itemPrice,
+            itemStock: itemStock,
+            description: itemDesc
+        };
+
+        fetch(`/backoffice/modify/item`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to update employee');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Employee updated successfully:', data);
+            fetchItemData();
+        })
+        .catch(error => {
+            console.error('Error updating employee:', error);
+            // Handle error condition, e.g., show error message to user
+        });
+    }
+
+
+
 
     // 표에 데이터를 동적으로 채우는 함수
     function populateEmployeeTable(data) {
