@@ -146,7 +146,7 @@
                                     <th scope="col">내용</th>
                                 </tr>
                                 </thead>
-                                <tbody class="coin-history-item" id="coinHistoryContainer" >
+                                <tbody class="coin-history-item" id="coinTransHistory" >
 <!--                                동적으로 내용 추가-->
                                 </tbody>
                             </table>
@@ -296,7 +296,7 @@
 
     document.getElementById('v-pills-coin-tab').addEventListener('click', function () {
         loadTabContent('coinTransHistory');
-    });c
+    });
 
     document.getElementById('v-pills-order-tab').addEventListener('click', function () {
         loadTabContent('orders');
@@ -314,14 +314,17 @@
         controller.abort();
         controller = new AbortController();
 
-        const container = document.getElementById('coinHistoryContainer');
+        const container = document.getElementById('coinTransHistory');
         container.innerHTML = '<div class="spinner-container"><div class="spinner"></div></div>'; // 로딩 스피너 추가
 
-
         const signal = controller.signal;
+        let isTimeout = false;
+        // clearTimeout(timeoutId)
+
         const timeoutId = setTimeout(() => {
+            isTimeout = true;
             controller.abort();
-        }, 5000); // 최대 3초까지 요청 대기
+        }, 10000); // 최대 10초까지 요청 대기
 
         fetch('/api/v1/m/' + tab, { signal })
             .then(response => {
@@ -336,12 +339,16 @@
                 }
             })
             .catch(error => {
+
                 if (error.name === 'AbortError') {
-                    failAlertNoReload("서버 응답이 지연되었습니다. 다시 시도해주세요.");
+                    if (isTimeout) {
+                        // 타임아웃, 탭 변경도 AbortError가 발생하기에, 타임아웃 용 변수 추가
+                        failAlertNoReload("서버 응답이 지연되었습니다. 다시 시도해주세요.");
+                    }
                 }
-                // else {
-                //     failAlertNoReload("서버 로딩에 실패했습니다.");
-                // }
+                else {
+                    failAlertNoReload("서버 로딩에 실패했습니다. 잠시 후 다시 시도해주세요.");
+                }
                 renderTabNullContent(container);
             });
 
@@ -369,7 +376,7 @@
     function renderTabContent(tab, data, container) {
         container.innerHTML = ''; // 기존 내용을 지우고 새 데이터를 추가
 
-        if (tab === 'coinHistory') {
+        if (tab === 'coinTransHistory') {
             data.forEach(item => {
                 // const newDiv = document.createElement('div');
                 const newTr = document.createElement('tr');

@@ -52,12 +52,13 @@ public class MemberApiController {
 
     @GetMapping("/coinTransHistory")
     public List<MemberDto.MemberCoinHistoryResponseDto> getMemberCoinTransHistory(@AuthenticationPrincipal MemberContext memberSession) throws InterruptedException {
+        Thread.sleep(20000);
         return memberService.getMemberCoinTransHistory(memberSession.getMemberId());
     }
 
     @GetMapping("/claims")
     public List<MemberDto.MemberClaimsResponseDto> getMemberClaims(@AuthenticationPrincipal MemberContext memberSession) throws InterruptedException {
-        //        Thread.sleep(20000);
+
         return memberService.getMemberClaims(memberSession.getMemberId());
     }
 

@@ -34,7 +34,7 @@ public class OrderItem {
     private Integer quantity;
 
     @OneToOne(mappedBy = "orderItem", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Claim claim;
+    private Claim claim = null;
 
     // dto to entity
     public static OrderItem createByItem(Item item, Integer quantity) {

@@ -155,10 +155,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public List<MemberOrdersResponseDto> getMemberOrders(Long memberId) {
+        System.out.println(memberId);
         List<Order> orders = orderRepository.findOrdersWithItemsByMemberId(memberId);
         List<MemberOrdersResponseDto> memberOrdersResponseDtos = new ArrayList<>();
-        System.out.println("111111");
-        System.out.println(orders.get(0).getOrderItems().get(0).getItem().getItemName());
+//        System.out.println(orders.get(0).getOrderItems().get(0).getItem().getItemName());
+        System.out.println(orders.get(0));
 
         return null;
     }
