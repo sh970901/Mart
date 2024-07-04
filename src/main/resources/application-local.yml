@@ -20,16 +20,23 @@ spring:
   datasource:
     hikari:
       pool-name: Leader
+      auto-commit: false
       jdbc-url: jdbc:postgresql://localhost:5432/mart
       username: admin
       password: admin
-      maximum-pool-size: 5
-      minimum-idle: 5
+      maximum-pool-size: 10
+      minimum-idle: 10
       driver-class-name: org.postgresql.Driver
-  jpa:
-    #    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
-    hibernate:
-      ddl-auto: create-drop        # DB (none, create, create-drop, update, validate)
+      follower:
+        pool-name: Follower
+        driver-class-name: org.postgresql.Driver
+        jdbc-url: jdbc:postgresql://localhost:5432/mart
+        username: admin
+        password: admin
+        minimum-idle: 5
+        maximum-pool-size: 5
+
+  jpa:  # DB (none, create, create-drop, update, validate)
     open-in-view: false
     properties:
       hibernate:
@@ -40,6 +47,8 @@ spring:
           batch_size: 20
         order_inserts: true
         order_updates: true
+        hbm2ddl:
+          auto: create-drop
 
 
   cache:
@@ -49,6 +58,10 @@ spring:
       host: 127.0.0.1
       port: 6379
 
+baobab:
+  scan:
+    packages:
+      - com.hun.market
 
 jasypt:
   encryptor:
