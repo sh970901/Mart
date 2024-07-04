@@ -23,6 +23,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
+
+import com.hun.market.order.claim.domain.Claim;
+import com.hun.market.order.claim.repository.ClaimRepository;
+import com.hun.market.order.order.domain.Order;
+import com.hun.market.order.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -37,6 +42,8 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
 
     private final CoinTransHistoryRepository coinTransHistoryRepository;
+    private final ClaimRepository claimRepository;
+    private final OrderRepository orderRepository;
 
     @Override
     @Transactional
@@ -128,11 +135,31 @@ public class MemberServiceImpl implements MemberService {
 
     }
 
-    @Override public List<MemberClaimsResponseDto> getMemberClaims(Long memberId) {
-        return null;
+    @Override
+    public List<MemberClaimsResponseDto> getMemberClaims(Long memberId) {
+        List<Claim> claims = claimRepository.findByMemberId(memberId);
+        List<MemberClaimsResponseDto> memberClaimsResponseDtos = new ArrayList<>();
+        claims.forEach(claim -> {
+           memberClaimsResponseDtos.add(
+                   MemberClaimsResponseDto.from().
+                           itemName(claim.getOrderItem().getItem().getItemName()).
+                           claimStatus(claim.getStatus()).
+                           time(claim.getCreateDate()).
+                           refundAmount(claim.getRefundAmount())
+                           .build());
+        });
+
+
+        return memberClaimsResponseDtos;
     }
 
-    @Override public List<MemberOrdersResponseDto> getMemberOrders(Long memberId) {
+    @Override
+    public List<MemberOrdersResponseDto> getMemberOrders(Long memberId) {
+        List<Order> orders = orderRepository.findOrdersWithItemsByMemberId(memberId);
+        List<MemberOrdersResponseDto> memberOrdersResponseDtos = new ArrayList<>();
+        System.out.println("111111");
+        System.out.println(orders.get(0).getOrderItems().get(0).getItem().getItemName());
+
         return null;
     }
 
@@ -148,7 +175,7 @@ public class MemberServiceImpl implements MemberService {
         List<CoinTransHistory> coinTransHistories = coinTransHistoryRepository.findByMemberIdOrderByEventDateDesc(memberId);
 
         return coinTransHistories.stream()
-                .map(MemberDto::fromE)
+                .map(MemberDto::fromCTH)
                 .toList();
     }
 

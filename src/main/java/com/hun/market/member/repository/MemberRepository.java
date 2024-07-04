@@ -20,4 +20,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("SELECT m FROM Member m LEFT JOIN FETCH m.cart WHERE m.mbName = :name")
     Optional<Member> findByMbNameWithCart(@Param("name") String name);
 
+
 }

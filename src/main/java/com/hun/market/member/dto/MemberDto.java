@@ -177,7 +177,7 @@ public class MemberDto {
 
     }
 
-    public static MemberCoinHistoryResponseDto fromE(CoinTransHistory coinTransHistory) {
+    public static MemberCoinHistoryResponseDto fromCTH(CoinTransHistory coinTransHistory) {
         return MemberCoinHistoryResponseDto.builder()
                 .transactionType(coinTransHistory.getTransactionType())
                 .amount(coinTransHistory.getAmount())
@@ -191,12 +191,13 @@ public class MemberDto {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    @Builder
+    @Builder(builderMethodName = "from")
     public static class MemberClaimsResponseDto {
 
         private ClaimStatus claimStatus;
         private Long refundAmount;
-        private LocalDateTime t;
+        private LocalDateTime time;
+        private String itemName;
 
 
     }
@@ -208,12 +209,18 @@ public class MemberDto {
     @Builder
     public static class MemberOrdersResponseDto {
 
-        private CoinTransType transactionType;
-        private int amount;
-        private int totalCoin;
-        private LocalDateTime eventDate;
-        private String description;
+        private LocalDate orderDate;
+        private List<OrderItemResponseDto> orderItems;
+        private int totalPrice;
 
+        @Getter
+        @Setter
+        public static class OrderItemResponseDto {
+            private String itemName;
+            private int quantity;
+            private int orderItemPrice;
+
+        }
     }
 
 }
