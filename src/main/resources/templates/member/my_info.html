@@ -131,20 +131,15 @@
                 <div class="tab-pane fade" id="v-pills-coin" role="tabpanel" aria-labelledby="v-pills-coin-tab" th:classappend="${activeTab == null || activeTab != 'profile' ? 'show active' : ''}">
                     <section class="coin-history">
                         <h2>코인 입출금</h2>
-<!--                        <div>-->
-<!--                            <div class="coin-history-item" id="coinHistoryContainer">-->
-<!--                                &lt;!&ndash; 날짜와 시간이 여기에 동적으로 추가됩니다 &ndash;&gt;-->
-<!--                            </div>-->
-<!--                        </div>-->
                         <div class="table-responsive">
                             <table class="table align-middle">
                                 <thead>
-                                <tr>
-                                    <th scope="col">날짜</th>
-                                    <th scope="col">거래 내역</th>
-                                    <th scope="col">금액</th>
-                                    <th scope="col">내용</th>
-                                </tr>
+                                    <tr>
+                                        <th scope="col">날짜</th>
+                                        <th scope="col">거래 내역</th>
+                                        <th scope="col">금액</th>
+                                        <th scope="col">내용</th>
+                                    </tr>
                                 </thead>
                                 <tbody class="coin-history-item" id="coinTransHistory" >
 <!--                                동적으로 내용 추가-->
@@ -152,7 +147,6 @@
                             </table>
                         </div>
                     </section>
-
                 </div>
                 <div class="tab-pane fade" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" th:classappend="${activeTab == 'profile' ? 'show active' : ''}">
                     <h2>개인정보 수정</h2>
@@ -189,45 +183,36 @@
                             <table class="table align-middle">
                                 <thead>
                                 <tr>
-                                    <th scope="col">구매 날짜</th>
+                                    <th scope="col">날짜</th>
                                     <th scope="col">주문 내역</th>
                                     <th scope="col">금액</th>
+                                    <th scope="col">상태</th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                <!-- 예시로 하나의 구매 내역을 렌더링하는 예시 -->
-                                <tr >
-                                    <td>2024-06-18</td>
-                                    <td>상품 A, 상품 B</td>
-                                    <td>30,000원</td>
-                                </tr>
-                                <!-- 또 다른 구매 내역 추가 예시 -->
-                                <tr>
-                                    <td>2024-06-20</td>
-                                    <td>상품 C, 상품 D, 상품 E</td>
-                                    <td>50,000원</td>
-                                </tr>
-                                <!-- 더 많은 구매 내역들을 추가할 수 있습니다 -->
+                                <tbody class="orders-history-item" id="orders" >
+                                <!--                                동적으로 내용 추가-->
                                 </tbody>
                             </table>
-                        </div>
-                        <div th:unless="${hasItems}" class="no-records">
-                            <p>구매 내역이 없습니다.</p>
                         </div>
                     </section>
                 </div>
                 <div class="tab-pane fade" id="v-pills-claim" role="tabpanel" aria-labelledby="v-pills-claim-tab">
                     <section class="claim-history">
                         <h2>환불 내역</h2>
-                        <div>
-                            <div class="claim-history-item">
-                                <p><strong>날짜:</strong> <span>2024-06-18</span></p>
-                                <p><strong>구매 내역:</strong> <span>상품 A, 상품 B</span></p>
-                                <p><strong>금액:</strong> <span>30000</span>원</p>
-                            </div>
-                        </div>
-                        <div>
-                            <p>구매 내역이 없습니다.</p>
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">날짜</th>
+                                        <th scope="col">환불 상품</th>
+                                        <th scope="col">금액</th>
+                                        <th scope="col">상태</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="claims-history-item" id="claims" >
+                                <!--                                동적으로 내용 추가-->
+                                </tbody>
+                            </table>
                         </div>
                     </section>
                 </div>
@@ -314,7 +299,7 @@
         controller.abort();
         controller = new AbortController();
 
-        const container = document.getElementById('coinTransHistory');
+        const container = document.getElementById(tab);
         container.innerHTML = '<div class="spinner-container"><div class="spinner"></div></div>'; // 로딩 스피너 추가
 
         const signal = controller.signal;
@@ -354,41 +339,21 @@
 
     }
 
-    // function loadTabContent(tab) {
-    //     const container = document.getElementById('coinHistoryContainer');
-    //     container.innerHTML = '<div class="spinner-container"><div class="spinner"></div></div>'; // 로딩 스피너 추가
-    //
-    //     fetch('/api/v1/m/' + tab)
-    //         .then(response => response.json())
-    //         .then(rep => {
-    //             if (rep.data.length === 0) {
-    //                 renderTabNullContent(container);
-    //             } else {
-    //                 renderTabContent(tab, rep.data, container);
-    //             }
-    //         })
-    //         .catch(error => {
-    //             console.error('Error fetching data:', error);
-    //             failAlert("서버 로딩에 실패했습니다.")
-    //         });
-    // }
-
     function renderTabContent(tab, data, container) {
         container.innerHTML = ''; // 기존 내용을 지우고 새 데이터를 추가
 
         if (tab === 'coinTransHistory') {
-            data.forEach(item => {
-                // const newDiv = document.createElement('div');
+            data.forEach(coinHistory => {
                 const newTr = document.createElement('tr');
                 const newTdTrans = document.createElement('td');
                 const newTdAmount = document.createElement('td');
                 const newTdDate = document.createElement('td');
                 const newTdDescription = document.createElement('td');
                 // newDiv.textContent = `거래 : ${item.transactionType} - 금액: ${item.amount} -날짜: ${item.eventDate} `;
-                newTdTrans.textContent = `입출금 ${item.transactionType}`;
-                newTdAmount.textContent = `${item.amount}원`;
-                newTdDate.textContent = `날짜 : ${item.eventDate}`;
-                newTdDescription.textContent = `${item.description}`;
+                newTdTrans.textContent = `${coinHistory.transactionType}`;
+                newTdAmount.textContent = `${coinHistory.amount}원`;
+                newTdDate.textContent = `${coinHistory.eventDate}`;
+                newTdDescription.textContent = `${coinHistory.description}`;
 
                 container.appendChild(newTr);
                 newTr.appendChild(newTdDate)
@@ -397,17 +362,53 @@
                 newTr.appendChild(newTdDescription)
 
             });
-        } else if (tab === 'order') {
-            data.forEach(item => {
-                const newDiv = document.createElement('div');
-                newDiv.textContent = `주문 정보: ${item.orderInfo}`;
-                container.appendChild(newDiv);
+        } else if (tab === 'orders') {
+            data.forEach(order => {
+                // const newDiv = document.createElement('div');
+                const newTr = document.createElement('tr');
+                const newTdOrderItems = document.createElement('td');
+                const newTdTotalPrice = document.createElement('td');
+                const newTdDate = document.createElement('td');
+                const newTdStatus = document.createElement('td');
+                // newDiv.textContent = `거래 : ${item.transactionType} - 금액: ${item.amount} -날짜: ${item.eventDate} `;
+                // newTdOrderItems.textContent = `상품: ${order.orderItems}`;
+                newTdTotalPrice.textContent = `${order.totalPrice}원`;
+                newTdDate.textContent = `${order.orderDate}`;
+                newTdStatus.textContent = `${order.orderStatus}`;
+
+                // 주문 아이템들을 텍스트로 설정
+                let orderItemsHTML = '';
+                order.orderItems.forEach(item => {
+                    orderItemsHTML += `상품명: ${item.itemName}, 수량: ${item.quantity}, 가격: ${item.itemPrice}원<br>`;
+                });
+                newTdOrderItems.innerHTML = orderItemsHTML.trim();
+
+                container.appendChild(newTr);
+                newTr.appendChild(newTdDate)
+                newTr.appendChild(newTdOrderItems)
+                newTr.appendChild(newTdTotalPrice)
+                newTr.appendChild(newTdStatus)
             });
-        } else if (tab === 'claim') {
-            data.forEach(item => {
-                const newDiv = document.createElement('div');
-                newDiv.textContent = `클레임 정보: ${item.claimInfo}`;
-                container.appendChild(newDiv);
+        } else if (tab === 'claims') {
+            data.forEach(claim => {
+                // const newDiv = document.createElement('div');
+                const newTr = document.createElement('tr');
+                const newTdClaimItem = document.createElement('td');
+                const newTdAmount = document.createElement('td');
+                const newTdDate = document.createElement('td');
+                const newTdStatus = document.createElement('td');
+                // newDiv.textContent = `거래 : ${item.transactionType} - 금액: ${item.amount} -날짜: ${item.eventDate} `;
+                newTdClaimItem.textContent = `${claim.itemName}`;
+                newTdAmount.textContent = `${claim.refundAmount}원`;
+                newTdDate.textContent = `${claim.time}`;
+                newTdStatus.textContent = `${claim.claimStatus}`;
+
+                container.appendChild(newTr);
+                newTr.appendChild(newTdDate)
+                newTr.appendChild(newTdClaimItem)
+                newTr.appendChild(newTdAmount)
+                newTr.appendChild(newTdStatus)
+
             });
         }
     }

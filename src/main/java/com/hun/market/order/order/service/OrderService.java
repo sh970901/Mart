@@ -36,10 +36,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -123,8 +120,14 @@ public class OrderService {
     private void updateAuthenticationSession(Member member){
         // 현재 인증 정보 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) return;
         // 현재 사용자의 정보를 이용하여 새로운 MemberContext 생성
-        MemberContext newMemberContext = new MemberContext(member, (List<GrantedAuthority>) authentication.getAuthorities());
+        List<GrantedAuthority> authorities = (List<GrantedAuthority>) authentication.getAuthorities();
+        if (authorities == null || authorities.isEmpty()){
+            authorities = new ArrayList<>();
+        }
+
+        MemberContext newMemberContext = new MemberContext(member, authorities);
         // 새로운 MemberContext로 Principal을 변경
         UsernamePasswordAuthenticationToken newAuthentication =
                 new UsernamePasswordAuthenticationToken(newMemberContext, authentication.getCredentials(), authentication.getAuthorities());

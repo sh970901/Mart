@@ -2,6 +2,7 @@ package com.hun.market.order.claim.domain;
 
 import com.hun.market.base.entity.BaseEntity;
 import com.hun.market.member.domain.Member;
+import com.hun.market.order.claim.dto.ClaimDto;
 import com.hun.market.order.order.domain.OrderItem;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,7 +27,7 @@ public class Claim extends BaseEntity {
     @Column(name = "refund_amount", nullable = false)
     private Long refundAmount;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_item_id")
     private OrderItem orderItem;
 
@@ -34,4 +35,12 @@ public class Claim extends BaseEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
+    public static Claim fromDto(ClaimDto.ClaimCreateRequestDto claimCreateRequestDto){
+        return Claim.builder()
+                .status(ClaimStatus.PENDING)
+                .refundAmount(claimCreateRequestDto.getRefundAmount())
+                .orderItem(claimCreateRequestDto.getOrderItem())
+                .member(claimCreateRequestDto.getMember())
+                .build();
+    }
 }

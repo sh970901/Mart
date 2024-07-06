@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import com.hun.market.order.claim.domain.Claim;
 import com.hun.market.order.claim.repository.ClaimRepository;
 import com.hun.market.order.order.domain.Order;
+import com.hun.market.order.order.domain.OrderItem;
 import com.hun.market.order.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -155,13 +156,38 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public List<MemberOrdersResponseDto> getMemberOrders(Long memberId) {
-        System.out.println(memberId);
         List<Order> orders = orderRepository.findOrdersWithItemsByMemberId(memberId);
-        List<MemberOrdersResponseDto> memberOrdersResponseDtos = new ArrayList<>();
-//        System.out.println(orders.get(0).getOrderItems().get(0).getItem().getItemName());
-        System.out.println(orders.get(0));
+        if (orders.isEmpty()) {
+            return List.of(MemberOrdersResponseDto.builder().build());
+        }
 
-        return null;
+        List<MemberOrdersResponseDto> memberOrdersResponseDtos = new ArrayList<>();
+
+        for (Order order : orders) {
+            List<MemberOrdersResponseDto.OrderItemResponseDto> oItemResponseDtos = new ArrayList<>();
+
+            List<OrderItem> orderItems  = order.getOrderItems();
+            for (OrderItem orderItem : orderItems) {
+                MemberOrdersResponseDto.OrderItemResponseDto oItemResponseDto = MemberOrdersResponseDto.OrderItemResponseDto
+                        .builder()
+                        .itemName(orderItem.getItem().getItemName())
+                        .itemPrice(orderItem.getItem().getItemPrice())
+                        .quantity(orderItem.getQuantity())
+                        .build();
+                oItemResponseDtos.add(oItemResponseDto);
+            }
+
+            MemberOrdersResponseDto ordersResponseDto = MemberOrdersResponseDto.builder()
+                    .orderDate(order.getCreateDate())
+                    .totalPrice(order.getTotalPrice())
+                    .orderItems(oItemResponseDtos)
+                    .orderStatus(order.getOrderStatus())
+                    .build();
+
+            memberOrdersResponseDtos.add(ordersResponseDto);
+        }
+
+        return memberOrdersResponseDtos;
     }
 
     @Transactional

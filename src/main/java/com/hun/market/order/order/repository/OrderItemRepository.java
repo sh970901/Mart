@@ -11,4 +11,5 @@ import java.lang.annotation.Native;
 public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
 
 
+    OrderItem findByItemId(Long id);
 }
