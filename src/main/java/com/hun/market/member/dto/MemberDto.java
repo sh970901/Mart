@@ -6,9 +6,11 @@ import com.hun.market.member.domain.CoinTransType;
 import com.hun.market.member.domain.Department;
 import com.hun.market.member.domain.Member;
 import com.hun.market.order.claim.domain.ClaimStatus;
+import com.hun.market.order.order.domain.OrderStatus;
 import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.*;
 
@@ -209,16 +211,18 @@ public class MemberDto {
     @Builder
     public static class MemberOrdersResponseDto {
 
-        private LocalDate orderDate;
-        private List<OrderItemResponseDto> orderItems;
-        private int totalPrice;
+        private LocalDateTime orderDate;
+        private List<OrderItemResponseDto> orderItems = new ArrayList<>();
+        private Long totalPrice;
+        private OrderStatus orderStatus;
 
         @Getter
         @Setter
+        @Builder
         public static class OrderItemResponseDto {
             private String itemName;
             private int quantity;
-            private int orderItemPrice;
+            private Long itemPrice;
 
         }
     }

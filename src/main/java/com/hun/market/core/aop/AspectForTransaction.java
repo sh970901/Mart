@@ -34,6 +34,9 @@ public class AspectForTransaction implements Ordered {
 
     @Override
     public int getOrder() {
-        return -1000;
+
+        return Ordered.LOWEST_PRECEDENCE;
+        //AspectForTransaction의 우선순위를 @Transactional보다 낮게 잡아야 TransactionSynchronizationManager.isCurrentTransactionReadOnly() 탐
+//        return -1000;
     }
 }
