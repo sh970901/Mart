@@ -101,4 +101,12 @@ public class MemberController {
     }
 
 
+    @GetMapping("/exam")
+    public String myInfoExam(Model model,
+        @AuthenticationPrincipal MemberContext memberSession){
+        MemberDto.MemberResponseDto memberDto = memberService.getMember(memberSession.getMemberId());
+        model.addAttribute("memberDto", memberDto);
+        return "exam/exam";
+    }
+
 }
