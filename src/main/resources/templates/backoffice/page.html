@@ -315,7 +315,7 @@
             </div>
             <div class = "popup-btn">
                 <button onclick="saveEmployee()">저장</button>
-                <button >탈퇴</button>
+                <button onclick="deleteEmployee()">삭제</button>
             </div>
 
         </div>
@@ -423,6 +423,37 @@
             console.error('Error uploading file:', error);
         });
     });*/
+    function deleteEmployee() {
+        // Get input values from the popup form
+        const empId = document.getElementById('emp-id').value;
+
+
+        // Send PUT request to update employee
+        fetch(`/backoffice/employee/${empId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to update employee');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Employee updated successfully:', data);
+            // Close the popup after successful update
+            closePopup();
+            // Refresh employee data or perform necessary UI updates
+            fetchEmployeeData(); // Example: Refresh employee data table
+        })
+        .catch(error => {
+            console.error('Error updating employee:', error);
+            // Handle error condition, e.g., show error message to user
+        });
+    }
+
     function saveEmployee() {
         // Get input values from the popup form
         const empId = document.getElementById('emp-id').value;
