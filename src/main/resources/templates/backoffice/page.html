@@ -10,17 +10,33 @@
     <!--<link rel="stylesheet" href="./styles.css">
     <script defer src="./script.js"></script>-->
     <style>
+        @font-face {
+            font-family: 'SpoqaHanSansNeo-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SpoqaHanSansNeo-Regular.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
         * {
+            font-family: 'SpoqaHanSansNeo-Regular',serif;
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        @font-face {
+            font-family: 'SpoqaHanSansNeo-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SpoqaHanSansNeo-Regular.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: SpoqaHanSansNeo-Regular;
         }
 
         .container {
+            font-family: SpoqaHanSansNeo-Regular;
             display: grid;
             grid-template-areas:
                 "nav header"
@@ -32,7 +48,7 @@
 
         .nav {
             grid-area: nav;
-            background-color: #2c3e50;
+            background-color: black;
             color: white;
             padding: 20px;
         }
@@ -52,7 +68,7 @@
 
         .header {
             grid-area: header;
-            background-color: #34495e;
+            background-color: black;
             color: white;
             padding: 20px;
             display: flex;
@@ -77,6 +93,7 @@
         }
 
         table {
+            font-size: 20px;
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
@@ -88,15 +105,19 @@
             text-overflow: ellipsis; /* 글자가 너무 길 경우 ...으로 표시 */
             overflow: hidden; /* 넘칠 경우 숨김 */
             text-align: center; /* 가운데 정렬 */
+            height: 40px; /* 원하는 높이로 설정 */
         }
 
         th {
-            background-color: #f4f4f4;
+            font-size: 20px;
+            color : white;
+            background-color: black;
             position: sticky;
             top: 0;
         }
 
         td {
+            height: 40px; /* 원하는 높이로 설정 */
             max-width: 300px; /* 최대 너비 설정 */
         }
 
@@ -164,7 +185,7 @@
         .upload-btn,
         .grant-coins-btn {
             padding: 10px 20px;
-            background-color: #3498db;
+            background-color: black;
             color: white;
             border: none;
             border-radius: 4px;
@@ -230,6 +251,18 @@
             padding: 8px;
             text-align: center;
         }
+        .active {
+            background-color: rgba(0, 0, 0, 0.8); /* 빨간색 배경과 0.8 투명도 */
+        }
+
+        .item-name,
+        .item-price,
+        .item-stock,
+        .item-desc {
+            text-align: center;
+        }
+
+
     </style>
 </head>
 <body>
@@ -561,7 +594,8 @@
                         <th>재고</th>
                         <th>이미지</th>
                         <th>설명</th>
-                        <th></th> <!--저장-->
+                        <th>이미지</th>
+                        <th>😵‍💫</th><!--저장-->
                     </tr>
                 </thead>
                 <tbody>
