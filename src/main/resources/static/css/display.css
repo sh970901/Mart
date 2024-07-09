@@ -4,11 +4,39 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f7f7f7;
+    overflow: hidden;
 }
 .container,
 .container-fluid
 {
     font-family: 'SpoqaHanSansNeo-Regular';
+}
+
+.floating-image {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: url('https://cdn.pixabay.com/photo/2022/01/11/18/56/balloons-6931276_1280.png') no-repeat center/cover;
+    animation: float 10s infinite ease-in-out;
+    z-index: -1; /* 다른 요소들 뒤에 배치 */
+}
+
+@keyframes float {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    25% {
+        transform: translate(-20px, -30px) rotate(45deg);
+    }
+    50% {
+        transform: translate(30px, -10px) rotate(90deg);
+    }
+    75% {
+        transform: translate(-10px, 20px) rotate(135deg);
+    }
+    100% {
+        transform: translate(0, 0) rotate(180deg);
+    }
 }
 
 /* 헤더 스타일 */
