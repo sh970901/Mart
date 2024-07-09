@@ -83,7 +83,7 @@ section h2 {
 /* 큰 화면(예: 데스크탑)에 대한 상품 배치: 4개 */
 @media only screen and (min-width: 1024px) {
     .item-list {
-        grid-template-columns: repeat(auto-fill, minmax(550px, 1fr)); /* 250px로 수정 */
+        grid-template-columns: repeat(auto-fill, minmax(450px, 2fr)); /* 250px로 수정 */
         gap: 70px; /* 간격을 조정하여 더 적은 상품이 보이도록 함 */
     }
 
@@ -103,7 +103,7 @@ section h2 {
     padding: 20px;
     text-align: center;
     width: 90%;
-    max-width: 600px;
+    max-width: 450px;
     transition: transform 0.3s ease;
 }
 
