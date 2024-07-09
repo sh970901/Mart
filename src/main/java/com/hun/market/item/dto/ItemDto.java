@@ -75,7 +75,7 @@ public class ItemDto {
         private String description;
 
         public static ItemCreatResponseDto of(Item item){
-            return ItemCreatResponseDto.builder().itemId(item.getId()).itemName(item.getItemName()).itemPrice(item.getItemPrice()).itemStock(item.getItemStock()).description(item.getDescription()).imagePath("이미지경로").build();
+            return ItemCreatResponseDto.builder().itemId(item.getId()).itemName(item.getItemName()).itemPrice(item.getItemPrice()).itemStock(item.getItemStock()).description(item.getDescription()).imagePath(item.getImagePath()).build();
         }
     }
 

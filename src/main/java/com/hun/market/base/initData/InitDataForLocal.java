@@ -46,7 +46,7 @@ public class InitDataForLocal extends AbstractInitData {
             if (initDataDone) return;
             before();
             for(int i = 0; i<100; i++){
-                ItemDto.ItemCreateRequestDto itemDto = ItemDto.ItemCreateRequestDto.builder().itemName("item"+i).itemPrice(2000L).imagePath("이미지경로").itemStock(3L).description(i+"번 상품입니다.").build();
+                ItemDto.ItemCreateRequestDto itemDto = ItemDto.ItemCreateRequestDto.builder().itemName("item"+i).itemPrice(2000L).imagePath("https://cdn.pixabay.com/photo/2024/04/01/06/57/cookies-8668140_1280.jpg").itemStock(3L).description(i+"번 상품입니다.").build();
                 Item item = Item.from(itemDto);
                 itemRepository.save(item);
             }

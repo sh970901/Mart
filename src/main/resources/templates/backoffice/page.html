@@ -7,6 +7,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+    <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"/>-->
     <!--<link rel="stylesheet" href="./styles.css">
     <script defer src="./script.js"></script>-->
     <style>
@@ -34,8 +37,18 @@
         body {
             font-family: SpoqaHanSansNeo-Regular;
         }
+        /* 기본 이미지 스타일 */
+        img {
+            width: 100px; /* 이미지 너비 설정 */
+            height: auto; /* 이미지 높이 자동으로 조정 */
+            transition: transform 0.3s ease; /* 호버 효과에 애니메이션 적용 */
+        }
 
-        .container {
+        img:hover {
+            transform: scale(1.5);
+        }
+
+        .container-fluid {
             font-family: SpoqaHanSansNeo-Regular;
             display: grid;
             grid-template-areas:
@@ -106,6 +119,7 @@
             overflow: hidden; /* 넘칠 경우 숨김 */
             text-align: center; /* 가운데 정렬 */
             height: 40px; /* 원하는 높이로 설정 */
+            padding: 0;
         }
 
         th {
@@ -119,6 +133,7 @@
         td {
             height: 40px; /* 원하는 높이로 설정 */
             max-width: 300px; /* 최대 너비 설정 */
+            padding: 0;
         }
 
         /* Popup styles */
@@ -182,6 +197,7 @@
             margin-top: 20px;
 
         }
+        .table-btn,
         .upload-btn,
         .grant-coins-btn {
             padding: 10px 20px;
@@ -190,12 +206,21 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
 
+        .table-btn:hover,
         .upload-btn:hover,
         .grant-coins-btn:hover {
-            background-color: #2980b9;
+            background-color: #333;
+        }
+
+        .table-btn:active,
+        .upload-btn:active,
+        .grant-coins-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
 
@@ -259,14 +284,31 @@
         .item-price,
         .item-stock,
         .item-desc {
+            width: 100%;
+            box-sizing: border-box;
+            border: none;
+            font-size: 20px; /* 원하는 글꼴 크기로 조정 */
+            height: 100px;
             text-align: center;
+        }
+
+        .item-name:focus,
+        .item-price:focus,
+        .item-stock:focus,
+        .item-desc:focus {
+            width: 100%;
+            box-sizing: border-box;
+            border: none;
+            font-size: 20px; /* 원하는 글꼴 크기로 조정 */
+            text-align: center;
+            background-color: #e0f7fa; /* 포커스 시 배경색 변경 */
         }
 
 
     </style>
 </head>
 <body>
-<div class="container">
+<div class="container-fluid">
     <nav class="nav">
         <ul>
             <li><a href="#" onclick="showPage('employee')">사원관리</a></li>
@@ -275,8 +317,7 @@
     </nav>
     <header class="header">
         <div class="user-info">
-            <span>관리자님 환영합니다</span>
-            <button>로그아웃</button>
+            <span>업무지원 시스템</span>
         </div>
     </header>
     <main class="content" id="content">
@@ -348,7 +389,7 @@
             </div>
             <div class = "popup-btn">
                 <button onclick="saveEmployee()">저장</button>
-                <button onclick="deleteEmployee()">삭제</button>
+                <button onclick="deleteConfirm()">삭제</button>
             </div>
 
         </div>
@@ -456,7 +497,30 @@
             console.error('Error uploading file:', error);
         });
     });*/
+
+
+    function deleteConfirm() {
+        Swal.fire({
+            title: '정말로 그렇게 하시겠습니까?',
+            text: "다시 되돌릴 수 없습니다. 신중하세요.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '삭제',
+            cancelButtonText: '취소',
+            reverseButtons: true, // 버튼 순서 거꾸로
+
+        }).then((result) => {
+            if (result.isConfirmed) {
+                deleteEmployee();
+            }
+        })
+    }
+
     function deleteEmployee() {
+
+
         // Get input values from the popup form
         const empId = document.getElementById('emp-id').value;
 
@@ -486,6 +550,7 @@
             // Handle error condition, e.g., show error message to user
         });
     }
+
 
     function saveEmployee() {
         // Get input values from the popup form
@@ -651,13 +716,20 @@
             <td><input class = "item-name" type="text" value="${item.itemName}" name="item-name-${item.itemId}"/></td>
             <td><input class = "item-price"  type="number" value="${item.itemPrice}" name="item-price-${item.itemId}" /></td>
             <td><input class = "item-stock" type="number" value="${item.itemStock}" name="item-stock-${item.itemId}" /></td>
-            <td>${item.imagePath}</td>
+            <td><img src="${item.imagePath}" alt="${item.itemName}"></td>
             <td><input class = "item-desc" type="text" value="${item.description}"  name="item-desc-${item.itemId}"/></td>
-            <td><button onclick="openImagePopup(this)">이미지</button></td>
-            <td><button onclick="modifyItem(${item.itemId})">${item.itemId}번 수정</button></td>
+            <td><button class = "table-btn" onclick="openImagePopup(this)">업로드</button></td>
+            <td><button class = "table-btn" onclick="modifyItem(${item.itemId})">${item.itemId}번 수정</button></td>
         `;
 
             tbody.appendChild(row);
+        });
+    }
+    function validateAlert() {
+        Swal.fire({
+            icon: 'fail',
+            title: '필수값 누락 알림',
+            text: '상품명, 가격, 재고는 필수값입니다.',
         });
     }
 
@@ -668,6 +740,26 @@
         const itemStock = $('[name="item-stock-' + itemNo + '"]').val();
         const itemPrice = $('[name="item-price-' + itemNo + '"]').val();
         const itemDesc = $('[name="item-desc-' + itemNo + '"]').val();
+
+        let itemValidate = false;
+        /*프론트 유효성 검증*/
+        if (itemName.trim() === '') {
+            $('[name="item-name-' + itemNo + '"]').css('background-color', '#ff7f7f');
+            itemValidate = true;
+        }
+        if (itemStock.trim() === '') {
+            $('[name="item-stock-' + itemNo + '"]').css('background-color', '#ff7f7f');
+            itemValidate = true;
+        }
+        if (itemPrice.trim() === '') {
+            $('[name="item-price-' + itemNo + '"]').css('background-color', '#ff7f7f');
+            itemValidate = true;
+        }
+
+        if (itemValidate) {
+            validateAlert();
+            return;
+        }
 
 
         // Construct request body
@@ -694,12 +786,31 @@
         })
         .then(data => {
             console.log('Employee updated successfully:', data);
+            toast();
             fetchItemData();
         })
         .catch(error => {
             console.error('Error updating employee:', error);
             // Handle error condition, e.g., show error message to user
         });
+    }
+    function toast() {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'center-center',
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+
+        Toast.fire({
+            icon: 'success',
+            title: '상품수정이 완료되었습니다.'
+        })
     }
 
 
@@ -721,7 +832,7 @@
             <td>${employee.department.departmentName}</td>
             <td>${employee.department.teamName}</td>
             <td>${employee.memberCoin}</td>
-            <td><button onclick="openPopup(this)">수정</button></td>
+            <td><button class="table-btn" onclick="openPopup(this)">수정</button></td>
         `;
 
             tbody.appendChild(row);
@@ -792,12 +903,14 @@
     }
 
     function openGrantCoinsPopup() {
+        $('.grant-coins-popup').addClass('show');
         copyEmployeeTableToPopup();
         document.getElementById("grant-coins-popup").style.display = "block";
     }
 
     // Function to close the "Grant Coins" popup
     function closeGrantCoinsPopup() {
+        $('.grant-coins-popup').removeClass('show');
         document.getElementById("grant-coins-popup").style.display = "none";
     }
     // Function to copy employee table data to the popup
