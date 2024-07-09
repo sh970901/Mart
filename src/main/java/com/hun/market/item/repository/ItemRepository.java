@@ -24,4 +24,6 @@ public interface ItemRepository extends PagingAndSortingRepository<Item, Long> {
     Page<Item> findByItemNameContaining(String query, Pageable pageable);
 
     List<Item> findAllByOrderById();
+
+    void delete(Item item);
 }

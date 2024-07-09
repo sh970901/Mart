@@ -304,6 +304,17 @@
             background-color: #e0f7fa; /* 포커스 시 배경색 변경 */
         }
 
+        #tablemodifybtn {
+            margin-left : 30px;
+            background-color: #80deea;
+        }
+        #tabledeletebtn {
+            background-color : #ff7f7f;
+
+        }
+
+
+
 
     </style>
 </head>
@@ -389,7 +400,7 @@
             </div>
             <div class = "popup-btn">
                 <button onclick="saveEmployee()">저장</button>
-                <button onclick="deleteConfirm()">삭제</button>
+                <button onclick="deleteConfirm('EMPLOYEE', null)">삭제</button>
             </div>
 
         </div>
@@ -499,10 +510,10 @@
     });*/
 
 
-    function deleteConfirm() {
+    function deleteConfirm(type,path) {
         Swal.fire({
-            title: '정말로 그렇게 하시겠습니까?',
-            text: "다시 되돌릴 수 없습니다. 신중하세요.",
+            title: '정말로 제거 하시겠습니까?',
+            text: "살려주세요 ㅠㅠ",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -513,20 +524,27 @@
 
         }).then((result) => {
             if (result.isConfirmed) {
-                deleteEmployee();
+                deleteData(type,path);
             }
         })
     }
 
-    function deleteEmployee() {
+    function deleteData(TYPE,path) {
+        let url = '';
 
-
+        if(TYPE === 'EMPLOYEE') {
+           const empId = document.getElementById('emp-id').value;
+           url =  `/backoffice/employee/${empId}`;
+        } else if(TYPE === 'ITEM') {
+           const itemNo = path;
+           url = `/backoffice/item/${itemNo}`;
+        }
         // Get input values from the popup form
-        const empId = document.getElementById('emp-id').value;
+
 
 
         // Send PUT request to update employee
-        fetch(`/backoffice/employee/${empId}`, {
+        fetch(url, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
@@ -540,10 +558,14 @@
         })
         .then(data => {
             console.log('Employee updated successfully:', data);
-            // Close the popup after successful update
-            closePopup();
-            // Refresh employee data or perform necessary UI updates
-            fetchEmployeeData(); // Example: Refresh employee data table
+
+            if(TYPE === 'EMPLOYEE') {
+                closePopup();
+                fetchEmployeeData();
+            } else if(TYPE === 'ITEM') {
+                fetchItemData();
+            }
+
         })
         .catch(error => {
             console.error('Error updating employee:', error);
@@ -645,7 +667,7 @@
                 <input type="file" name="items">
                 <input type="submit" value="업로드" class="upload-btn">
             </form>
-<!--            <button class="grant-coins-btn" onclick="openGrantCoinsPopup()">코인 일괄 지급</button>-->
+            <button class="grant-coins-btn" onclick="openGrantCoinsPopup()">단독상품 등록</button>
             </div>
 
 
@@ -719,7 +741,7 @@
             <td><img src="${item.imagePath}" alt="${item.itemName}"></td>
             <td><input class = "item-desc" type="text" value="${item.description}"  name="item-desc-${item.itemId}"/></td>
             <td><button class = "table-btn" onclick="openImagePopup(this)">업로드</button></td>
-            <td><button class = "table-btn" onclick="modifyItem(${item.itemId})">${item.itemId}번 수정</button></td>
+            <td><button class = "table-btn" id="tabledeletebtn" onclick="deleteConfirm('ITEM', ${item.itemId})">${item.itemId}번 삭제</button><button class = "table-btn" id="tablemodifybtn" onclick="modifyItem(${item.itemId})">${item.itemId}번 수정</button></td>
         `;
 
             tbody.appendChild(row);

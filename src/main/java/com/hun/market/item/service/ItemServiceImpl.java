@@ -68,6 +68,13 @@ public class ItemServiceImpl implements ItemService {
                              .collect(Collectors.toList());
     }
 
+    @Transactional
+    @Override
+    public void deleteItem(Long itemNo) {
+        itemRepository.findById(itemNo)
+                      .ifPresent(itemRepository::delete);
+    }
+
     @Override
     @Transactional
     public void updateItem(ItemModifyDto itemModifyDto) {

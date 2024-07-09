@@ -15,4 +15,6 @@ public interface ItemService {
     ItemDto.ItemCreatResponseDto getItemOne(Long itemId);
 
     List<ItemDto.ItemCreatResponseDto> getAllItems();
+
+    void deleteItem(Long itemNo);
 }
