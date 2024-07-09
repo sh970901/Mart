@@ -77,17 +77,14 @@
                                     <label th:for="${'itemCheckbox' + cartItem.cartItemId}" th:text="'상품: ' + ${cartItem.itemName}">상품 제목</label>
                                     <div>
                                         <p class="card-text" th:text="'찜 수량: ' + ${cartItem.quantity}">찜 갯수</p>
-                                        <button class="btn btn-outline-primary me-2"
-                                                th:attr="data-item-id=${cartItem.itemId}, data-item-name=${cartItem.itemName}"
-                                                onclick="addCart(this)">
-                                            추가
-                                        </button>
-                                        <button class="btn btn-outline-danger me-2" th:onclick="|cancelCartItem(${cartItem.cartItemId})|">감소</button>
+                                        <button class="btn" id="buynow" th:attr="data-item-id=${cartItem.itemId}, data-item-name=${cartItem.itemName}" onclick="addCart(this)">추가</button>
+                                        <button class="btn" id="minus" th:onclick="|cancelCartItem(${cartItem.cartItemId})|">감소</button>
                                     </div>
                                     <p class="card-text" th:text="'상품 재고: ' + ${cartItem.itemStock}">상품 재고</p>
-                                    <p>
+                                    <!--todo 취소버튼 없애고 찜수량 0개되면 빠지는 거로가시죠 -->
+                                    <!--<p>
                                         <button class="btn btn-outline-danger me-2" th:onclick="|cancelCart(${cartItem.cartItemId})|">취소</button>
-                                    </p>
+                                    </p>-->
                                 </div>
                             </div>
                         </div>

@@ -12,6 +12,14 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/common/js/common.js"></script>
     <style>
+
+        @font-face {
+            font-family: 'SpoqaHanSansNeo-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SpoqaHanSansNeo-Regular.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
         .header-top {
             position: fixed;
             top: 0;
@@ -56,19 +64,19 @@
                 <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/8-col/img%285%29.jpg" class="d-block w-100" alt="Exotic Fruits"/>
 <!--                <img th:src="@{/images/상품이미지.jpeg}" alt="상품 이미지">-->
                 <!--                <img th:src="${item.imageUrl}" th:alt="${item.name} Image" alt="상품 이미지">-->
-                <h3 th:text="${item.itemName}">상품 제목</h3>
-                <p th:text="${item.description}">상품 설명</p>
+                <div class="item-name" th:text="${item.itemName}"></div>
+                <div th:text="${item.itemPrice}+'원'"></div>
+                <div class="item-desc" th:text="${item.description}">상품 설명</div>
 <!--                <p th:text="'재고: ' + ${item.itemStock} + '개'">수량</p>-->
-                <span th:text="'가격: ₩' + ${item.itemPrice}">가격: ₩</span>
+
 <!--                <p><button class="btn btn-outline-primary me-2" th:onclick="|placeOrder(${item.itemId})|">바로 구매</button></p>-->
-                <p><button class="btn btn-outline-primary" th:itemId="${item.itemId}" th:itemName="${item.itemName}" th:itemStock="${item.itemStock}" th:itemPrice="${item.itemPrice}" th:onclick="|showPurchaseModal(this.getAttribute('itemId'), this.getAttribute('itemName'), this.getAttribute('itemStock'), this.getAttribute('itemPrice'))|" data-bs-toggle="modal" data-bs-target="#orderModal">바로 구매</button></p>
-                <p>
-                    <button class="btn btn-outline-primary me-2"
-                            th:attr="data-item-id=${item.itemId}, data-item-name=${item.itemName}"
-                            onclick="addCart(this)">
-                        찜하기
-                    </button>
-                </p>
+                <div class="btn-wrap">
+                    <button class="btn" id="buynow" th:itemId="${item.itemId}" th:itemName="${item.itemName}" th:itemStock="${item.itemStock}" th:itemPrice="${item.itemPrice}" th:onclick="|showPurchaseModal(this.getAttribute('itemId'), this.getAttribute('itemName'), this.getAttribute('itemStock'), this.getAttribute('itemPrice'))|" data-bs-toggle="modal" data-bs-target="#orderModal">바로 구매</button>
+                    <button class="btn" id="heart" th:attr="data-item-id=${item.itemId}, data-item-name=${item.itemName}" onclick="addCart(this)">찜하기</button>
+                </div>
+
+
+
             </div>
         </div>
         <div id="loading-skeleton" class="skeleton" style="display: none;">

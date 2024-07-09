@@ -1,9 +1,14 @@
 /* 전체 페이지 스타일 */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'SpoqaHanSansNeo-Regular','Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f7f7f7;
+}
+.container,
+.container-fluid
+{
+    font-family: 'SpoqaHanSansNeo-Regular';
 }
 
 /* 헤더 스타일 */
@@ -91,6 +96,7 @@ section h2 {
 }
 
 .item {
+    font-family: 'SpoqaHanSansNeo-Regular';
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -117,6 +123,51 @@ section h2 {
     font-size: 20px;
     color: #333;
 }
+
+.item-name {
+    font-size: 24px;
+}
+.item-desc {
+    margin-top: 10px;
+}
+
+.btn-wrap {
+    margin-top : 20px;
+}
+
+.btn {
+    width: 120px;
+    padding: 10px 20px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.btn:hover {
+    background-color: #333;
+}
+
+.btn:active{
+    transform: translateY(4px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+#buynow {
+
+    background-color: #80deea;
+}
+#heart {
+    margin-left : 80px;
+    background-color : #ff7f7f;
+}
+#minus {
+    background-color : #ff7f7f;
+}
+
+
 
 .item p {
     margin-bottom: 10px;
