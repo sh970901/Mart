@@ -4,7 +4,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f7f7f7;
-    overflow: hidden;
+
 }
 .container,
 .container-fluid
@@ -154,9 +154,15 @@ section h2 {
 
 .item-name {
     font-size: 24px;
+    text-align: left;
+    font-weight: bold;
 }
 .item-desc {
     margin-top: 10px;
+    text-align: left;
+}
+.item-price {
+    text-align: left;
 }
 
 .btn-wrap {
@@ -165,7 +171,7 @@ section h2 {
 
 .btn {
     width: 120px;
-    padding: 10px 20px;
+    padding: 5px 10px;
     background-color: black;
     color: white;
     border: none;
