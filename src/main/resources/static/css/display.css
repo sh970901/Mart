@@ -20,6 +20,89 @@ body {
     animation: float 10s infinite ease-in-out;
     z-index: -1; /* 다른 요소들 뒤에 배치 */
 }
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px 20px;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+
+.center-contents {
+    flex: 0 0 60%; /* 60% width for center contents */
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    flex-direction: column; /* Arrange child elements vertically */
+}
+
+
+.left-contents,
+.right-contents {
+    flex: 0 0 20%; /* 20% width for left and right contents */
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.search-container {
+    display: flex;
+    align-items: center;
+    width: 200%; /* Make the search container take the full width of its parent */
+
+}
+
+.search-container .form-control {
+    flex-grow: 1; /* Allow the input to take up available space */
+    margin-right: 10px; /* Space between input and button */
+}
+
+.search-button {
+    width: auto; /* Adjust as needed */
+    height: 30px; /* Adjust as needed */
+    border: none; /* Remove default button border */
+    padding: 0; /* Remove default button padding */
+    cursor: pointer; /* Change cursor to pointer */
+}
+
+
+.logo-img {
+    margin-top: -16px;
+    margin-bottom: -40px;
+}
+
+
+.main-title-name {
+    font-size: 64px;
+    font-weight: 700;
+    font-family: 'SpoqaHanSansNeo-Regular';
+}
+
+.info-btn-wrap {
+    display: flex; /* Flexbox를 사용하여 버튼을 가로로 배치 */
+    align-items: center; /* 수직 중앙 정렬 */
+}
+
+.info-btn-wrap > * {
+    margin-right: 10px; /* 버튼 사이에 오른쪽 여백을 추가 */
+}
+
+.info-btn-wrap > *:last-child {
+    margin-right: 0; /* 마지막 버튼에는 오른쪽 여백을 추가하지 않음 */
+}
+
+.icon-button {
+    width: 32px; /* 아이콘 너비 */
+    height: 32px; /* 아이콘 높이 */
+}
+
 
 @keyframes float {
     0% {
@@ -308,3 +391,19 @@ footer {
     font-size: 1rem;
     font-weight: 600;
 }
+.modal-header {
+    font-weight: bold;
+    font-size : 24px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+.modal-title {
+    flex: 1;
+    text-align: center;
+}
+
+.modal-content {
+    font-family: 'SpoqaHanSansNeo-Regular';
+}
+
