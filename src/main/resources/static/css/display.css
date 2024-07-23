@@ -32,11 +32,12 @@ body {
     top: 0;
     left: 0;
     z-index: 1000;
+    opacity: 0.95;
 }
 
 
 .center-contents {
-    flex: 0 0 60%; /* 60% width for center contents */
+    /*flex: 0 0 60%; !* 60% width for center contents *!*/
     display: flex;
     justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically */
@@ -51,17 +52,28 @@ body {
     align-items: center;
 }
 
+.user-info-wrap {
+    margin-bottom: 20px;
+    font-size: 20px;
+}
 
 .search-container {
     display: flex;
     align-items: center;
-    width: 200%; /* Make the search container take the full width of its parent */
+    width: 130%; /* Make the search container take the full width of its parent */
+    max-width: 600px; /* 필요에 따라 조정 */
+    margin-left: -10%;
 
 }
 
 .search-container .form-control {
-    flex-grow: 1; /* Allow the input to take up available space */
+    flex: 1;; /* Allow the input to take up available space */
     margin-right: 10px; /* Space between input and button */
+    padding: 10px;
+    font-size: 16px;
+    text-align: center; /* 입력 창의 텍스트를 가운데 정렬 */
+    width: 100%;
+    max-width: 800px; /* 필요에 따라 조정 */
 }
 
 .search-button {
@@ -77,7 +89,11 @@ body {
     margin-top: -16px;
     margin-bottom: -40px;
 }
-
+/*.main-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}*/
 
 .main-title-name {
     font-size: 64px;
@@ -86,8 +102,10 @@ body {
 }
 
 .info-btn-wrap {
-    display: flex; /* Flexbox를 사용하여 버튼을 가로로 배치 */
-    align-items: center; /* 수직 중앙 정렬 */
+    display: flex; /* Flexbox 컨테이너로 설정 */
+    justify-content: center; /* 가로 방향 가운데 정렬 */
+    align-items: center; /* 세로 방향 가운데 정렬 */
+    gap: 25px; /* 자식 요소들 간의 세로 간격 설정 (필요에 따라 조정) */
 }
 
 .info-btn-wrap > * {
@@ -101,6 +119,9 @@ body {
 .icon-button {
     width: 32px; /* 아이콘 너비 */
     height: 32px; /* 아이콘 높이 */
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
 }
 
 
@@ -124,6 +145,7 @@ body {
 
 /* 헤더 스타일 */
 header {
+    font-family: 'SpoqaHanSansNeo-Regular';
     /*background-color: #1859FF;*/
     /*color: #fff;*/
     color: #1859FF;
@@ -330,7 +352,7 @@ footer {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f0f0f0; /* 스켈레톤의 배경색을 정의합니다. */
+   /* background-color: #f0f0f0; !* 스켈레톤의 배경색을 정의합니다. *!*/
     border-radius: 30px; /* 스켈레톤의 모서리를 둥글게 만듭니다. */
     padding: 20px; /* 스켈레톤의 안쪽 여백을 설정합니다. */
     animation: pulse 10s infinite alternate; /* 펄스 애니메이션 적용 */
@@ -405,5 +427,14 @@ footer {
 
 .modal-content {
     font-family: 'SpoqaHanSansNeo-Regular';
+}
+
+.modal-footer {
+    display: flex; /* Flexbox 컨테이너로 설정 */
+    justify-content: center; /* 수평 방향으로 가운데 정렬 */
+    align-items: center; /* 수직 방향으로 가운데 정렬 */
+    padding: 20px; /* 여백을 추가하여 내부 요소와 모달 경계 사이에 공간을 만듭니다. */
+    border-top: 1px solid #ddd; /* 모달의 상단에 구분선 추가 */
+    background-color: #f9f9f9; /* 배경 색상 설정 */
 }
 

@@ -26,19 +26,23 @@
                 <div>
                     <a class="main-title-name" th:href="@{/main}" style="color: #1859FF">INNO MARKET</a>
                 </div>
+                <div class="main-title">
+                    <form class="" th:action="@{/i/items}" method="get">
+                        <div class="search-container">
+                            <label for="searchInput" class="visually-hidden">Search</label>
+                            <input type="search" id="searchInput" class="form-control border-bottom" placeholder="상품 검색" aria-label="Search" name="q">
+                            <input type="image" src="/images/character/search.png" alt="검색" class="search-button">
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="main-title">
-                <form class="" th:action="@{/i/items}" method="get">
-                    <div class="search-container">
-                        <label for="searchInput" class="visually-hidden">Search</label>
-                        <input type="search" id="searchInput" class="form-control border-bottom" placeholder="상품 검색" aria-label="Search" name="q">
-                        <input type="image" src="/images/character/search.png" alt="검색" class="search-button">
-                    </div>
-                </form>
-            </div>
+
         </div>
         <div class ="right-contents">
-            <span class="user-info" th:if="${#authorization.expression('isAuthenticated()')}" th:text="${#authentication.principal.username + '님 반갑습니다.'}" style="color: black"></span> <br/>
+            <div class="user-info-wrap">
+                <span class="user-info" th:if="${#authorization.expression('isAuthenticated()')}" th:text="${#authentication.principal.username + '님 반갑습니다.'}" style="color: black"></span>
+            </div>
+
             <div class="login-div">
                 <div class="info-btn-wrap">
                     <button class="btn btn-outline-primary me-2" sec:authorize="isAnonymous()" onclick="location.href='/login'">로그인</button>
@@ -49,9 +53,9 @@
                     <a th:href="@{/c/cart}" sec:authorize="isAuthenticated()">
                         <img src="/images/character/cart.png" alt="찜목록 아이콘"  class="icon-button">
                     </a>
-                    <button sec:authorize="isAuthenticated()" onclick="location.href='/logout'">
-                        <img src="/images/character/bye.png" alt="로그아웃 아이콘"  class="icon-button">
-                    </button>
+                    <a sec:authorize="isAuthenticated()" href="/logout" class="icon-link">
+                        <img src="/images/character/bye.png" alt="로그아웃 아이콘" class="icon-button">
+                    </a>
                 </div>
             </div>
         </div>
