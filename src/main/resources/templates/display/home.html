@@ -73,27 +73,56 @@
 <!-- Modal HTML -->
 <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
     <div class="modal-dialog">
+        <!--todo 모달 닫기 버튼 만들어 주기-->
+        <div class="modal-header">
+            <div class="modal-title" id="orderModalLabel">주문 확인</div>
+        </div>
         <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title" id="orderModalLabel">주문 확인</div>
-            </div>
             <div class="modal-body">
-                <p>선택된 상품: <span id="selectedItem"></span></p>
-                <p id="selectedItemId"></p>
-                <p>가격: <span id="itemPrice"></span>원</p>
-                <p>총 가격: <span id="totalPrice"></span>원</p>
-                <p>보유 코인:
-                    <span class="user-info" id="mbCoinValue" th:if="${#authorization.expression('isAuthenticated()')}"
-                          th:text="|${#authentication.principal.mbCoin}원|"></span>
-                </p>
-                <p>현재 재고: <span id="itemStock"></span>개</p>
-                <p>수량: <span id="itemQuantity"></span>개</p>
-                <p><button type="button" class="btn btn-secondary" onclick="countItemQuantityP()">증가</button>
-                <button type="button" class="btn btn-secondary" onclick="countItemQuantityM()">감소</button></p>
+                <div class="line-info-wrap">
+                    상품명 :
+                    <div id="selectedItem"></div>
+                    <div id="selectedItemId"></div>
+                </div>
+                <div class="line-info-wrap">
+                    가격 :
+                    <div id="itemPrice"></div>
+                    원
+                </div>
+                <!--todo 재고 어떻게 할건지-->
+                <div id="itemStock" style="display: none;"></div>
+                <div class="line-info-wrap">
+                    수량:
+                    <div id="itemQuantity"></div>
+                    개
+                    <a th:href="@{/m/main}" sec:authorize="isAuthenticated()">
+
+                    </a>
+                    <!--todo 이미지 싱크 크기좀 ,, ㅋㅋ -->
+                    <a href="javascript:void(0);" onclick="countItemQuantityP()">
+                        <img src="/images/character/plus.png" alt="수량추가"  class="icon-button">
+                    </a>
+                    <a href="javascript:void(0);" onclick="countItemQuantityM()">
+                        <img src="/images/character/minus.png" alt="수량추가"  class="icon-button">
+                    </a>
+                </div>
+            </div>
+            <div class ="modal-content">
+                <div class="line-info-wrap">
+                    총 가격 :
+                    <div id="totalPrice"></div>
+                    원
+                    / 내 코인 :
+                    <div class="user-info" id="mbCoinValue" th:if="${#authorization.expression('isAuthenticated()')}"
+                         th:text="|${#authentication.principal.mbCoin}원|"></div>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn" data-bs-dismiss="modal">취소</button>
-                <button type="button" class="btn" onclick="purchaseItem()">구매</button>
+                <div class="btn-wrap">
+                    <!--modal-body 상의 id 값 이용-->
+                    <!--todo 모든 구매 버튼 더블 클릭 방지 -->
+                    <button class="btn btn-purchase" onclick="purchaseItem()">구매</button>
+                </div>
             </div>
         </div>
     </div>

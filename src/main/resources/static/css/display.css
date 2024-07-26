@@ -422,28 +422,65 @@ footer {
     font-weight: 800;
 }
 
+
+.modal-dialog {
+    @font-face {
+        font-family: 'SpoqaHanSansNeo-Regular';
+        src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SpoqaHanSansNeo-Regular.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+    }
+    font-family: 'SpoqaHanSansNeo-Regular' !important;;
+    display: flex; /* Flexbox 컨테이너로 설정 */
+    justify-content: center; /* 수평 방향으로 가운데 정렬 */
+    align-items: center; /* 수직 방향으로 가운데 정렬 */
+    border-top: 1px solid #ddd; /* 모달의 상단에 구분선 추가 */
+    background-color: #f9f9f9; /* 배경 색상 설정 */
+
+}
+
+
 .modal-header {
     font-weight: bold;
-    font-size : 24px;
+    font-size : 20px;
     display: flex;
     justify-content: center;
     position: relative;
+    border-bottom: none !important; /* 밑줄 제거 */
 }
 .modal-title {
     flex: 1;
     text-align: center;
 }
-
 .modal-content {
-    font-family: 'SpoqaHanSansNeo-Regular';
+    padding: 20px;
+}
+.line-info-wrap {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f8f9fa; /* 연한 배경색 */
+    border-radius: 5px; /* 모서리 둥글게 */
+}
+.line-info-wrap > div {
+    margin-left: 10px; /* 각 요소 간의 간격 */
+}
+.line-info-wrap button {
+    margin-left: 5px; /* 버튼 간의 간격 */
+}
+.modal-body {
+    padding: 10px;
 }
 
-.modal-footer {
-    display: flex; /* Flexbox 컨테이너로 설정 */
-    justify-content: center; /* 수평 방향으로 가운데 정렬 */
-    align-items: center; /* 수직 방향으로 가운데 정렬 */
-    padding: 20px; /* 여백을 추가하여 내부 요소와 모달 경계 사이에 공간을 만듭니다. */
-    border-top: 1px solid #ddd; /* 모달의 상단에 구분선 추가 */
-    background-color: #f9f9f9; /* 배경 색상 설정 */
+
+
+.btn-purchase {
+    background-color: black !important;
+    color: white !important;
 }
+
+
+
+
 
