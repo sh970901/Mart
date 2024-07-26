@@ -1,396 +1,401 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>이커머스 메인 페이지</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/display.css}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <!--    스윗알럿-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="/common/js/common.js"></script>
-    <style>
-        a {
-            text-decoration: none;
-            color: white;
-        }
-        .main-content {
-            margin-top: 10px;
-        }
-        .nav-pills .nav-link.active {
-            background-color: #0d6efd;
-        }
-        .profile-section, .purchase-history, .claim-history, .coin-history, .order-history {
-            padding: 20px;
-            background-color: #f8f9fa;
-            border-radius: 10px;
-        }
-        .custom-container {
-            max-width: 960px; /* 콘텐츠 최대 너비 */
-            margin: 0 auto; /* 중앙 정렬 */
-            padding: 0 15px; /* 양쪽 여백 설정 */
-        }
-        .error {
-            color: red;
-            font-size: 0.9em;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>이커머스 메인 페이지</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/display.css}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <!--    스윗알럿-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="/common/js/common.js"></script>
+  <style>
+    a {
+      text-decoration: none;
+      color: white;
+    }
 
+    .main-content {
+      margin-top: 10px;
+    }
 
-        /**/
-        .coin-history-item {
-            padding: 10px;
-            border: 1px solid #ddd;
-            margin: 5px 0;
-        }
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border-left-color: #09f;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .spinner-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
+    .nav-pills .nav-link.active {
+      background-color: #0d6efd;
+    }
+
+    .claim-history, .coin-history, .order-history {
+      padding: 20px;
+      background-color: #f8f9fa;
+      border-radius: 10px;
+    }
+
+    .error {
+      color: red;
+      font-size: 0.9em;
+    }
+
+    .coin-history-item {
+      padding: 10px;
+      border: 1px solid #ddd;
+      margin: 5px 0;
+    }
+
+    .spinner {
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border-left-color: #09f;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .spinner-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
 </head>
 <body>
 <div>
-<div class="container-fluid">
-<header th:insert="~{fragments/header :: headerFragment}"></header>
-<main class="container main-content">
-    <p>
+  <div class="container-fluid">
+    <header th:insert="~{fragments/header :: headerFragment}"></header>
+    <main class="container main-content">
+      <p>
         <strong>
-            <span th:text="|${memberDto.getMemberName()}|">이승훈</span>
-            <span th:text="|[${memberDto.getDepartment().getDepartmentName()} -|">부서</span>
-            <span th:text="|${memberDto.getDepartment().getTeamName()}]|">팀</span>
+          <span th:text="|${memberDto.getMemberName()}|">이승훈</span>
+          <span th:text="|[${memberDto.getDepartment().getDepartmentName()} -|">부서</span>
+          <span th:text="|${memberDto.getDepartment().getTeamName()}]|">팀</span>
         </strong>
-    </p>
-    <p><strong>보유 코인: </strong> <span th:text="${memberDto.getMemberCoin()}">1000</span>원</p>
-    <div class="row">
+      </p>
+      <p><strong>보유 코인: </strong> <span th:text="${memberDto.getMemberCoin()}">1000</span>원</p>
+      <div class="row">
         <div class="col-md-3">
-            <nav class="nav flex-column nav-pills">
-                <a class="nav-link" id="v-pills-coin-tab" data-bs-toggle="pill" href="#v-pills-coin" role="tab" aria-controls="v-pills-coin" aria-selected="true" th:classappend="${activeTab == null || activeTab != 'profile' ? 'active' : ''}">코인 입출금</a>
-                <a class="nav-link" id="v-pills-order-tab" data-bs-toggle="pill" href="#v-pills-order" role="tab" aria-controls="v-pills-order" aria-selected="false">구매 내역</a>
-                <a class="nav-link" id="v-pills-claim-tab" data-bs-toggle="pill" href="#v-pills-claim" role="tab" aria-controls="v-pills-claim" aria-selected="false">환불 내역</a>
-                <a class="nav-link" id="v-pills-home-tab" data-bs-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="false" th:classappend="${activeTab == 'profile' ? 'active' : ''}">회원 정보</a>
-                <a class="nav-link" id="v-pills-cart-tab" th:href="@{/c/cart}" role="tab" aria-selected="false">찜 목록</a>
-            </nav>
+          <nav class="nav flex-column nav-pills">
+            <a class="nav-link" id="v-pills-coin-tab" data-bs-toggle="pill" href="#v-pills-coin" role="tab" aria-controls="v-pills-coin" aria-selected="true" th:classappend="${activeTab == null || activeTab != 'profile' ? 'active' : ''}">코인 입출금</a>
+            <a class="nav-link" id="v-pills-order-tab" data-bs-toggle="pill" href="#v-pills-order" role="tab" aria-controls="v-pills-order" aria-selected="false">구매 내역</a>
+            <a class="nav-link" id="v-pills-claim-tab" data-bs-toggle="pill" href="#v-pills-claim" role="tab" aria-controls="v-pills-claim" aria-selected="false">환불 내역</a>
+            <a class="nav-link" id="v-pills-home-tab" data-bs-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="false" th:classappend="${activeTab == 'profile' ? 'active' : ''}">회원 정보</a>
+            <a class="nav-link" id="v-pills-cart-tab" th:href="@{/c/cart}" role="tab" aria-selected="false">찜 목록</a>
+          </nav>
         </div>
         <div class="col-md-9">
-            <div class="tab-content" id="v-pills-tabContent">
-                <div class="tab-pane fade" id="v-pills-coin" role="tabpanel" aria-labelledby="v-pills-coin-tab" th:classappend="${activeTab == null || activeTab != 'profile' ? 'show active' : ''}">
-                    <section class="coin-history">
-                        <h2>코인 입출금</h2>
-                        <div class="table-responsive">
-                            <table class="table align-middle">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">날짜</th>
-                                        <th scope="col">거래 내역</th>
-                                        <th scope="col">금액</th>
-                                        <th scope="col">내용</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="coin-history-item" id="coinTransHistory" >
-<!--                                동적으로 내용 추가-->
-                                </tbody>
-                            </table>
-                        </div>
-                    </section>
+          <div class="tab-content" id="v-pills-tabContent">
+            <div class="tab-pane fade" id="v-pills-coin" role="tabpanel" aria-labelledby="v-pills-coin-tab" th:classappend="${activeTab == null || activeTab != 'profile' ? 'show active' : ''}">
+              <section class="coin-history">
+                <h2>코인 입출금</h2>
+                <div class="table-responsive">
+                  <table class="table align-middle">
+                    <thead>
+                    <tr>
+                      <th scope="col">날짜</th>
+                      <th scope="col">거래 내역</th>
+                      <th scope="col">금액</th>
+                      <th scope="col">내용</th>
+                    </tr>
+                    </thead>
+                    <tbody class="coin-history-item" id="coinTransHistory">
+                    <!--                                동적으로 내용 추가-->
+                    </tbody>
+                  </table>
                 </div>
-                <div class="tab-pane fade" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" th:classappend="${activeTab == 'profile' ? 'show active' : ''}">
-                    <h2>개인정보 수정</h2>
-                    <section class="password-change-section">
-                        <h3>비밀번호 변경</h3>
-                        <!-- Flash Attributes 메시지 표시 -->
-                        <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
-                        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
-                        <form th:action="@{/m/change-password}" method="post" onsubmit="return validatePassword()">
-                            <div class="mb-3">
-                                <label for="currentPassword" class="form-label">현재 비밀번호</label>
-                                <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
-                                <span id="currentPasswordError" class="error"></span>
-                            </div>
-                            <div class="mb-3">
-                                <label for="newPassword" class="form-label">새 비밀번호</label>
-                                <input type="password" class="form-control" id="newPassword" name="newPassword" required>
-                                <span id="newPasswordError" class="error"></span>
-                            </div>
-                            <div class="mb-3">
-                                <label for="confirmPassword" class="form-label">새 비밀번호 확인</label>
-                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
-                                <span id="confirmPasswordError" class="error"></span>
-                                <span id="passwordMismatchError" class="error"></span>
-                            </div>
-                            <button type="submit" class="btn btn-primary">비밀번호 변경</button>
-                        </form>
-                    </section>
-                </div>
-                <div class="tab-pane fade" id="v-pills-order" role="tabpanel" aria-labelledby="v-pills-order-tab">
-                    <section class="order-history">
-                        <h2>구매 내역</h2>
-                        <div class="table-responsive">
-                            <table class="table align-middle">
-                                <thead>
-                                <tr>
-                                    <th scope="col">날짜</th>
-                                    <th scope="col">주문 내역</th>
-                                    <th scope="col">금액</th>
-                                    <th scope="col">상태</th>
-                                </tr>
-                                </thead>
-                                <tbody class="orders-history-item" id="orders" >
-                                <!--                                동적으로 내용 추가-->
-                                </tbody>
-                            </table>
-                        </div>
-                    </section>
-                </div>
-                <div class="tab-pane fade" id="v-pills-claim" role="tabpanel" aria-labelledby="v-pills-claim-tab">
-                    <section class="claim-history">
-                        <h2>환불 내역</h2>
-                        <div class="table-responsive">
-                            <table class="table align-middle">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">날짜</th>
-                                        <th scope="col">환불 상품</th>
-                                        <th scope="col">금액</th>
-                                        <th scope="col">상태</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="claims-history-item" id="claims" >
-                                <!--                                동적으로 내용 추가-->
-                                </tbody>
-                            </table>
-                        </div>
-                    </section>
-                </div>
+              </section>
             </div>
+            <div class="tab-pane fade" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" th:classappend="${activeTab == 'profile' ? 'show active' : ''}">
+              <h2>개인정보 수정</h2>
+              <section class="password-change-section">
+                <h3>비밀번호 변경</h3>
+                <!-- Flash Attributes 메시지 표시 -->
+                <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+                <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+                <form th:action="@{/m/change-password}" method="post" onsubmit="return validatePassword()">
+                  <div class="mb-3">
+                    <label for="currentPassword" class="form-label">현재 비밀번호</label>
+                    <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
+                    <span id="currentPasswordError" class="error"></span>
+                  </div>
+                  <div class="mb-3">
+                    <label for="newPassword" class="form-label">새 비밀번호</label>
+                    <input type="password" class="form-control" id="newPassword" name="newPassword" required>
+                    <span id="newPasswordError" class="error"></span>
+                  </div>
+                  <div class="mb-3">
+                    <label for="confirmPassword" class="form-label">새 비밀번호 확인</label>
+                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                    <span id="confirmPasswordError" class="error"></span>
+                    <span id="passwordMismatchError" class="error"></span>
+                  </div>
+                  <button type="submit" class="btn btn-primary">비밀번호 변경</button>
+                </form>
+              </section>
+            </div>
+            <div class="tab-pane fade" id="v-pills-order" role="tabpanel" aria-labelledby="v-pills-order-tab">
+              <section class="order-history">
+                <h2>구매 내역</h2>
+                <div class="table-responsive">
+                  <table class="table align-middle">
+                    <thead>
+                    <tr>
+                      <th scope="col">날짜</th>
+                      <th scope="col">주문 내역</th>
+                      <th scope="col">금액</th>
+                      <th scope="col">상태</th>
+                    </tr>
+                    </thead>
+                    <tbody class="orders-history-item" id="orders">
+                    <!--                                동적으로 내용 추가-->
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            </div>
+            <div class="tab-pane fade" id="v-pills-claim" role="tabpanel" aria-labelledby="v-pills-claim-tab">
+              <section class="claim-history">
+                <h2>환불 내역</h2>
+                <div class="table-responsive">
+                  <table class="table align-middle">
+                    <thead>
+                    <tr>
+                      <th scope="col">날짜</th>
+                      <th scope="col">환불 상품</th>
+                      <th scope="col">금액</th>
+                      <th scope="col">상태</th>
+                    </tr>
+                    </thead>
+                    <tbody class="claims-history-item" id="claims">
+                    <!--                                동적으로 내용 추가-->
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            </div>
+          </div>
         </div>
-    </div>
-</main>
-</div>
+      </div>
+    </main>
+  </div>
 </div>
 
 <footer th:insert="~{fragments/footer :: footerFragment}"></footer>
 
 <script th:src="@{/js/member.js}"></script>
 <script th:inline="javascript">
-    /*[[CDATA[*/
-    function validatePassword() {
-        var currentPassword = document.getElementById("currentPassword").value;
-        var newPassword = document.getElementById("newPassword").value;
-        var confirmPassword = document.getElementById("confirmPassword").value;
-        var currentPasswordError = document.getElementById("currentPasswordError");
-        var newPasswordError = document.getElementById("newPasswordError");
-        var confirmPasswordError = document.getElementById("confirmPasswordError");
-        var passwordMismatchError = document.getElementById("passwordMismatchError");
+  /*[[CDATA[*/
+  function validatePassword() {
+    var currentPassword = document.getElementById("currentPassword").value;
+    var newPassword = document.getElementById("newPassword").value;
+    var confirmPassword = document.getElementById("confirmPassword").value;
+    var currentPasswordError = document.getElementById("currentPasswordError");
+    var newPasswordError = document.getElementById("newPasswordError");
+    var confirmPasswordError = document.getElementById("confirmPasswordError");
+    var passwordMismatchError = document.getElementById("passwordMismatchError");
 
-        var valid = true;
+    var valid = true;
 
-        if (!currentPassword) {
-            currentPasswordError.textContent = "현재 비밀번호를 입력하세요.";
-            valid = false;
-        } else {
-            currentPasswordError.textContent = "";
-        }
-
-        if (!newPassword) {
-            newPasswordError.textContent = "새 비밀번호를 입력하세요.";
-            valid = false;
-        } else {
-            newPasswordError.textContent = "";
-        }
-
-        if (!confirmPassword) {
-            confirmPasswordError.textContent = "새 비밀번호 확인을 입력하세요.";
-            valid = false;
-        } else {
-            confirmPasswordError.textContent = "";
-        }
-
-        if (currentPassword === newPassword) {
-            confirmPasswordError.textContent = "새 비밀번호가 동일합니다.";
-            valid = false;
-        } else {
-            confirmPasswordError.textContent = "";
-        }
-
-        if (newPassword !== confirmPassword) {
-            passwordMismatchError.textContent = "새 비밀번호와 확인 비밀번호가 일치하지 않습니다.";
-            valid = false;
-        } else {
-            passwordMismatchError.textContent = "";
-        }
-
-        return valid;
+    if (!currentPassword) {
+      currentPasswordError.textContent = "현재 비밀번호를 입력하세요.";
+      valid = false;
+    } else {
+      currentPasswordError.textContent = "";
     }
 
-    // AbortController를 스코프a 변수로 선언
-    let controller = new AbortController();
+    if (!newPassword) {
+      newPasswordError.textContent = "새 비밀번호를 입력하세요.";
+      valid = false;
+    } else {
+      newPasswordError.textContent = "";
+    }
 
-    document.getElementById('v-pills-coin-tab').addEventListener('click', function () {
-        loadTabContent('coinTransHistory');
-    });
+    if (!confirmPassword) {
+      confirmPasswordError.textContent = "새 비밀번호 확인을 입력하세요.";
+      valid = false;
+    } else {
+      confirmPasswordError.textContent = "";
+    }
 
-    document.getElementById('v-pills-order-tab').addEventListener('click', function () {
-        loadTabContent('orders');
-    });
+    if (currentPassword === newPassword) {
+      confirmPasswordError.textContent = "새 비밀번호가 동일합니다.";
+      valid = false;
+    } else {
+      confirmPasswordError.textContent = "";
+    }
 
-    document.getElementById('v-pills-claim-tab').addEventListener('click', function () {
-        loadTabContent('claims');
-    });
+    if (newPassword !== confirmPassword) {
+      passwordMismatchError.textContent = "새 비밀번호와 확인 비밀번호가 일치하지 않습니다.";
+      valid = false;
+    } else {
+      passwordMismatchError.textContent = "";
+    }
 
-    // 페이지가 로드될 때 기본 탭을 로드합니다.
+    return valid;
+  }
+
+  // AbortController를 스코프a 변수로 선언
+  let controller = new AbortController();
+
+  document.getElementById('v-pills-coin-tab').addEventListener('click', function () {
     loadTabContent('coinTransHistory');
+  });
 
-    function loadTabContent(tab) {
-        // 이전 요청 취소
-        controller.abort();
-        controller = new AbortController();
+  document.getElementById('v-pills-order-tab').addEventListener('click', function () {
+    loadTabContent('orders');
+  });
 
-        const container = document.getElementById(tab);
-        container.innerHTML = '<div class="spinner-container"><div class="spinner"></div></div>'; // 로딩 스피너 추가
+  document.getElementById('v-pills-claim-tab').addEventListener('click', function () {
+    loadTabContent('claims');
+  });
 
-        const signal = controller.signal;
-        let isTimeout = false;
-        // clearTimeout(timeoutId)
+  // 페이지가 로드될 때 기본 탭을 로드합니다.
+  loadTabContent('coinTransHistory');
 
-        const timeoutId = setTimeout(() => {
-            isTimeout = true;
-            controller.abort();
-        }, 10000); // 최대 10초까지 요청 대기
+  function loadTabContent(tab) {
+    // 이전 요청 취소
+    controller.abort();
+    controller = new AbortController();
 
-        fetch('/api/v1/m/' + tab, { signal })
-            .then(response => {
-                clearTimeout(timeoutId); // 요청이 완료되면 타임아웃 타이머 해제
-                return response.json();
-            })
-            .then(rep => {
-                if (rep.data.length === 0) {
-                    renderTabNullContent(container);
-                } else {
-                    renderTabContent(tab, rep.data, container);
-                }
-            })
-            .catch(error => {
+    const container = document.getElementById(tab);
+    container.innerHTML = '<div class="spinner-container"><div class="spinner"></div></div>'; // 로딩 스피너 추가
 
-                if (error.name === 'AbortError') {
-                    if (isTimeout) {
-                        // 타임아웃, 탭 변경도 AbortError가 발생하기에, 타임아웃 용 변수 추가
-                        failAlertNoReload("서버 응답이 지연되었습니다. 다시 시도해주세요.");
-                    }
-                }
-                else {
-                    failAlertNoReload("서버 로딩에 실패했습니다. 잠시 후 다시 시도해주세요.");
-                }
-                renderTabNullContent(container);
-            });
+    const signal = controller.signal;
+    let isTimeout = false;
+    // clearTimeout(timeoutId)
 
-    }
+    const timeoutId = setTimeout(() => {
+      isTimeout = true;
+      controller.abort();
+    }, 10000); // 최대 10초까지 요청 대기
 
-    function renderTabContent(tab, data, container) {
-        container.innerHTML = ''; // 기존 내용을 지우고 새 데이터를 추가
+    fetch('/api/v1/m/' + tab, {signal})
+    .then(response => {
+      clearTimeout(timeoutId); // 요청이 완료되면 타임아웃 타이머 해제
+      return response.json();
+    })
+    .then(rep => {
+      if (rep.data.length === 0) {
+        renderTabNullContent(container);
+      } else {
+        renderTabContent(tab, rep.data, container);
+      }
+    })
+    .catch(error => {
 
-        if (tab === 'coinTransHistory') {
-            data.forEach(coinHistory => {
-                const newTr = document.createElement('tr');
-                const newTdTrans = document.createElement('td');
-                const newTdAmount = document.createElement('td');
-                const newTdDate = document.createElement('td');
-                const newTdDescription = document.createElement('td');
-                // newDiv.textContent = `거래 : ${item.transactionType} - 금액: ${item.amount} -날짜: ${item.eventDate} `;
-                newTdTrans.textContent = `${coinHistory.transactionType}`;
-                newTdAmount.textContent = `${coinHistory.amount}원`;
-                newTdDate.textContent = `${coinHistory.eventDate}`;
-                newTdDescription.textContent = `${coinHistory.description}`;
-
-                container.appendChild(newTr);
-                newTr.appendChild(newTdDate)
-                newTr.appendChild(newTdTrans)
-                newTr.appendChild(newTdAmount)
-                newTr.appendChild(newTdDescription)
-
-            });
-        } else if (tab === 'orders') {
-            data.forEach(order => {
-                // const newDiv = document.createElement('div');
-                const newTr = document.createElement('tr');
-                const newTdOrderItems = document.createElement('td');
-                const newTdTotalPrice = document.createElement('td');
-                const newTdDate = document.createElement('td');
-                const newTdStatus = document.createElement('td');
-                // newDiv.textContent = `거래 : ${item.transactionType} - 금액: ${item.amount} -날짜: ${item.eventDate} `;
-                // newTdOrderItems.textContent = `상품: ${order.orderItems}`;
-                newTdTotalPrice.textContent = `${order.totalPrice}원`;
-                newTdDate.textContent = `${order.orderDate}`;
-                newTdStatus.textContent = `${order.orderStatus}`;
-
-                // 주문 아이템들을 텍스트로 설정
-                let orderItemsHTML = '';
-                order.orderItems.forEach(item => {
-                    orderItemsHTML += `상품명: ${item.itemName}, 수량: ${item.quantity}, 가격: ${item.itemPrice}원<br>`;
-                });
-                newTdOrderItems.innerHTML = orderItemsHTML.trim();
-
-                container.appendChild(newTr);
-                newTr.appendChild(newTdDate)
-                newTr.appendChild(newTdOrderItems)
-                newTr.appendChild(newTdTotalPrice)
-                newTr.appendChild(newTdStatus)
-            });
-        } else if (tab === 'claims') {
-            data.forEach(claim => {
-                // const newDiv = document.createElement('div');
-                const newTr = document.createElement('tr');
-                const newTdClaimItem = document.createElement('td');
-                const newTdAmount = document.createElement('td');
-                const newTdDate = document.createElement('td');
-                const newTdStatus = document.createElement('td');
-                // newDiv.textContent = `거래 : ${item.transactionType} - 금액: ${item.amount} -날짜: ${item.eventDate} `;
-                newTdClaimItem.textContent = `${claim.itemName}`;
-                newTdAmount.textContent = `${claim.refundAmount}원`;
-                newTdDate.textContent = `${claim.time}`;
-                newTdStatus.textContent = `${claim.claimStatus}`;
-
-                container.appendChild(newTr);
-                newTr.appendChild(newTdDate)
-                newTr.appendChild(newTdClaimItem)
-                newTr.appendChild(newTdAmount)
-                newTr.appendChild(newTdStatus)
-
-            });
+      if (error.name === 'AbortError') {
+        if (isTimeout) {
+          // 타임아웃, 탭 변경도 AbortError가 발생하기에, 타임아웃 용 변수 추가
+          failAlertNoReload("서버 응답이 지연되었습니다. 다시 시도해주세요.");
         }
-    }
+      } else {
+        failAlertNoReload("서버 로딩에 실패했습니다. 잠시 후 다시 시도해주세요.");
+      }
+      renderTabNullContent(container);
+    });
 
-    function renderTabNullContent(container) {
-        container.innerHTML = '<div>데이터가 없습니다.</div>';
+  }
+
+  function renderTabContent(tab, data, container) {
+    container.innerHTML = ''; // 기존 내용을 지우고 새 데이터를 추가
+
+    if (tab === 'coinTransHistory') {
+      data.forEach(coinHistory => {
+        const newTr = document.createElement('tr');
+        const newTdTrans = document.createElement('td');
+        const newTdAmount = document.createElement('td');
+        const newTdDate = document.createElement('td');
+        const newTdDescription = document.createElement('td');
+        // newDiv.textContent = `거래 : ${item.transactionType} - 금액: ${item.amount} -날짜: ${item.eventDate} `;
+        newTdTrans.textContent = `${coinHistory.transactionType}`;
+        newTdAmount.textContent = `${coinHistory.amount}원`;
+        newTdDate.textContent = `${coinHistory.eventDate}`;
+        newTdDescription.textContent = `${coinHistory.description}`;
+
+        container.appendChild(newTr);
+        newTr.appendChild(newTdDate)
+        newTr.appendChild(newTdTrans)
+        newTr.appendChild(newTdAmount)
+        newTr.appendChild(newTdDescription)
+
+      });
+    } else if (tab === 'orders') {
+      data.forEach(order => {
+        // const newDiv = document.createElement('div');
+        const newTr = document.createElement('tr');
+        const newTdOrderItems = document.createElement('td');
+        const newTdTotalPrice = document.createElement('td');
+        const newTdDate = document.createElement('td');
+        const newTdStatus = document.createElement('td');
+        // newDiv.textContent = `거래 : ${item.transactionType} - 금액: ${item.amount} -날짜: ${item.eventDate} `;
+        // newTdOrderItems.textContent = `상품: ${order.orderItems}`;
+        newTdTotalPrice.textContent = `${order.totalPrice}원`;
+        newTdDate.textContent = `${order.orderDate}`;
+        newTdStatus.textContent = `${order.orderStatus}`;
+
+        // 주문 아이템들을 텍스트로 설정
+        let orderItemsHTML = '';
+        order.orderItems.forEach(item => {
+          orderItemsHTML += `상품명: ${item.itemName}, 수량: ${item.quantity}, 가격: ${item.itemPrice}원<br>`;
+        });
+        newTdOrderItems.innerHTML = orderItemsHTML.trim();
+
+        container.appendChild(newTr);
+        newTr.appendChild(newTdDate)
+        newTr.appendChild(newTdOrderItems)
+        newTr.appendChild(newTdTotalPrice)
+        newTr.appendChild(newTdStatus)
+      });
+    } else if (tab === 'claims') {
+      data.forEach(claim => {
+        // const newDiv = document.createElement('div');
+        const newTr = document.createElement('tr');
+        const newTdClaimItem = document.createElement('td');
+        const newTdAmount = document.createElement('td');
+        const newTdDate = document.createElement('td');
+        const newTdStatus = document.createElement('td');
+        // newDiv.textContent = `거래 : ${item.transactionType} - 금액: ${item.amount} -날짜: ${item.eventDate} `;
+        newTdClaimItem.textContent = `${claim.itemName}`;
+        newTdAmount.textContent = `${claim.refundAmount}원`;
+        newTdDate.textContent = `${claim.time}`;
+        newTdStatus.textContent = `${claim.claimStatus}`;
+
+        container.appendChild(newTr);
+        newTr.appendChild(newTdDate)
+        newTr.appendChild(newTdClaimItem)
+        newTr.appendChild(newTdAmount)
+        newTr.appendChild(newTdStatus)
+
+      });
     }
-    /*]]>*/
+  }
+
+  function renderTabNullContent(container) {
+    container.innerHTML = '<div>데이터가 없습니다.</div>';
+  }
+
+  /*]]>*/
 </script>
 </body>
 </html>
