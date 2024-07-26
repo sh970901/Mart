@@ -32,7 +32,7 @@ body {
     top: 0;
     left: 0;
     z-index: 1000;
-    opacity: 0.95;
+    /*opacity: 0.95;*/
 }
 
 
@@ -328,9 +328,16 @@ section h2 {
     background-color: #ffc107; /* 버튼 호버 시 색상 변경 */
 }
 
-.item-display-area {
-    margin-top : 240px;
+/*헤더 높이만큼 아래로*/
+.section-main {
+    margin-top: 10%;
 }
+
+.member-info-div {
+    margin-bottom: 50px;
+}
+
+
 
 
 /* 푸터 스타일 */
