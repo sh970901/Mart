@@ -328,6 +328,11 @@ section h2 {
     background-color: #ffc107; /* 버튼 호버 시 색상 변경 */
 }
 
+.item-display-area {
+    margin-top : 240px;
+}
+
+
 /* 푸터 스타일 */
 footer {
     /*background-color: #333;*/
@@ -409,10 +414,7 @@ footer {
     font-size: 3rem;
     font-weight: 800;
 }
-.search-result p {
-    font-size: 1rem;
-    font-weight: 600;
-}
+
 .modal-header {
     font-weight: bold;
     font-size : 24px;

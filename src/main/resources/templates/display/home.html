@@ -40,19 +40,14 @@
 <div class="floating-image" style="top: 90%; left: 30%; animation-delay: 16s;"></div>
 <div class="floating-image" style="top: 15%; left: 60%; animation-delay: 18s;"></div>
 <main>
-    <section>
-<!--        <h2>추천 상품</h2>-->
+    <div class="item-display-area">
         <div class="item-list" id="item-list">
             <div class="item" th:each="item : ${itemList}">
                 <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/8-col/img%285%29.jpg" class="d-block w-100" alt="Exotic Fruits"/>
-<!--                <img th:src="@{/images/상품이미지.jpeg}" alt="상품 이미지">-->
-                <!--                <img th:src="${item.imageUrl}" th:alt="${item.name} Image" alt="상품 이미지">-->
                 <div class="item-name" th:text="${item.itemName}"></div>
                 <div class="item-desc" th:text="${item.description}">상품 설명</div>
                 <div class="item-price" th:text="${item.itemPrice}+'원'"></div>
-<!--                <p th:text="'재고: ' + ${item.itemStock} + '개'">수량</p>-->
 
-<!--                <p><button class="btn btn-outline-primary me-2" th:onclick="|placeOrder(${item.itemId})|">바로 구매</button></p>-->
                 <div class="btn-wrap">
                     <button class="btn" id="buynow" th:itemId="${item.itemId}" th:itemName="${item.itemName}" th:itemStock="${item.itemStock}" th:itemPrice="${item.itemPrice}" th:onclick="|showPurchaseModal(this.getAttribute('itemId'), this.getAttribute('itemName'), this.getAttribute('itemStock'), this.getAttribute('itemPrice'))|" data-bs-toggle="modal" data-bs-target="#orderModal">바로 구매</button>
                     <button class="btn" id="heart" th:attr="data-item-id=${item.itemId}, data-item-name=${item.itemName}" onclick="addCart(this)">찜하기</button>
@@ -72,7 +67,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 </main>
 
 <!-- Modal HTML -->
@@ -97,8 +92,8 @@
                 <button type="button" class="btn btn-secondary" onclick="countItemQuantityM()">감소</button></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                <button type="button" class="btn btn-primary" onclick="purchaseItem()">구매</button>
+                <button type="button" class="btn" data-bs-dismiss="modal">취소</button>
+                <button type="button" class="btn" onclick="purchaseItem()">구매</button>
             </div>
         </div>
     </div>
