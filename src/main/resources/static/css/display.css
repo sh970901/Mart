@@ -344,7 +344,6 @@ section h2 {
     transition: background-color 0.3s ease;
 }
 
-
 .item button:hover {
     background-color: #ffc107; /* 버튼 호버 시 색상 변경 */
 }
@@ -468,14 +467,18 @@ footer {
 }
 
 .modal-dialog {
-
+    @font-face {
+        font-family: 'SpoqaHanSansNeo-Regular';
+        src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SpoqaHanSansNeo-Regular.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+    }
     font-family: 'SpoqaHanSansNeo-Regular' !important;;
     display: flex; /* Flexbox 컨테이너로 설정 */
     justify-content: center; /* 수평 방향으로 가운데 정렬 */
     align-items: center; /* 수직 방향으로 가운데 정렬 */
     border-top: 1px solid #ddd; /* 모달의 상단에 구분선 추가 */
     background-color: #f9f9f9; /* 배경 색상 설정 */
-
 
 }
 
@@ -497,11 +500,11 @@ footer {
     /*border-bottom: none !important; !* 밑줄 제거 *!*/
     border: none !important;
 }
-
 .line-info-wrap {
     display: flex;
     align-items: center;
-    padding: 20px;
+    margin-bottom: 10px;
+    padding: 10px;
     background-color: #f8f9fa; /* 연한 배경색 */
     border-radius: 5px; /* 모서리 둥글게 */
 }
