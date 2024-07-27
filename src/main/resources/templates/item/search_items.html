@@ -36,7 +36,7 @@
 <header th:insert="~{fragments/header :: headerFragment}"></header>
 
 <main>
-  <div class="item-display-area">
+  <div class="container section-main">
 
     <div class="search-result" th:if="${itemList.size() > 0}">
       <span th:text="'\''+ ${keyword} + '\''" class="keyword"></span>'에 대한 검색 결과입니다.'

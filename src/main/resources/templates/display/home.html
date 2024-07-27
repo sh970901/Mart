@@ -39,8 +39,13 @@
 <div class="floating-image" style="top: 80%; left: 50%; animation-delay: 14s;"></div>
 <div class="floating-image" style="top: 90%; left: 30%; animation-delay: 16s;"></div>
 <div class="floating-image" style="top: 15%; left: 60%; animation-delay: 18s;"></div>
-<main>
-    <div class="section-main">
+<main class="container">
+
+
+    <div class=banner>
+        <img src="/images/character/banner.png" alt="배너이미지" class="banner-img">
+    </div>
+    <div class="section-main main-home">
         <div class="item-list" id="item-list">
             <div class="item" th:each="item : ${itemList}">
                 <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/8-col/img%285%29.jpg" class="d-block w-100" alt="Exotic Fruits"/>
@@ -49,12 +54,9 @@
                 <div class="item-price" th:text="${item.itemPrice}+'원'"></div>
 
                 <div class="btn-wrap">
-                    <button class="btn" id="buynow" th:itemId="${item.itemId}" th:itemName="${item.itemName}" th:itemStock="${item.itemStock}" th:itemPrice="${item.itemPrice}" th:onclick="|showPurchaseModal(this.getAttribute('itemId'), this.getAttribute('itemName'), this.getAttribute('itemStock'), this.getAttribute('itemPrice'))|" data-bs-toggle="modal" data-bs-target="#orderModal">바로 구매</button>
+                    <button class="btn" id="buynow" th:itemId="${item.itemId}" th:itemName="${item.itemName}" th:itemStock="${item.itemStock}" th:itemPrice="${item.itemPrice}" th:onclick="|showPurchaseModal(this.getAttribute('itemId'), this.getAttribute('itemName'), this.getAttribute('itemStock'), this.getAttribute('itemPrice'))|" data-bs-toggle="modal" data-bs-target="#orderModal">바로구매</button>
                     <button class="btn" id="heart" th:attr="data-item-id=${item.itemId}, data-item-name=${item.itemName}" onclick="addCart(this)">찜하기</button>
                 </div>
-
-
-
             </div>
         </div>
         <div id="loading-skeleton" class="skeleton" style="display: none;">
@@ -80,45 +82,42 @@
         <div class="modal-content">
             <div class="modal-body">
                 <div class="line-info-wrap">
-                    상품명 :
-                    <div id="selectedItem"></div>
+                    <div class="line-caption">상품명</div>
+                    <div class="line-content" id="selectedItem"></div>
                     <div id="selectedItemId"></div>
                 </div>
                 <div class="line-info-wrap">
-                    가격 :
-                    <div id="itemPrice"></div>
+                    <div  class="line-caption">가격</div>
+                    <div class="line-content" id="itemPrice"></div>
                     원
                 </div>
                 <!--todo 재고 어떻게 할건지-->
                 <div id="itemStock" style="display: none;"></div>
                 <div class="line-info-wrap">
-                    수량:
-                    <div id="itemQuantity"></div>
+                    <div class="line-caption">주문수량</div>
+                    <div class="line-content" id="itemQuantity"></div>
                     개
                     <a th:href="@{/m/main}" sec:authorize="isAuthenticated()">
 
                     </a>
                     <!--todo 이미지 싱크 크기좀 ,, ㅋㅋ -->
+                    <a href="javascript:void(0);" onclick="countItemQuantityM()">
+                        <img src="/images/character/minus.png" alt="수량감소"  class="icon-minus">
+                    </a>
                     <a href="javascript:void(0);" onclick="countItemQuantityP()">
                         <img src="/images/character/plus.png" alt="수량추가"  class="icon-button">
                     </a>
-                    <a href="javascript:void(0);" onclick="countItemQuantityM()">
-                        <img src="/images/character/minus.png" alt="수량추가"  class="icon-button">
-                    </a>
                 </div>
             </div>
-            <div class ="modal-content">
-                <div class="line-info-wrap">
-                    총 가격 :
+            <div class ="modal-content ">
+                <div class="line-info-wrap total-price-wrap">
+                    <div>합계 :</div>
                     <div id="totalPrice"></div>
-                    원
-                    / 내 코인 :
-                    <div class="user-info" id="mbCoinValue" th:if="${#authorization.expression('isAuthenticated()')}"
-                         th:text="|${#authentication.principal.mbCoin}원|"></div>
+                    <div>원</div>
                 </div>
             </div>
             <div class="modal-footer">
-                <div class="btn-wrap">
+                <div class="btn-wrap btn-purchase-wrap">
                     <!--modal-body 상의 id 값 이용-->
                     <!--todo 모든 구매 버튼 더블 클릭 방지 -->
                     <button class="btn btn-purchase" onclick="purchaseItem()">구매</button>
@@ -133,8 +132,6 @@
 <script th:src="@{/js/display.js}"></script>
 <script th:inline="javascript">
     /*[[CDATA[*/
-
-
     /*]]>*/
 </script>
 </body>
