@@ -123,6 +123,13 @@ body {
     border: none;
     cursor: pointer;
 }
+.icon-minus {
+    width: 38px;
+    height: 38px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
 
 
 @keyframes float {
@@ -216,8 +223,8 @@ section h2 {
 /* 큰 화면(예: 데스크탑)에 대한 상품 배치: 4개 */
 @media only screen and (min-width: 1024px) {
     .item-list {
-        grid-template-columns: repeat(auto-fill, minmax(450px, 2fr)); /* 250px로 수정 */
-        gap: 70px; /* 간격을 조정하여 더 적은 상품이 보이도록 함 */
+        grid-template-columns: repeat(auto-fill, minmax(300px, 4fr)); /* 250px로 수정 */
+        gap: 30px; /* 간격을 조정하여 더 적은 상품이 보이도록 함 */
     }
 
     .item img {
@@ -275,8 +282,11 @@ section h2 {
 }
 
 .btn {
-    width: 120px;
-    padding: 5px 10px;
+    white-space: nowrap; /* 줄 바꿈을 방지합니다 */
+    text-align: center;
+    font-size:12px !important;
+    width: 72px;
+    /*padding: 5px 5px;*/
     background-color: black;
     color: white;
     border: none;
@@ -299,7 +309,7 @@ section h2 {
     background-color: #80deea;
 }
 #heart {
-    margin-left : 80px;
+    margin-left : 60px;
     background-color : #ff7f7f;
 }
 #minus {
@@ -318,19 +328,37 @@ section h2 {
     background-color: #333;
     color: #fff;
     border: none;
-    padding: 10px 20px;
+    padding: 10px;
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s ease;
 }
 
+
 .item button:hover {
     background-color: #ffc107; /* 버튼 호버 시 색상 변경 */
+}
+
+.banner {
+    margin-top: 14%;
+    display: flex; /* Flexbox 컨테이너로 설정 */
+    justify-content: center; /* 수평 방향으로 가운데 정렬 */
+    max-width: 100%;
+    padding-left : 20px;
+    padding-right: 20px;
+    /* 컨테이너의 높이를 화면 전체 높이로 설정 */
+}
+.banner-img {
+    width: 100%;
+    max-height: 450px;
 }
 
 /*헤더 높이만큼 아래로*/
 .section-main {
     margin-top: 10%;
+}
+.main-home {
+    margin-top: 30px !important;
 }
 
 .member-info-div {
@@ -454,12 +482,14 @@ footer {
 }
 .modal-content {
     padding: 20px;
+    /*border-bottom: none !important; !* 밑줄 제거 *!*/
+    border: none !important;
 }
+
 .line-info-wrap {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
-    padding: 10px;
+    padding: 20px;
     background-color: #f8f9fa; /* 연한 배경색 */
     border-radius: 5px; /* 모서리 둥글게 */
 }
@@ -471,6 +501,7 @@ footer {
 }
 .modal-body {
     padding: 10px;
+    border-bottom: none !important; /* 밑줄 제거 */
 }
 
 
@@ -478,6 +509,14 @@ footer {
 .btn-purchase {
     background-color: black !important;
     color: white !important;
+    border: none;
+    padding: 10px !important;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+.btn-purchase:hover {
+    background-color: lightblue !important;
 }
 
 
