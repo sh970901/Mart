@@ -45,7 +45,13 @@ public class InitDataForLocal extends AbstractInitData {
         return args -> {
             if (initDataDone) return;
             before();
-            for(int i = 0; i<100; i++){
+            ItemDto.ItemCreateRequestDto itemDto1 = ItemDto.ItemCreateRequestDto.builder().itemName("품절상품").itemPrice(2000L).imagePath("https://cdn.pixabay.com/photo/2024/04/01/06/57/cookies-8668140_1280.jpg").itemStock(0L).description("에구저런 품절이네요").build();
+            Item item1 = Item.from(itemDto1);
+            itemRepository.save(item1);
+            ItemDto.ItemCreateRequestDto itemDto12 = ItemDto.ItemCreateRequestDto.builder().itemName("다팔린상품").itemPrice(2000L).imagePath("https://cdn.pixabay.com/photo/2024/04/01/06/57/cookies-8668140_1280.jpg").itemStock(0L).description("쀼쀼").build();
+            Item item2 = Item.from(itemDto12);
+            itemRepository.save(item2);
+            for(int i = 2; i<100; i++){
                 ItemDto.ItemCreateRequestDto itemDto = ItemDto.ItemCreateRequestDto.builder().itemName("item"+i).itemPrice(2000L).imagePath("https://cdn.pixabay.com/photo/2024/04/01/06/57/cookies-8668140_1280.jpg").itemStock(3L).description(i+"번 상품입니다.").build();
                 Item item = Item.from(itemDto);
                 itemRepository.save(item);
@@ -64,7 +70,7 @@ public class InitDataForLocal extends AbstractInitData {
             memberRepository.save(Member.from(mbDto3));
 
 
-            OrderDto.OrderItemCreateRequestDto orderItemDto = OrderDto.OrderItemCreateRequestDto.builder().itemId(2L).quantity(2).build();
+            OrderDto.OrderItemCreateRequestDto orderItemDto = OrderDto.OrderItemCreateRequestDto.builder().itemId(4L).quantity(2).build();
             orderService.createOrderByMember(orderItemDto, mbDto.getMbName());
 
             Item item = itemRepository.findById(orderItemDto.getItemId()).orElseThrow(() -> new ItemNotFoundException("상품을 찾을 수 없습니다."));

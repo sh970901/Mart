@@ -48,13 +48,20 @@
         <div class="item-list" id="item-list">
             <div class="item" th:each="item : ${itemList}">
                 <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/8-col/img%285%29.jpg" class="d-block w-100" alt="Exotic Fruits"/>
+                <!--todo 전시상품, 모달 상품명 길어질 경우 텍스트 크기 줄이거나 , 말줄임 처리 필요-->
+
                 <div class="item-name" th:text="${item.itemName}"></div>
                 <div class="item-desc" th:text="${item.description}">상품 설명</div>
                 <div class="item-price" th:text="${item.itemPrice}+'원'"></div>
 
-                <div class="btn-wrap">
-                    <button class="btn" id="buynow" th:itemId="${item.itemId}" th:itemName="${item.itemName}" th:itemStock="${item.itemStock}" th:itemPrice="${item.itemPrice}" th:onclick="|showPurchaseModal(this.getAttribute('itemId'), this.getAttribute('itemName'), this.getAttribute('itemStock'), this.getAttribute('itemPrice'))|" data-bs-toggle="modal" data-bs-target="#orderModal">바로구매</button>
-                    <button class="btn" id="heart" th:attr="data-item-id=${item.itemId}, data-item-name=${item.itemName}" onclick="addCart(this)">찜하기</button>
+                <div th:if="${item.itemStock > 0}">
+                  <div class="btn-wrap">
+                      <button class="btn" id="buynow" th:itemId="${item.itemId}" th:itemName="${item.itemName}" th:itemStock="${item.itemStock}" th:itemPrice="${item.itemPrice}" th:onclick="|showPurchaseModal(this.getAttribute('itemId'), this.getAttribute('itemName'), this.getAttribute('itemStock'), this.getAttribute('itemPrice'))|" data-bs-toggle="modal" data-bs-target="#orderModal">바로구매</button>
+                      <button class="btn" id="heart" th:attr="data-item-id=${item.itemId}, data-item-name=${item.itemName}" onclick="addCart(this)">찜하기</button>
+                  </div>
+                </div>
+                <div th:if="${item.itemStock <= 0}">
+                    <div class="sold-out">품절</div>
                 </div>
 
 
@@ -77,12 +84,15 @@
 <!-- Modal HTML -->
 <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <!--todo 모달 닫기 버튼 만들어 주기-->
         <div class="modal-header">
             <div class="modal-title" id="orderModalLabel">주문 확인</div>
         </div>
         <div class="modal-content">
+            <div class="close-btn-wrap">
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
             <div class="modal-body">
+
                 <div class="line-info-wrap">
                     <div class="line-caption">상품명</div>
                     <div class="line-content" id="selectedItem"></div>
@@ -96,8 +106,8 @@
                 <!--todo 재고 어떻게 할건지-->
                 <div id="itemStock" style="display: none;"></div>
                 <div class="line-info-wrap">
-                    수량:
-                    <div id="itemQuantity"></div>
+                    <div  class="line-caption">수량</div>
+                    <div class="line-content" id="itemQuantity"></div>
                     개
                     <a th:href="@{/m/main}" sec:authorize="isAuthenticated()">
 
