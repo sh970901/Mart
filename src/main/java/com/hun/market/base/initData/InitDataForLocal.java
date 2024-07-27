@@ -52,7 +52,12 @@ public class InitDataForLocal extends AbstractInitData {
             Item item2 = Item.from(itemDto12);
             itemRepository.save(item2);
             for(int i = 2; i<100; i++){
-                ItemDto.ItemCreateRequestDto itemDto = ItemDto.ItemCreateRequestDto.builder().itemName("item"+i).itemPrice(2000L).imagePath("https://cdn.pixabay.com/photo/2024/04/01/06/57/cookies-8668140_1280.jpg").itemStock(3L).description(i+"번 상품입니다.").build();
+                ItemDto.ItemCreateRequestDto itemDto;
+                if(i % 7 == 0) {
+                    itemDto = ItemDto.ItemCreateRequestDto.builder().itemName("item"+i).itemPrice(2000L).imagePath("https://cdn.pixabay.com/photo/2024/04/01/06/57/cookies-8668140_1280.jpg").itemStock(0L).description(i+"번 상품입니다.").build();
+                } else {
+                    itemDto = ItemDto.ItemCreateRequestDto.builder().itemName("item"+i).itemPrice(2000L).imagePath("https://cdn.pixabay.com/photo/2024/04/01/06/57/cookies-8668140_1280.jpg").itemStock(3L).description(i+"번 상품입니다.").build();
+                }
                 Item item = Item.from(itemDto);
                 itemRepository.save(item);
             }

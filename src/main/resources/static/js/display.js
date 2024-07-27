@@ -41,16 +41,31 @@ function fetchMoreItems() {
             rep.data.forEach(item => {
                 const newItem = document.createElement('div');
                 newItem.classList.add('item');
-                newItem.innerHTML = `
+
+                if(item.itemStock > 0) {
+                    newItem.innerHTML = `
                     <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/8-col/img%285%29.jpg" class="d-block w-100" alt="Exotic Fruits"/>
                     <div class="item-name">${item.itemName}</div>
                     <div class="item-desc">${item.description}</div>
-                    <div class="item-price">${item.itemPrice}</div>
+                    <div class="item-price">${item.itemPrice}원</div>
                     <div class="btn-wrap">
                       <button class="btn" id="buynow" onclick="showPurchaseModal(${item.itemId}, '${item.itemName}', ${item.itemStock},${item.itemPrice})" data-bs-toggle="modal" data-bs-target="#orderModal">바로 구매</button>
                       <button class="btn" id="heart" th:attr="data-item-id=${item.itemId}, data-item-name=${item.itemName}" onclick="addCartJs(${item.itemId}, '${item.itemName}')">찜하기</button>
                     </div>
                 `;
+                } else  {
+                    newItem.innerHTML = `
+                    <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/8-col/img%285%29.jpg" class="d-block w-100" alt="Exotic Fruits"/>
+                    <div class="item-name">${item.itemName}</div>
+                    <div class="item-desc">${item.description}</div>
+                    <div class="item-price">${item.itemPrice}</div>
+                    <div>
+                      <div class="sold-out">품절</div>
+                    </div>
+                `;
+                }
+
+
                 itemList.appendChild(newItem);
             });
 
