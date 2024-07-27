@@ -37,53 +37,58 @@
     <div class="section-main cart-section-main">
         <div class="container">
             <div class="row centered"  th:if="${cartItemList != null}">
-                <div class="col">
-                    <input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)">
-                    <label for="selectAll">전체 선택</label><br/>
-                    <button class="btn btn-outline-primary" onclick="showPurchaseModal()" data-bs-toggle="modal" data-bs-target="#orderModal" >구매</button>
-<!--                    <button class="btn btn-outline-primary" onclick="purchaseSelectedItems()">구매</button>-->
+                <div class="col checkbox-wrap">
+                    <div>
+                        <input type="checkbox" class="custom-checkbox" id="selectAll" onclick="toggleSelectAll(this)">
+                        <label for="selectAll">전체 선택</label><br/>
+                    </div>
+                    <button class="btn btn-purchase cart-purchase-btn" onclick="showPurchaseModal()" data-bs-toggle="modal" data-bs-target="#orderModal" >구매</button>
+
                 </div>
             </div>
-            <div class="item-list" id="item-list" th:if="${cartItemList != null}">
-                <div class="item" th:each="cartItem : ${cartItemList}">
-                    <div class="card mb-3">
-                        <div class="row g-0">
-                            <div class="col-md-4">
-                                <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/8-col/img%285%29.jpg" class="img-fluid rounded-start" alt="상품 이미지">
+            <div class="item-list-cart" id="item-list" th:if="${cartItemList != null}">
+                <table class="cart-table table table-bordered">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th style="width: 15%;">상품 이미지</th>
+                        <th style="width: 40%;">상품명</th>
+                        <th style="width: 10%;">구매 수량</th>
+                        <th style="width: 10%;">상품 재고</th>
+                        <th>수량 증감</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="cartItem : ${cartItemList}">
+                        <td>
+                            <input type="checkbox" th:id="${'itemCheckbox' + cartItem.cartItemId}" th:data-itemStock="${cartItem.itemStock}" th:data-price="${cartItem.itemPrice}" th:data-itemName="${cartItem.itemName}" th:data-id="${cartItem.itemId}" th:data-quantity="${cartItem.quantity}" th:data-cartItemId="${cartItem.cartItemId}" class="itemCheckbox custom-checkbox" >
+                            <label th:for="${'itemCheckbox' + cartItem.cartItemId}"></label>
+                        </td>
+                        <td>
+                            <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/8-col/img%285%29.jpg" class="img" alt="상품 이미지" style="width: 200px;">
+                        </td>
+                        <td th:text="${cartItem.itemName}">
+                        </td>
+                        <td th:text="${cartItem.quantity}">찜 수량</td>
+                        <td th:text="${cartItem.itemStock}">상품 재고</td>
+                        <td>
+                            <div class="line-info-wrap cart-btn-wrap">
+                            <a href="javascript:void(0);" th:onclick="|cancelCartItem(${cartItem.cartItemId})|" onclick="return false;">
+                                <img src="/images/character/minus.png" alt="수량감소"  class="icon-minus">
+                            </a>
+                            <!--todo 카트 페이지 에서는 재고 초과 해도 장바구니 담김  -->
+                            <a href="javascript:void(0);" th:attr="data-item-id=${cartItem.itemId}, data-item-name=${cartItem.itemName}" onclick="addCart(this); return false;">
+                                <img src="/images/character/plus.png" alt="수량추가"  class="icon-button">
+                            </a>
                             </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <input type="checkbox" th:id="${'itemCheckbox' + cartItem.cartItemId}" th:data-itemStock="${cartItem.itemStock}" th:data-price="${cartItem.itemPrice}" th:data-itemName="${cartItem.itemName}" th:data-id="${cartItem.itemId}" th:data-quantity="${cartItem.quantity}" th:data-cartItemId="${cartItem.cartItemId}" class="itemCheckbox">
-                                    <label th:for="${'itemCheckbox' + cartItem.cartItemId}" th:text="'상품: ' + ${cartItem.itemName}">상품 제목</label>
-                                    <div>
-                                        <p class="card-text" th:text="'찜 수량: ' + ${cartItem.quantity}">찜 갯수</p>
-                                        <button class="btn" id="buynow" th:attr="data-item-id=${cartItem.itemId}, data-item-name=${cartItem.itemName}" onclick="addCart(this)">추가</button>
-                                        <button class="btn" id="minus" th:onclick="|cancelCartItem(${cartItem.cartItemId})|">감소</button>
-                                    </div>
-                                    <p class="card-text" th:text="'상품 재고: ' + ${cartItem.itemStock}">상품 재고</p>
-                                    <!--todo 취소버튼 없애고 찜수량 0개되면 빠지는 거로가시죠 -->
-                                    <!--<p>
-                                        <button class="btn btn-outline-danger me-2" th:onclick="|cancelCart(${cartItem.cartItemId})|">취소</button>
-                                    </p>-->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="text-center" id="item-list2" th:if="${cartItemList == null}">
                 <div class="text-center">
                     찜목록 상품이 없습니다.
-                </div>
-            </div>
-            <div id="loading-skeleton" class="skeleton" style="display: none;">
-                <div class="skeleton-content">
-                    <div class="skeleton-box">
-                    </div>
-                    <div class="skeleton-box">
-                    </div>
-                    <div class="skeleton-box">
-                    </div>
                 </div>
             </div>
         </div>

@@ -571,3 +571,43 @@ footer {
     opacity: 0.9;
 }
 
+/*장바구니 페이지*/
+.cart-table {
+    width: 100%;
+    margin: 0 auto;
+}
+.cart-table td, .cart-table th {
+    text-align: center;
+    vertical-align: middle;
+}
+.cart-table img {
+    display: block;
+    margin: 0 auto;
+}
+.cart-btn-wrap {
+    text-align: center !important;
+    display: flex !important;
+    justify-content: center !important;
+}
+.checkbox-wrap {
+    padding-top: 30px;
+    display: flex; /* Flexbox 활성화 */
+    justify-content: space-between; /* 양끝 정렬 */
+    align-items: center; /* 세로 정렬을 가운데로 맞춤 */
+    width: 100%; /* 전체 너비를 사용 */
+    font-size: 24px !important;
+    white-space: nowrap; /* 줄바꿈 방지 */
+    padding-bottom: 30px;
+}
+.custom-checkbox {
+    transform: scale(5); /* 기본 크기의 1.5배로 확대 */
+    -webkit-transform: scale(1.5); /* Safari */
+    -moz-transform: scale(1.5); /* Firefox */
+    -ms-transform: scale(1.5); /* IE 9 */
+    -o-transform: scale(1.5); /* Opera */
+    margin-right: 10px; /* 체크박스와 텍스트 간의 간격 조정 */
+}
+
+.cart-purchase-btn {
+    width: 10% !important;
+}
