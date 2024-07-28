@@ -11,11 +11,18 @@
     --twitter-color: #1DA1F2;
     --insta-color: #E1306C;
 }
+@font-face {
+    font-family: 'SpoqaHanSansNeo-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SpoqaHanSansNeo-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
 
 * {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'SpoqaHanSansNeo-Regular' !important;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -23,16 +30,24 @@
 
 html,
 body {
-    height: 100vh;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    /*height: 100vh;*/
     overflow: hidden;
 }
 
-.container {
+
+.container-fluid {
     position: relative;
-    min-height: 100vh;
+    /*min-height: 100vh;*/
     overflow: hidden;
+    z-index: 1;
     /*min-width: 1000px;*/
 }
+
 
 .row {
     display: flex;
@@ -52,8 +67,8 @@ body {
 }
 
 .form-wrapper {
-    width: 100%;
-    max-width: 28rem;
+    width: 120%;
+    max-width: 32rem;
 }
 
 .form {
@@ -185,12 +200,12 @@ body {
     cursor: pointer;
 }
 
-.container.sign-in .form.sign-in,
-.container.sign-in .social-list.sign-in,
-.container.sign-in .social-list.sign-in>div,
-.container.sign-up .form.sign-up,
-.container.sign-up .social-list.sign-up,
-.container.sign-up .social-list.sign-up>div {
+.container-fluid.sign-in .form.sign-in,
+.container-fluid.sign-in .social-list.sign-in,
+.container-fluid.sign-in .social-list.sign-in>div,
+.container-fluid.sign-up .form.sign-up,
+.container-fluid.sign-up .social-list.sign-up,
+.container-fluid.sign-up .social-list.sign-up>div {
     transform: scale(1);
 }
 
@@ -239,18 +254,18 @@ body {
     transform: translateX(250%);
 }
 
-.container.sign-in .text.sign-in h2,
-.container.sign-in .text.sign-in p,
-.container.sign-in .img.sign-in img,
-.container.sign-up .text.sign-up h2,
-.container.sign-up .text.sign-up p,
-.container.sign-up .img.sign-up img {
+.container-fluid.sign-in .text.sign-in h2,
+.container-fluid.sign-in .text.sign-in p,
+.container-fluid.sign-in .img.sign-in img,
+.container-fluid.sign-up .text.sign-up h2,
+.container-fluid.sign-up .text.sign-up p,
+.container-fluid.sign-up .img.sign-up img {
     transform: translateX(0);
 }
 
 /* BACKGROUND */
 
-.container::before {
+.container-fluid::before {
     content: "";
     position: absolute;
     top: 0;
@@ -267,12 +282,12 @@ body {
     border-top-left-radius: max(50vw, 50vh);
 }
 
-.container.sign-in::before {
+.container-fluid.sign-in::before {
     transform: translate(0, 0);
     right: 50%;
 }
 
-.container.sign-up::before {
+.container-fluid.sign-up::before {
     transform: translate(100%, 0);
     right: 50%;
 }
@@ -281,9 +296,9 @@ body {
 
 @media only screen and (max-width: 440px) {
 
-    .container::before,
-    .container.sign-in::before,
-    .container.sign-up::before {
+    .container-fluid::before,
+    .container-fluid.sign-in::before,
+    .container-fluid.sign-up::before {
         height: 100vh;
         border-bottom-right-radius: 0;
         border-top-left-radius: 0;
@@ -296,8 +311,8 @@ body {
         transform: translateY(100%);
     } */
 
-    .container.sign-in .col.sign-in,
-    .container.sign-up .col.sign-up {
+    .container-fluid.sign-in .col.sign-in,
+    .container-fluid.sign-up .col.sign-up {
         transform: translateY(0);
     }
 
@@ -345,4 +360,19 @@ body {
         margin: .5rem;
         font-size: 2rem;
     }
+}
+
+/*신규 추가*/
+.login-title {
+    font-size: 120px;
+    font-weight: 700;
+    padding-right: 200px;
+}
+
+
+.matter-element {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    background-color: yellow;
 }
